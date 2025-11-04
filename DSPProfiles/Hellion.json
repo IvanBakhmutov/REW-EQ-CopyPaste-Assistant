@@ -4,7 +4,6 @@
     "processName": "HAM*",
     "QDevider": 1,
     "TimeoutBeforePasteSecs": 6,
-    "ReplaceDecimalCommaWithPoint": true,
     "StartingPositionHint": "Please select 1 band Freq box",
     "KeystrokeSequence": [
         {

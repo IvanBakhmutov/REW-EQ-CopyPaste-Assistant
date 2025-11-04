@@ -4,7 +4,6 @@
     "processName": "ESX_Toolkit_*",
     "QDevider": 2.5,
     "TimeoutBeforePasteSecs": 6,
-    "ReplaceDecimalCommaWithPoint": true,
     "StartingPositionHint": "Please select 1 band Freq box",
     "KeystrokeSequence": [
         {

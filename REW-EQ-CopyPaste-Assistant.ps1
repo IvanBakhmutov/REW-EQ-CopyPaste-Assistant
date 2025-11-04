@@ -1,16 +1,31 @@
-﻿# Parse Configurable PEQ text data from clipboard and return an array of objects with Freq, Q, and Gain properties.
-function Read-ConfigurablePEQText {
+﻿# Parse copied EQ text data from clipboard and return an array of objects with Freq, Q, and Gain properties.
+<#
+.SYNOPSIS
+   Parses EQ text data from the clipboard.
+.DESCRIPTION
+   This function processes text data containing EQ settings, extracts relevant information, and returns an array of objects with properties: Frequency, Q, and Gain.
+.EXAMPLE
+   $bands = Read-EQText -Text $clipboardText -QDevider 2.0
+   This example parses the PEQ data from the clipboard text with a Q divider of 2.0.
+.INPUTS
+   [string] $Text - The PEQ text data to parse.
+   [double] $QDevider - The divider value for Q.
+.OUTPUTS
+   [array] - An array of objects with Freq, Q, and Gain properties.
+.NOTES
+   Ensure the input text is in the expected format for proper parsing.
+#>
+function Read-EQText {
     param(
         [Parameter(Mandatory = $true)][string]$Text,
-        [Parameter(Mandatory = $true)][double]$QDevider,
-        [Parameter(Mandatory = $false)][string]$ReplaceDecimalCommaWithPoint = "true"
+        [Parameter(Mandatory = $true)][double]$QDevider
     )
 
     if (-not $Text) { return @() }
 
     $lines = $Text -split "`r?`n"
-    $firstNonEmpty = ($lines | Where-Object { $_.Trim() -ne "" } | Select-Object -First 1)
-    if ($firstNonEmpty.Trim() -ne 'Configurable_PEQ') { return @() }
+    # $firstNonEmpty = ($lines | Where-Object { $_.Trim() -ne "" } | Select-Object -First 1)
+    # if ($firstNonEmpty.Trim() -ne 'Configurable_PEQ') { return @() }
    
     $bands = $lines[1..$lines.count] | ConvertFrom-Csv -Delimiter "`t"
 
@@ -33,6 +48,22 @@ function Read-ConfigurablePEQText {
     }
 }
 
+# Show a confirmation dialog to the user and return their response as a boolean.
+<#
+.SYNOPSIS
+   Displays a confirmation dialog for user input.
+.DESCRIPTION
+   This function creates a graphical confirmation dialog with "Yes" and "No" buttons. It returns the user's choice as a boolean value.
+.EXAMPLE
+   $userConfirmed = Show-ConfirmationDialog
+   This example shows a confirmation dialog and stores the user's response in $userConfirmed.
+.INPUTS
+   None.
+.OUTPUTS
+   [bool] - True if the user clicks "Yes", False otherwise.
+.NOTES
+   The dialog is always displayed on top of other windows.
+#>
 function Show-ConfirmationDialog {
     Add-Type -AssemblyName System.Windows.Forms
 
@@ -76,6 +107,22 @@ function Show-ConfirmationDialog {
     return $confirmation
 }
 
+# Bring the DSP software window to the front based on the provided process name.
+<#
+.SYNOPSIS
+   Brings the DSP software window to the foreground.
+.DESCRIPTION
+   This function identifies the DSP software process by its name and attempts to bring its window to the foreground using various techniques.
+.EXAMPLE
+   Show-DSPWindowToFront -ProcessName "DSPSoftware"
+   This example brings the DSP software window with the specified process name to the foreground.
+.INPUTS
+   [string] $ProcessName - The name of the DSP software process.
+.OUTPUTS
+   [bool] - True if the window was successfully brought to the foreground, False otherwise.
+.NOTES
+   Requires the DSP software to be running with a visible window.
+#>
 function Show-DSPWindowToFront {
     param(
         [string]$ProcessName
@@ -228,7 +275,7 @@ $processes = Get-Process | Where-Object {
 }
 
 if ($processes.Count -eq 0) {
-    Write-Host "No $ProcessName process found running. Please run $($DSPConfig.Description) before proceeding.`nHit ENTER to close powershell..." -ForegroundColor Yellow
+    Write-Host "No $ProcessName process found running. Please run $($DSPConfig.Description) before proceeding.`nHit ENTER to close PowerShell..." -ForegroundColor Yellow
     Read-host
     return
 } 
@@ -242,14 +289,15 @@ do {
  
     # Check clipboard content
     $buffer = get-clipboard -TextFormatType unicodetext
-    if ($($buffer -split "`n")[0] -eq "Configurable_PEQ") {
-        Write-host "`nFound EQ in clipboard. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
-        $bands = Read-ConfigurablePEQText `
+    $bufferHeader = $($buffer -split "`n")[0]
+    if ($bufferHeader -in "Configurable_PEQ","Generic","Extended") {
+        [array]$bands = Read-EQText `
                         -Text ($buffer | Out-String) `
-                        -QDevider $QDevider `
-                        -ReplaceDecimalCommaWithPoint $($DSPConfig.ReplaceDecimalCommaWithPoint)
-        Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."                        
-        
+                        -QDevider $QDevider
+        Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
+        Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
+        $bufferHeader = ""
+
         $UserInput = Show-ConfirmationDialog
 
         if ($UserInput -eq $true) {
@@ -267,8 +315,10 @@ do {
                 }
             }
             
+            # Sort bands by frequency (if needed) - currently commented out to preserve original order 
+            # $bands = $bands | Sort-Object { [double]$_.Freq }
+            
             # Prepare transposed table for display
-            $bands = $bands | Sort-Object { [double]$_.Freq }
             $bandsTable = [ordered]@{}
             for ($i = 0; $i -lt $bands.Count; $i++) {
                 $bandName = "Band$($i + 1)"
@@ -294,7 +344,6 @@ do {
             Write-Host "Cancelled by user. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
             Set-Clipboard "Canceled"
         }
-        
         
     }
     Write-Host -NoNewline ("`b" + $spinner[$spinnerindex])
