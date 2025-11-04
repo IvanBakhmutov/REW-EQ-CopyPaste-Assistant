@@ -17,4 +17,4 @@ If in your Windows machine PowerShell execution policy set to restricted you can
 it will run powerhsell process and run the script. Otherwise you can run .ps1 file directly, it is
 up to you.
 
-Thanks for Denis GD the ideas and collaboration!
+Thanks for Denis GS the ideas and collaboration!
