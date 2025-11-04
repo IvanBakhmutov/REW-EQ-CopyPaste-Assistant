@@ -1,51 +1,9 @@
-﻿# Set the console output encoding to UTF-8 to properly display Cyrillic characters
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-
-
-$scriptDir = Split-Path -Parent $PSCommandPath
-$DSPProfilesDir = Join-Path -Path $scriptDir -ChildPath "DSPProfiles"
-$DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-
-
-if ($DSPProfilesList.Count -eq 0) {
-    Write-Host "No JSON profiles found in $profilesPath"
-    exit
-}
-
-# Display numbered list
-Write-Host "`nAvailable DSP Profiles:`n"
-for ($i = 0; $i -lt $DSPProfilesList.Count; $i++) {
-    Write-Host "[$($i+1)] $($DSPProfilesList[$i].Name)"
-}
-
-# Ask user to choose
-$choice = Read-Host "`nEnter the number of the profile you want to use"
-
-# Validate and get selected file
-if ($choice -match '^\d+$' -and $choice -ge 1 -and $choice -le $DSPProfilesList.Count) {
-    $selectedProfile = $DSPProfilesList[$choice - 1].FullName
-    Write-Host "`nYou selected: $selectedProfile"
-} else {
-    Read-Host "Invalid selection. Hit ENTER to close powershell..."
-    exit
-}
-
-$DSPConfig = Get-Content $selectedProfile -Raw | ConvertFrom-Json
-
-# DSP Software window process name
-$ProcessName = $DSPConfig.processName
-
-# Q divider
-$QDevider = $DSPConfig.QDevider
-
-Write-Host "`nUsing DSP Profile: $($DSPConfig.Description)`nQ devider value: $($DSPConfig.QDevider)" -ForegroundColor Green
-
-#    Parses Configurable PEQ text data from clipboard and returns an array of objects with Freq, Q, and Gain properties.
-function Parse-ConfigurablePEQText {
+﻿# Parse Configurable PEQ text data from clipboard and return an array of objects with Freq, Q, and Gain properties.
+function Read-ConfigurablePEQText {
     param(
-        [Parameter(Mandatory=$true)][string]$Text,
-        [Parameter(Mandatory=$true)][double]$QDevider,
-        [Parameter(Mandatory=$true)][int]$testOrNot
+        [Parameter(Mandatory = $true)][string]$Text,
+        [Parameter(Mandatory = $true)][double]$QDevider,
+        [Parameter(Mandatory = $false)][string]$ReplaceDecimalCommaWithPoint = "true"
     )
 
     if (-not $Text) { return @() }
@@ -57,12 +15,12 @@ function Parse-ConfigurablePEQText {
     $bands = $lines[1..$lines.count] | ConvertFrom-Csv -Delimiter "`t"
 
     $results = @()
-
-    $bands | where-Object {$_.Type -eq 'PK'} | ForEach-Object {
+    
+    $bands | where-Object { $_.Type -eq 'PK' } | ForEach-Object {
         $results += [PSCustomObject]@{
             Freq = [double]$_.'Frequency(Hz)'
-            Q    = [math]::round($([double]($_.Q -replace ",",".") / $QDevider),1)
-            Gain = ([double]($_.'Gain(dB)' -replace ",",".")) * $testOrNot
+            Q    = [math]::round($([double]($_.Q -replace ",", ".") / $QDevider), 1)
+            Gain = ([double]($_.'Gain(dB)' -replace ",", "."))
         }
     }
     
@@ -81,7 +39,7 @@ function Show-ConfirmationDialog {
     # Create the form
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "EQ Paste Confirmation"
-    $form.Size = New-Object System.Drawing.Size(320,150)
+    $form.Size = New-Object System.Drawing.Size(320, 150)
     $form.StartPosition = "CenterScreen"
     $form.TopMost = $true  # Make it stay on top
 
@@ -89,27 +47,27 @@ function Show-ConfirmationDialog {
     $label = New-Object System.Windows.Forms.Label
     $label.Text = "Ready to paste EQ settings to DSP. Proceed?"
     $label.AutoSize = $true
-    $label.Location = New-Object System.Drawing.Point(40,20)
+    $label.Location = New-Object System.Drawing.Point(40, 20)
     $form.Controls.Add($label)
 
     # Create Yes button
     $yesButton = New-Object System.Windows.Forms.Button
     $yesButton.Text = "Yes"
-    $yesButton.Location = New-Object System.Drawing.Point(70,70)
+    $yesButton.Location = New-Object System.Drawing.Point(70, 70)
     $yesButton.Add_Click({
-        $global:confirmation = $true
-        $form.Close()
-    })
+            $global:confirmation = $true
+            $form.Close()
+        })
     $form.Controls.Add($yesButton)
 
     # Create No button
     $noButton = New-Object System.Windows.Forms.Button
     $noButton.Text = "No"
-    $noButton.Location = New-Object System.Drawing.Point(170,70)
+    $noButton.Location = New-Object System.Drawing.Point(170, 70)
     $noButton.Add_Click({
-        $global:confirmation = $false
-        $form.Close()
-    })
+            $global:confirmation = $false
+            $form.Close()
+        })
     $form.Controls.Add($noButton)
 
     # Show the form
@@ -117,59 +75,13 @@ function Show-ConfirmationDialog {
 
     if ($confirmation) {
         Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
-    } else {
+    }
+    else {
         Write-Host "Cancelled by user. Waiting for new data in clipboard" -ForegroundColor Yellow
     }
     return $confirmation
 }
 
-function Show-TestOrNotDialog {
-    Add-Type -AssemblyName System.Windows.Forms
-
-    # Create the form
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Flip bands Q?"
-    $form.Size = New-Object System.Drawing.Size(340,170)
-    $form.StartPosition = "CenterScreen"
-    $form.TopMost = $true  # Make it stay on top
-
-    # Create a label
-    $label = New-Object System.Windows.Forms.Label
-    $label.Text = "Flip Q values to compare visually with REW?`nYes - Flipped Q (Inverted graph)`nNo - Normal Q"
-    $label.AutoSize = $true
-    $label.Location = New-Object System.Drawing.Point(40,20)
-    $form.Controls.Add($label)
-
-    # Create Yes button
-    $yesButton = New-Object System.Windows.Forms.Button
-    $yesButton.Text = "Yes"
-    $yesButton.Location = New-Object System.Drawing.Point(70,90)
-    $yesButton.Add_Click({
-        $global:confirmation = -1
-        $form.Close()
-    })
-    $form.Controls.Add($yesButton)
-
-    # Create No button
-    $noButton = New-Object System.Windows.Forms.Button
-    $noButton.Text = "No"
-    $noButton.Location = New-Object System.Drawing.Point(170,90)
-    $noButton.Add_Click({
-        $global:confirmation = 1
-        $form.Close()
-    })
-    $form.Controls.Add($noButton)
-
-    # Show the form
-    $form.ShowDialog() | Out-Null
-
-    if ($confirmation -eq -1) {
-        Write-Host "Testing mode: Q values multiplied by -1 (flipped)" -ForegroundColor Yellow
-    } else {
-        Write-Host "Normal mode: Q value will be pasted as they are" -ForegroundColor Yellow
-    }
-    return $confirmation
-}
 function Show-DSPWindowToFront {
     param(
         [string]$ProcessName
@@ -247,7 +159,8 @@ public static class NativeMethods {
         try {
             [NativeMethods]::BringWindowToTop($handle) | Out-Null
             [NativeMethods]::SetForegroundWindow($handle) | Out-Null
-        } finally {
+        }
+        finally {
             [NativeMethods]::AttachThreadInput($curThread, $fgThread, $false) | Out-Null
         }
 
@@ -273,9 +186,47 @@ public static class NativeMethods {
 Add-Type -AssemblyName System.Windows.Forms
 Write-Host "Script started" -ForegroundColor Yellow
 
-# Gain multiplier to flip graph and compare with REW
-# (Inverted gain value -1, normal is 1)
-$testOrNot = Show-TestOrNotDialog
+# Set the console output encoding to UTF-8 to properly display Cyrillic characters
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+# Load DSP profiles
+$scriptDir = Split-Path -Parent $PSCommandPath
+$DSPProfilesDir = Join-Path -Path $scriptDir -ChildPath "DSPProfiles"
+$DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+
+# Check if any profiles found
+if ($DSPProfilesList.Count -eq 0) {
+    Write-Host "No JSON profiles found in $profilesPath"
+    exit
+}
+
+# Display numbered list
+Write-Host "`nAvailable DSP Profiles:`n"
+for ($i = 0; $i -lt $DSPProfilesList.Count; $i++) {
+    Write-Host "[$($i+1)] $($DSPProfilesList[$i].Name)"
+}
+
+# Ask user to choose
+$choice = Read-Host "`nEnter the number of the profile you want to use"
+
+# Validate and get selected file
+if ($choice -match '^\d+$' -and $choice -ge 1 -and $choice -le $DSPProfilesList.Count) {
+    $selectedProfile = $DSPProfilesList[$choice - 1].FullName
+    Write-Host "`nYou selected: $selectedProfile"
+}
+else {
+    Read-Host "Invalid selection. Hit ENTER to close powershell..."
+    exit
+}
+
+# Load selected profile
+$DSPConfig = Get-Content $selectedProfile -Raw | ConvertFrom-Json
+# DSP Software window process name
+$ProcessName = $DSPConfig.processName
+# Q divider
+$QDevider = $DSPConfig.QDevider
+
+Write-Host "`nUsing DSP Profile: $($DSPConfig.Description)`nQ devider value: $($DSPConfig.QDevider)" -ForegroundColor Green
 
 # find DSP Software processes with window
 $processes = Get-Process | Where-Object {
@@ -291,39 +242,41 @@ Write-Host "Found $($DSPConfig.Description) process: $($processes[0].ProcessName
 Write-Host "Waiting for EQ data from REW in clipboard" -ForegroundColor Yellow
 
 do {
-
-    $buffer = get-clipboard -TextFormatType UnicodeText
-    if($($buffer -split "`n")[0] -eq "Configurable_PEQ"){
+    # Check clipboard content
+    $buffer = get-clipboard -TextFormatType unicodetext
+    if ($($buffer -split "`n")[0] -eq "Configurable_PEQ") {
         Write-host "Found EQ in clipboard. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
-        $bands = Parse-ConfigurablePEQText  -Text ($buffer | Out-String) -QDevider $QDevider -testOrNot $testOrNot
+        $bands = Read-ConfigurablePEQText `
+                        -Text ($buffer | Out-String) `
+                        -QDevider $QDevider `
+                        -ReplaceDecimalCommaWithPoint $($DSPConfig.ReplaceDecimalCommaWithPoint)
         $UserInput = Show-ConfirmationDialog
-        if($UserInput -eq $true){
+        if ($UserInput -eq $true) {
             Set-Clipboard "Processed"
             Show-DSPWindowToFront -processName $ProcessName | Out-Null
             
             write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. Please select 1 band Freq box"
             Start-Sleep -Seconds $DSPConfig.TimeoutBeforePasteSecs
             [System.Windows.Forms.SendKeys]::SendWait('^a')
-            foreach($band in $bands){
-                foreach($KeySet in $DSPConfig.KeystrokeSequence){
-                    $keyToSend = $KeySet.keys.Replace("FREQ",$band.freq).Replace("QVALUE",$band.Q).Replace("GAIN",$band.Gain)
+            foreach ($band in $bands) {
+                foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
+                    $keyToSend = $KeySet.keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain)
                     [System.Windows.Forms.SendKeys]::SendWait($keyToSend)
                     Start-Sleep -Milliseconds $KeySet.delay_ms
                 }
             }
-            # Prepare transposed table for display
-            $bands = $bands | Sort-Object {[double]$_.Freq}
-
-            $bandsTable = [ordered]@{}
             
+            # Prepare transposed table for display
+            $bands = $bands | Sort-Object { [double]$_.Freq }
+            $bandsTable = [ordered]@{}
             for ($i = 0; $i -lt $bands.Count; $i++) {
                 $bandName = "Band$($i + 1)"
                 $bandsTable[$bandName] = $bands[$i]
             }
             
+            # Transpose the table
             $transposed = @()
-            
-            foreach ($prop in "Freq","Q","Gain") {
+            foreach ($prop in "Freq", "Q", "Gain") {
                 $row = [ordered]@{ Property = $prop }
                 foreach ($band in $bandsTable.GetEnumerator()) {
                     $row[$band.Key] = $band.Value.$prop
@@ -335,10 +288,10 @@ do {
             Write-Host "`nPasted EQ Bands:" -ForegroundColor Green
             $transposed | Format-Table -AutoSize 
             Write-Host "Finished paste. Waiting for new data in clipboard" -ForegroundColor Green
-        } else {
+        }
+        else {
             Set-Clipboard "Canceled"
         }
         Start-Sleep -Seconds 2
     }
-
 } while (1)
