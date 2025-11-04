@@ -5,6 +5,7 @@
 - update readme.me with details
 - record demo video
 - review script body, consider other options apart of Configurable_PEQ (if it is needed?)
+- decimal point/comma read from profile
 
 - DSP profiles can be expanded with:
  Light Audio,
