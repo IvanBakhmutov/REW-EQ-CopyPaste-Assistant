@@ -1,0 +1,17 @@
+{
+    "version": "1.0",
+	"Description": "ESX Toolkit DSP software",
+    "processName": "ESX_Toolkit_*",
+    "QDevider": 2.5,
+    "TimeoutBeforePasteSecs": 6,
+    "KeystrokeSequence": [
+        {
+            "keys": "FREQ{ENTER}{DOWN}QVALUE{ENTER}{DOWN}GAIN{ENTER}",
+            "delay_ms": 200
+        },
+        {
+            "keys": "{RIGHT}{UP}{UP}",
+            "delay_ms": 200
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+powershell -executionpolicy remotesigned ".\REW-EQ-CopyPaste-Assistant.ps1"

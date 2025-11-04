@@ -1,0 +1,13 @@
+{
+    "version": "1.0",
+	"Description": "Hellion DSP software",
+    "processName": "HAM*",
+    "QDevider": 1,
+    "TimeoutBeforePasteSecs": 6,
+    "KeystrokeSequence": [
+        {
+            "keys": "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
+            "delay_ms": 200
+        }
+    ]
+}
