@@ -73,12 +73,6 @@ function Show-ConfirmationDialog {
     # Show the form
     $form.ShowDialog() | Out-Null
 
-    if ($confirmation) {
-        Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
-    }
-    else {
-        Write-Host "Cancelled by user. Waiting for new data in clipboard" -ForegroundColor Yellow
-    }
     return $confirmation
 }
 
@@ -239,23 +233,30 @@ if ($processes.Count -eq 0) {
     return
 } 
 Write-Host "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)" -ForegroundColor Green
-Write-Host "Waiting for EQ data from REW in clipboard" -ForegroundColor Yellow
+Write-Host "Hint: When finished with EQ close PowerShell window or hit ctrl-c and confirm exit" -ForegroundColor Yellow
+Write-Host "Waiting for EQ data from REW in clipboard  " -ForegroundColor Yellow -NoNewline
+$spinner = @('/', '-', '\', '|')
+$spinnerindex = 0
 
 do {
+ 
     # Check clipboard content
     $buffer = get-clipboard -TextFormatType unicodetext
     if ($($buffer -split "`n")[0] -eq "Configurable_PEQ") {
-        Write-host "Found EQ in clipboard. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
+        Write-host "`nFound EQ in clipboard. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
         $bands = Read-ConfigurablePEQText `
                         -Text ($buffer | Out-String) `
                         -QDevider $QDevider `
                         -ReplaceDecimalCommaWithPoint $($DSPConfig.ReplaceDecimalCommaWithPoint)
+        Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."                        
+        
         $UserInput = Show-ConfirmationDialog
+
         if ($UserInput -eq $true) {
-            Set-Clipboard "Processed"
+            Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
             Show-DSPWindowToFront -processName $ProcessName | Out-Null
             
-            write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. Please select 1 band Freq box"
+            write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
             Start-Sleep -Seconds $DSPConfig.TimeoutBeforePasteSecs
             [System.Windows.Forms.SendKeys]::SendWait('^a')
             foreach ($band in $bands) {
@@ -287,11 +288,16 @@ do {
             # Display the transposed table
             Write-Host "`nPasted EQ Bands:" -ForegroundColor Green
             $transposed | Format-Table -AutoSize 
-            Write-Host "Finished paste. Waiting for new data in clipboard" -ForegroundColor Green
+            Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Green -NoNewline
         }
         else {
+            Write-Host "Cancelled by user. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
             Set-Clipboard "Canceled"
         }
-        Start-Sleep -Seconds 2
+        
+        
     }
+    Write-Host -NoNewline ("`b" + $spinner[$spinnerindex])
+    $spinnerindex = ($spinnerindex + 1) % $spinner.Length
+    Start-Sleep -Seconds 1
 } while (1)
