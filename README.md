@@ -9,6 +9,6 @@ This is just an initial version of the tool. Experiment with it, create your own
 
 If the PowerShell execution policy on your Windows machine is set to "Restricted," you can run the `.bat` file, which will execute the PowerShell process and run the script. Otherwise, you can run the `.ps1` file directly. The choice is yours.
 
-A demo video is coming soon.
+A demo video [https://youtu.be/s-LkXFBM7A4](https://youtu.be/s-LkXFBM7A4)
 
 Special thanks to Denis GS for the ideas and collaboration!

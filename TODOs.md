@@ -5,7 +5,7 @@
 - DONE: Review script body, consider other options apart of Configurable_PEQ (if it is needed?).
 - REMOVED: Decimal point/comma read from profile, was not needed as for math operations it has to be point (not sure why in REW it is comma).
 - DONE: Update readme.me with details.
-- Record demo video.
+- ADDED: Record demo video.
 
 - DSP profiles list can be expanded with:
  Light Audio,
