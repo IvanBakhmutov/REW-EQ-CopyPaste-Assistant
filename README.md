@@ -6,6 +6,7 @@ Room EQ Wizard (REW) has several predefined profiles for popular DSP models, all
 The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain `{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software.
 
 This is just an initial version of the tool. Experiment with it, create your own DSP profiles, and have fun!
+Once you tested your own DSP profile please share it in the Discussoin section of the repository so it will be added to the repo.
 
 If the PowerShell execution policy on your Windows machine is set to "Restricted," you can run the `.bat` file, which will execute the PowerShell process and run the script. Otherwise, you can run the `.ps1` file directly. The choice is yours.
 
