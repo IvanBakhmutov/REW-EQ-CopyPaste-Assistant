@@ -6,9 +6,9 @@
    This function processes text data containing EQ settings, extracts relevant information, and returns an array of objects with properties: Frequency, Q, and Gain.
 .EXAMPLE
    $bands = Read-EQText -Text $clipboardText -QDevider 2.0
-   This example parses the PEQ data from the clipboard text with a Q divider of 2.0.
+   This example parses the EQ data from the clipboard text with a Q divider of 2.0.
 .INPUTS
-   [string] $Text - The PEQ text data to parse.
+   [string] $Text - The EQ text data to parse.
    [double] $QDevider - The divider value for Q.
 .OUTPUTS
    [array] - An array of objects with Freq, Q, and Gain properties.
@@ -24,13 +24,11 @@ function Read-EQText {
     if (-not $Text) { return @() }
 
     $lines = $Text -split "`r?`n"
-    # $firstNonEmpty = ($lines | Where-Object { $_.Trim() -ne "" } | Select-Object -First 1)
-    # if ($firstNonEmpty.Trim() -ne 'Configurable_PEQ') { return @() }
-   
+
     $bands = $lines[1..$lines.count] | ConvertFrom-Csv -Delimiter "`t"
 
     $results = @()
-    
+
     $bands | where-Object { $_.Type -eq 'PK' } | ForEach-Object {
         $results += [PSCustomObject]@{
             Freq = [double]$_.'Frequency(Hz)'
@@ -38,13 +36,13 @@ function Read-EQText {
             Gain = ([double]($_.'Gain(dB)' -replace ",", "."))
         }
     }
-    
+
     if ($results.count -gt 0) {
         Write-Verbose -Message "Parsed $($results.count) PEQ bands from clipboard."
         return [array]$results
     }
-    else { 
-        return @() 
+    else {
+        return @()
     }
 }
 
@@ -55,8 +53,8 @@ function Read-EQText {
 .DESCRIPTION
    This function creates a graphical confirmation dialog with "Yes" and "No" buttons. It returns the user's choice as a boolean value.
 .EXAMPLE
-   $userConfirmed = Show-ConfirmationDialog
-   This example shows a confirmation dialog and stores the user's response in $userConfirmed.
+   $UserInput = Show-ConfirmationDialog
+   This example shows a confirmation dialog and stores the user's response in $UserInput.
 .INPUTS
    None.
 .OUTPUTS
@@ -114,10 +112,10 @@ function Show-ConfirmationDialog {
 .DESCRIPTION
    This function identifies the DSP software process by its name and attempts to bring its window to the foreground using various techniques.
 .EXAMPLE
-   Show-DSPWindowToFront -ProcessName "DSPSoftware"
+   Show-DSPWindowToFront -ProcessName "DSPSoftware_V*"
    This example brings the DSP software window with the specified process name to the foreground.
 .INPUTS
-   [string] $ProcessName - The name of the DSP software process.
+   [string] $ProcessName - The name of the DSP software process. Wildcards are supported.
 .OUTPUTS
    [bool] - True if the window was successfully brought to the foreground, False otherwise.
 .NOTES
@@ -278,7 +276,7 @@ if ($processes.Count -eq 0) {
     Write-Host "No $ProcessName process found running. Please run $($DSPConfig.Description) before proceeding.`nHit ENTER to close PowerShell..." -ForegroundColor Yellow
     Read-host
     return
-} 
+}
 Write-Host "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)" -ForegroundColor Green
 Write-Host "Hint: When finished with EQ close PowerShell window or hit ctrl-c and confirm exit" -ForegroundColor Yellow
 Write-Host "Waiting for EQ data from REW in clipboard  " -ForegroundColor Yellow -NoNewline
@@ -286,14 +284,14 @@ $spinner = @('/', '-', '\', '|')
 $spinnerindex = 0
 
 do {
- 
+
     # Check clipboard content
     $buffer = get-clipboard -TextFormatType unicodetext
     $bufferHeader = $($buffer -split "`n")[0]
-    if ($bufferHeader -in "Configurable_PEQ","Generic","Extended") {
+    if ($bufferHeader -in "Configurable_PEQ", "Generic", "Extended") {
         [array]$bands = Read-EQText `
-                        -Text ($buffer | Out-String) `
-                        -QDevider $QDevider
+            -Text ($buffer | Out-String) `
+            -QDevider $QDevider
         Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
         Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
         $bufferHeader = ""
@@ -303,7 +301,7 @@ do {
         if ($UserInput -eq $true) {
             Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
             Show-DSPWindowToFront -processName $ProcessName | Out-Null
-            
+
             write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
             Start-Sleep -Seconds $DSPConfig.TimeoutBeforePasteSecs
             [System.Windows.Forms.SendKeys]::SendWait('^a')
@@ -314,17 +312,17 @@ do {
                     Start-Sleep -Milliseconds $KeySet.delay_ms
                 }
             }
-            
-            # Sort bands by frequency (if needed) - currently commented out to preserve original order 
+
+            # Sort bands by frequency (if needed) - currently commented out to preserve original order
             # $bands = $bands | Sort-Object { [double]$_.Freq }
-            
+
             # Prepare transposed table for display
             $bandsTable = [ordered]@{}
             for ($i = 0; $i -lt $bands.Count; $i++) {
                 $bandName = "Band$($i + 1)"
                 $bandsTable[$bandName] = $bands[$i]
             }
-            
+
             # Transpose the table
             $transposed = @()
             foreach ($prop in "Freq", "Q", "Gain") {
@@ -334,17 +332,17 @@ do {
                 }
                 $transposed += [pscustomobject]$row
             }
-            
+
             # Display the transposed table
             Write-Host "`nPasted EQ Bands:" -ForegroundColor Green
-            $transposed | Format-Table -AutoSize 
+            $transposed | Format-Table -AutoSize
             Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Green -NoNewline
         }
         else {
             Write-Host "Cancelled by user. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
             Set-Clipboard "Canceled"
         }
-        
+
     }
     Write-Host -NoNewline ("`b" + $spinner[$spinnerindex])
     $spinnerindex = ($spinnerindex + 1) % $spinner.Length
