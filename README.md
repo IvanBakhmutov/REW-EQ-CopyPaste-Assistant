@@ -17,6 +17,35 @@ A demo video [https://youtu.be/s-LkXFBM7A4](https://youtu.be/s-LkXFBM7A4)
 
 Special thanks to Denis GS for the ideas and collaboration!
 
+## DSP Profile file format
+
+`{`  
+`"version": "1.0",` *// not used yet, ignored so far.*  
+`"Description": "<Human readable name of the app, for simplicity>",` *// A display message of a selected DSP profile when the script is running; does not affect functionality.*  
+`"processName": "<Windows process name, wildcards accepted>",` *// Once you run your DSP software, open Task Manager → Details and find its process name.  
+// Even though you launch SomeDSPApp.exe, the actual process name may differ  
+// (for instance, you might see SomeDSPConfigV4 in the list of tasks).  
+// This happens because the executable you run may act as a wrapper or archive  
+// that extracts and launches another binary internally.  
+// So, what will work is just SomeDSP* *  
+`"QDevider": 1,` *// A divider of a Q value: 1 if Q should remain the same;  
+// >1 will divide REW Q and paste smaller values in the DSP;  
+// <1 pastes greater values.*  
+`"TimeoutBeforePasteSecs": 6,` *// How much time the script waits before sending keystrokes.*  
+`"StartingPositionHint": "Please select 1 band Freq box",` *// A hint message — I'm guessing some DSPs may have a different first parameter than Freq.  
+// Just a message; does not affect functionality.*  
+`"KeystrokeSequence": [` *// Array of keystrokes, with delays between them.*  
+`{`  
+`"keys": "FREQ{ENTER}{DOWN}QVALUE{ENTER}{DOWN}GAIN{ENTER}",`  
+`"delay_ms": 200`  
+`},`  
+`{`  
+`"keys": "{RIGHT}{UP}{UP}",`  
+`"delay_ms": 200`  
+`}`  
+`]`  
+`}`  
+
 ## Change log
 
 06-11-2025:
