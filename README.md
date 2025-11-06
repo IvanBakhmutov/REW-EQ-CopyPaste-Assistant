@@ -2,7 +2,7 @@
 
 # Description
 
-Room EQ Wizard EQ Copy-Paste Assistant script for unlisted DSP brands.
+Room EQ Wizard EQ Copy-Paste Assistant script for DSP software which not captures EQ settings from clipboard.
 
 Room EQ Wizard (REW) includes several predefined profiles for popular DSP models, and some DSP software allows you to paste EQ settings directly from REW. However, many DSP applications don’t support this feature, requiring you to enter the values manually. This is where this assistant script comes in. It assists with the EQ copy-paste procedure from REW software into your DSP app's EQ settings. You just need to run it in the background while working with REW EQ settings and ensure your DSP software is running. When you are ready with EQ filters, hit the "Copy" button in the EQ filters section of REW. This tool will then prompt you to confirm if you want to paste the copied data into your DSP app. After your confirmation, it will bring the DSP process to the foreground, and you will need to click on the first band where the keystroke sequence will start to paste the data.
 
