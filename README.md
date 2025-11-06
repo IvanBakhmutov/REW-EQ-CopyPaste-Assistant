@@ -9,7 +9,7 @@ Room EQ Wizard (REW) has several predefined profiles for popular DSP models, all
 The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain `{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software.
 
 This is just an initial version of the tool. Experiment with it, create your own DSP profiles, and have fun!
-Once you tested your own DSP profile please share it in the Discussoin section of the repository so it will be added to the repo.
+Once you tested your own DSP profile please share it in the Discussion section of the repository so it will be added to the repo.
 
 If the PowerShell execution policy on your Windows machine is set to "Restricted," you can run the `.bat` file, which will execute the PowerShell process and run the script. Otherwise, you can run the `.ps1` file directly. The choice is yours.
 
@@ -30,6 +30,6 @@ Let’s take ESX Toolkit as an example:
     <img src="Resources/Configurable_PEQ-for-ESXToolkit.png" alt="Configurable_PEQ for ESXToolkit" width=481 />
 </p>
 In a such case REW will calculate EQ using correct EQ settings which suit for ESX Toolkit. 
-Side note: ESX Toolkit won’t allow you to enter values outside the supported range. For example, if you’re adjusting the Gain of a selected band and try to input -13, it will accept -1 and then stop—you won’t be able to type the 3, and the value will remain -1 (since the minimum allowed value is -12).
 
+Side note: ESX Toolkit won’t allow you to enter values outside the supported range. For example, if you’re adjusting the Gain of a selected band and try to input -13, it will accept -1 and then stop—you won’t be able to type the 3, and the value will remain -1 (since the minimum allowed value is -12).
 This is why a configurable EQ in REW is necessary; otherwise, the tool would paste incorrect settings into the DSP.
