@@ -1,4 +1,7 @@
 # REW-EQ-CopyPaste-Assistant
+
+# Description
+
 Room EQ Wizard EQ Copy-Paste Assistant script for unlisted DSP brands.
 
 Room EQ Wizard (REW) has several predefined profiles for popular DSP models, allowing EQ settings to be easily copied to the DSP software directly from REW. However, for unlisted models, this assistant script comes into play. It assists with the EQ copy-paste procedure from REW software into your DSP app's EQ settings. You just need to run it in the background while working with REW EQ settings and ensure your DSP software is running. When you are ready with EQ filters, hit the "Copy" button in the EQ filters section of REW. This tool will then prompt you to confirm if you want to paste the copied data into your DSP app. After your confirmation, it will bring the DSP process to the foreground, and you will need to click on the first band where the keystroke sequence will start to paste the data.
@@ -13,3 +16,20 @@ If the PowerShell execution policy on your Windows machine is set to "Restricted
 A demo video [https://youtu.be/s-LkXFBM7A4](https://youtu.be/s-LkXFBM7A4)
 
 Special thanks to Denis GS for the ideas and collaboration!
+
+## Change log
+
+06-11-2025:
+Changed the QDevider value in the ESXToolkit.json profile to 1, as tests in the car showed that the actual Q format is RBJ Q (Half Gain).
+
+For proper AutoEQ in REW that works correctly with your DSP, you need to determine the minimum and maximum values for Frequency, Q, and Gain, and then create a configurable EQ in REW.
+
+Let’s take ESX Toolkit as an example:
+<p align="center">
+    <img src="Resources/ESXToolkit-EQ-ranges.png" alt="ESXToolkit EQ ranges" width=300 />
+    <img src="Resources/Configurable_PEQ-for-ESXToolkit.png" alt="Configurable_PEQ for ESXToolkit" width=481 />
+</p>
+In a such case REW will calculate EQ using correct EQ settings which suit for ESX Toolkit. 
+Side note: ESX Toolkit won’t allow you to enter values outside the supported range. For example, if you’re adjusting the Gain of a selected band and try to input -13, it will accept -1 and then stop—you won’t be able to type the 3, and the value will remain -1 (since the minimum allowed value is -12).
+
+This is why a configurable EQ in REW is necessary; otherwise, the tool would paste incorrect settings into the DSP.
