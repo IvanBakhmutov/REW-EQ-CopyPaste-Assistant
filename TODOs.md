@@ -7,7 +7,12 @@
 - DONE: Update readme.me with details.
 - ADDED: Record demo video.
 
-- DSP profiles list can be expanded with:
+- Nakamichi, Musway, Awave DSPs navigation goes in different way. Main script and profiles format needs to adjusted
+- Make a pop-up notification with instruction how to start and continue paste procedure
+- Separate function for transposed colsole output
+
+- DSP profiles list with your help can be expanded with:
+ Musway,
  Light Audio,
  MadBit,
  Контур,
@@ -16,4 +21,8 @@
  Tonemix,
  новые URAL,
  Awave,
- Sennuopu and others
+ Sennuopu,
+ Mobridge,
+ Zapco,
+ Phoenix Gold,
+ JL and others
