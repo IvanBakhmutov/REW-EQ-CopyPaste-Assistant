@@ -10,6 +10,9 @@
 - Nakamichi, Musway, Awave DSPs navigation goes in different way. Main script and profiles format needs to adjusted
 - Make a pop-up notification with instruction how to start and continue paste procedure
 - Separate function for transposed colsole output
+- Make decimal number in profiles for [math]::round parameter
+- Make delimiter in profile, for DSPs where delimiter is `,`
+- Move functions to a psm1 module for better readability
 
 - DSP profiles list with your help can be expanded with:
  Musway,
