@@ -3,11 +3,13 @@
 	"Description": "Hellion DSP software",
     "processName": "HAM*",
     "QDevider": 1,
+    "QDecimals": 1,
+    "GainDecimals": 1,
     "TimeoutBeforePasteSecs": 6,
     "StartingPositionHint": "Please select 1 band Freq box",
     "KeystrokeSequence": [
         {
-            "keys": "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
+            "keys": "^aFREQ{ENTER}^aQVALUE{ENTER}^aGAIN{ENTER}",
             "delay_ms": 200
         }
     ]

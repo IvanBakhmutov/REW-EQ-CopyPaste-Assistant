@@ -1,0 +1,21 @@
+{
+    "version": "1.0",
+	"Description": "MS Excel",
+    "processName": "excel*",
+    "QDevider": 3,
+    "QDecimals": 3,
+    "GainDecimals": 1,
+    "Delimiter": ".",
+    "TimeoutBeforePasteSecs": 6,
+    "StartingPositionHint": "Please select 1 cell",
+    "KeystrokeSequence": [
+        {
+            "keys": "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
+            "delay_ms": 200
+        },
+        {
+            "keys": "{RIGHT}{UP}{UP}{UP}",
+            "delay_ms": 200
+        }
+    ]
+}
