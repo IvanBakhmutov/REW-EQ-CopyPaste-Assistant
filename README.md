@@ -1,5 +1,9 @@
 # REW-EQ-CopyPaste-Assistant
 
+[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)]()  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 # Description
 
 Room EQ Wizard EQ Copy-Paste Assistant script for DSP software which not captures EQ settings from clipboard.
@@ -47,7 +51,13 @@ Special thanks to Denis GS for the ideas and collaboration!
 `]`  
 `}`  
 
+Donate **[paypal.me/IvanBakhmutov](https://paypal.me/IvanBakhmutov)** to support development
+
 ## Change log
+
+### 09-11-2025:
+Breaking news. Someone released similar tool :) While I'm working on new features and testing the tool with variety of DSP software I'll open donates just not to miss the train, absolutely not necessary from your end, but I will be happy.
+
 ### 08-11-2025:
 
 Great news! I’ve received positive feedback — a few people have already tested the tool, and the responses are encouraging.
