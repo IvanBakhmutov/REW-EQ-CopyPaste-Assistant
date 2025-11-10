@@ -1,0 +1,53 @@
+{
+    "version": "1.0",
+	"Description": "Phoenix Gold DSP software",
+    "processName": "PhoenixGold*",
+    "QDevider": 1,
+    "QDecimals": 1,
+    "GainDecimals": 1,
+    "DecimalSeparator": ".",
+    "TimeoutBeforePasteSecs": 6,
+    "StartingPositionHint": "Please hower mouse over 1 band Freq box and wait",
+    "KeystrokeSequence": [
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "FREQ",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "+27",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "QVALUE",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "+27",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "GAIN",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "-54",
+            "delay_ms": 10
+        },
+        {
+            "mouseChangePositionX": "+51",
+            "delay_ms": 10
+        }
+    ]
+}
