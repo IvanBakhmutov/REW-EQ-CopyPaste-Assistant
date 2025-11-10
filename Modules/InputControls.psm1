@@ -55,6 +55,10 @@ public class MouseControl {
         mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, 0, 0, 0, UIntPtr.Zero);
     }
 
+    public static void LeftClick() {
+        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
+    }
+
     public static void ScrollUp(int amount) {
         mouse_event(MOUSEEVENTF_WHEEL, 0, 0, (uint)amount, UIntPtr.Zero);
     }
@@ -79,13 +83,22 @@ function Invoke-MouseMoveBy {
     [MouseControl]::MoveBy($X, $Y)
 }
 
-function Invoke-MouseClickAt {
+function Invoke-MouseClickLeftAt {
     [CmdletBinding()]
     param (
         [int]$X,
         [int]$Y
     )
     [MouseControl]::ClickAt($X, $Y)
+}
+
+function Invoke-MouseClickRightAt {
+    [CmdletBinding()]
+    param (
+        [int]$X,
+        [int]$Y
+    )
+    [MouseControl]::RightClickAt($X, $Y)
 }
 
 function Invoke-MouseClickRelative {
@@ -101,6 +114,12 @@ function Invoke-MouseRightClick {
     [CmdletBinding()]
     param ()
     [MouseControl]::RightClick()
+}
+
+function Invoke-MouseLeftClick {
+    [CmdletBinding()]
+    param ()
+    [MouseControl]::LeftClick()
 }
 
 function Invoke-MouseScrollUp {
@@ -139,12 +158,21 @@ function Invoke-KeyStroke {
     [System.Windows.Forms.SendKeys]::SendWait($Keys)
 }
 
+function Get-MousePosition {
+    $point = New-Object MouseControl+POINT
+    [MouseControl]::GetCursorPos([ref]$point) | Out-Null
+    return $point.X, $point.Y
+}
+
 # --- Exported Functions ---
 Export-ModuleMember -Function `
     Invoke-MouseMoveBy,
-    Invoke-MouseClickAt,
+    Invoke-MouseClickLeftAt,
+    Invoke-MouseClickRightAt,    
     Invoke-MouseClickRelative,
+    Invoke-MouseLeftClick,
     Invoke-MouseRightClick,
     Invoke-MouseScrollUp,
     Invoke-MouseScrollDown,
-    Invoke-KeyStroke
+    Invoke-KeyStroke,
+    Get-MousePosition

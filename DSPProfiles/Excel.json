@@ -10,12 +10,44 @@
     "StartingPositionHint": "Please select 1 cell",
     "KeystrokeSequence": [
         {
-            "keys": "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "^aFREQ",
             "delay_ms": 200
         },
         {
-            "keys": "{RIGHT}{UP}{UP}{UP}",
+            "mouseChangePositionY": "+25",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },        
+        {
+            "keys": "^aQVALUE",
             "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "+25",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },        
+        {
+            "keys": "^aGAIN",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "-50",
+            "delay_ms": 10
+        },
+        {
+            "mouseChangePositionX": "+66",
+            "delay_ms": 10
         }
     ]
 }

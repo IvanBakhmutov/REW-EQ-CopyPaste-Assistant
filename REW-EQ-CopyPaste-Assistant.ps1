@@ -105,40 +105,71 @@ do {
             write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
             Start-Sleep -Seconds $DSPConfig.TimeoutBeforePasteSecs
             
+            # Check if mouse actions are defined in the profile
+            $hasMouseAction = $DSPConfig.KeystrokeSequence | Where-Object {
+               $_.PSObject.Properties.Name -match '^mouse'
+            }
+
+            if($null -ne $hasMouseAction) {
+                Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
+                $MouseX, $MouseY = Get-MousePosition
+                Write-Host "Current mouse position: X=$MouseX, Y=$MouseY"
+            }
+
             # Start pasting EQ bands with configured keystrokes and mouse actions
             foreach ($band in $bands) {
                 foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
-                    $keyToSend = $KeySet.keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain)
-                    [System.Windows.Forms.SendKeys]::SendWait($keyToSend)
-                    Start-Sleep -Milliseconds $KeySet.delay_ms
+                    switch($KeySet.PSObject.Properties.Name) {
+                        "mouseChangePositionY" {
+                            $MouseY += [int]$KeySet.mouseChangePositionY
+                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                            Write-Host -ForegroundColor Blue "New MouseY: $MouseY"
+                        }
+                        "mouseChangePositionX" {
+                            $MouseX += [int]$KeySet.mouseChangePositionX
+                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                            Write-Host -ForegroundColor Blue "New MouseX: $MouseX"
+                        }
+                        "mouseClick" {
+                            switch ($KeySet.mouseClick.ToLower()) {
+                                "left" {
+                                    Invoke-MouseClickLeftAt -X $MouseX -Y $MouseY
+                                    Start-Sleep -Milliseconds $KeySet.delay_ms
+                                    Write-Host -ForegroundColor Blue "Left click at X:$MouseX Y:$MouseY"
+                                }
+                                "right" {
+                                    Invoke-MouseClickRightAt -X $MouseX -Y $MouseY
+                                    Start-Sleep -Milliseconds $KeySet.delay_ms
+                                    Write-Host -ForegroundColor Blue "Right click at X:$MouseX Y:$MouseY"
+                                }
+                            }
+                        }
+                        "MouseScrollUp" {
+                            Invoke-MouseScrollUp -Amount $KeySet.MouseScrollUp
+                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                            Write-Host -ForegroundColor Blue "Mouse scroll up by $($KeySet.MouseScrollUp)"
+                        }
+                        "Invoke-MouseScrollDown" {
+                            Invoke-MouseScrollDown -Amount $KeySet.MouseScrollDown
+                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                            Write-Host -ForegroundColor Blue "Mouse scroll down by $($KeySet.MouseScrollDown)"
+                        }
+                        "keys" {
+                            $keyToSend = $KeySet.keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain)
+                            Invoke-KeyStroke -Keys $keyToSend
+                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                            Write-Host -ForegroundColor Blue "Sent keystrokes: $keyToSend"
+                        }
+                    }
                 }
             }
 
-            # Sort bands by frequency (if needed) - currently commented out to preserve original order
-            # $bands = $bands | Sort-Object { [double]$_.Freq }
-
-            # Prepare transposed table for display
-           <# $bandsTable = [ordered]@{}
-            for ($i = 0; $i -lt $bands.Count; $i++) {
-                $bandName = "Band$($i + 1)"
-                $bandsTable[$bandName] = $bands[$i]
-            }
-
-            # Transpose the table
-            $transposed = @()
-            foreach ($prop in "Freq", "Q", "Gain") {
-                $row = [ordered]@{ Property = $prop }
-                foreach ($band in $bandsTable.GetEnumerator()) {
-                    $row[$band.Key] = $band.Value.$prop
-                }
-                $transposed += [pscustomobject]$row
-            }
-
-            # Display the transposed table
-            Write-Host "`nPasted EQ Bands:" -ForegroundColor Green
-            $transposed | Format-Table -AutoSize #>
+            # Show transposed table of pasted bands
             Show-TransposedTable -bands $bands | Format-Table -AutoSize
             Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Green -NoNewline
+            $MouseX = $null
+            $MouseY = $null
+            $keyToSend = $null
         }
         else {
             Write-Host "Cancelled by user. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
