@@ -5,7 +5,7 @@
     "QDevider": 1,
     "QDecimals": 1,
     "GainDecimals": 1,
-    "Delimiter": ".",
+    "DecimalSeparator": ".",
     "TimeoutBeforePasteSecs": 6,
     "StartingPositionHint": "Please select 1 band Freq box",
     "KeystrokeSequence": [

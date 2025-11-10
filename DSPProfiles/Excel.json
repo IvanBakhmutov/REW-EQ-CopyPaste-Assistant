@@ -3,9 +3,9 @@
 	"Description": "MS Excel",
     "processName": "excel*",
     "QDevider": 3,
-    "QDecimals": 3,
+    "QDecimals": 10,
     "GainDecimals": 1,
-    "Delimiter": ".",
+    "DecimalSeparator": ".",
     "TimeoutBeforePasteSecs": 6,
     "StartingPositionHint": "Please select 1 cell",
     "KeystrokeSequence": [

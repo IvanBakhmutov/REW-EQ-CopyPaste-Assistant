@@ -28,33 +28,31 @@ function Read-EQText {
         [Parameter(Mandatory = $true)][double]$QDevider,
         [Parameter(Mandatory = $true)][int]$QDecimals,
         [Parameter(Mandatory = $true)][int]$GainDecimals,
-        [Parameter(Mandatory = $true)][string]$Delimiter
+        [Parameter(Mandatory = $true)][string]$DecimalSeparator
     )
 
     if (-not $Text) { return @() }
 
     $lines = $Text -split "`r?`n"
-
     $bands = $lines[1..$lines.count] | ConvertFrom-Csv -Delimiter "`t"
 
     $results = @()
 
     $bands | where-Object { $_.Type -eq 'PK' } | ForEach-Object {
-
         if($QDevider -ne 1){
             # Adjust Q value based on QDevider and round to specified decimals
-            $adjustedQ = ([math]::round($([double]($_.Q -replace ",", ".") / $QDevider), $QDecimals)).toString()
+            $adjustedQ = [math]::round($([double]($_.Q -replace ",", ".") / $QDevider), $QDecimals)
         } else {
-            $adjustedQ = ([math]::round([double]($_.Q -replace ",", "."), $QDecimals)).toString()
+            $adjustedQ = [math]::round([double]($_.Q -replace ",", "."), $QDecimals)
         }
 
         # Round Gain to specified decimals
-        $adjustedGain = ([math]::round([double]($_.'Gain(dB)' -replace ",", "."), $GainDecimals)).toString()
+        $adjustedGain = [math]::round([double]($_.'Gain(dB)' -replace ",", "."), $GainDecimals)
 
         # Replace decimal separator if needed
-        if($Delimiter -eq ","){
-            $adjustedGain = $adjustedGain -replace "\.", ","
-            $adjustedQ = $adjustedQ -replace "\.", ","
+        if($DecimalSeparator -eq ","){
+            $adjustedGain = $adjustedGain.tostring() -replace "\.", ","
+            $adjustedQ = $adjustedQ.tostring() -replace "\.", ","
         }
 
         $results += [PSCustomObject]@{
@@ -73,6 +71,7 @@ function Read-EQText {
         return @()
     }
 }
+
 
 # Show a confirmation dialog to the user and return their response as a boolean.
 <#
@@ -253,7 +252,54 @@ public static class NativeMethods {
     return $true
 }
 
+# Show transposed table of EQ bands
+<#
+.SYNOPSIS
+   Displays a transposed table of EQ bands. 
+.DESCRIPTION
+   This function takes an array of EQ band objects and transposes the data for better readability in the console.
+.EXAMPLE        
+Show-TransposedTable -Bands $bands | Format-Table -AutoSize
+   This example transposes the EQ bands and formats the output as a table.  
+   Output will be similar to:
+    Property   Band1   Band2   Band3   ...
+    -------    -----   -----   -----   ...
+    Freq       100     200     300     ...
+    Q          1.0     1.5     2.0     ...
+    Gain       3.0     -2.0    0.0     ...
+.INPUTS
+   [array] $Bands - An array of EQ band objects with properties Freq, Q, and Gain.
+.OUTPUTS
+   [array] - An array of transposed objects for display.
+
+#>
+function Show-TransposedTable {
+    param(
+        [Parameter(Mandatory = $true)][array]$Bands
+    )
+
+    $bandsTable = [ordered]@{}
+    for ($i = 0; $i -lt $Bands.Count; $i++) {
+        $bandName = "Band$($i + 1)"
+        $bandsTable[$bandName] = $Bands[$i]
+    }
+
+    $transposed = @()
+    foreach ($property in $bandsTable.Values[0].PSObject.Properties.Name) {
+        $row = [ordered]@{}
+        $row["Parameter"] = $property
+        for ($i = 0; $i -lt $bandsTable.Count; $i++) {
+            $bandName = "Band$($i + 1)"
+            $row[$bandName] = $bandsTable[$bandName].$property
+        }
+        $transposed += [PSCustomObject]$row
+    }
+
+    return $transposed
+}
+
 Export-ModuleMember -Function `
     Read-EQText, `
     Show-ConfirmationDialog, `
-    Show-DSPWindowToFront
+    Show-DSPWindowToFront, `
+    Show-TransposedTable

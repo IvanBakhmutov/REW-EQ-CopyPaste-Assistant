@@ -5,14 +5,14 @@
 - DONE: Review script body, consider other options apart of Configurable_PEQ (if it is needed?).
 - REMOVED: Decimal point/comma read from profile, was not needed as for math operations it has to be point (not sure why in REW it is comma).
 - DONE: Update readme.me with details.
-- ADDED: Record demo video.
+- DONE: Record demo video.
+- DONE: Make a pop-up notification with instruction how to start and continue paste procedure.
+- DONE: Make decimal number in profiles for [math]::round parameter.
+- DONE: Make delimiter in profile, for DSPs where delimiter is `,`.
+- DONE: Move functions to a psm1 module for better readability.
+- DONE: Separate function for transposed colsole output.
 
-- Nakamichi, Musway, Awave DSPs navigation goes in different way. Main script and profiles format needs to adjusted
-- Make a pop-up notification with instruction how to start and continue paste procedure
-- Separate function for transposed colsole output
-- Make decimal number in profiles for [math]::round parameter
-- Make delimiter in profile, for DSPs where delimiter is `,`
-- Move functions to a psm1 module for better readability
+- Nakamichi, Musway, Awave DSPs navigation goes in different way. Main script and profiles format needs to adjusted.
 
 - DSP profiles list with your help can be expanded with:
  Musway,

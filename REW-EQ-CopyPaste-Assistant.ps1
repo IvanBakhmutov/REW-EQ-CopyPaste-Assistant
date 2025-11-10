@@ -45,10 +45,10 @@ $ProcessName = $DSPConfig.processName
 if($DSPConfig.QDevider){
     $QDevider = $DSPConfig.QDevider
 }
-if($DSPConfig.Delimiter){
-    $Delimiter = $DSPConfig.Delimiter
+if($DSPConfig.DecimalSeparator){
+    $DecimalSeparator = $DSPConfig.DecimalSeparator
 } else {
-    $Delimiter = "."
+    $DecimalSeparator = "."
 }
 if($null -ne $DSPConfig.QDecimals){
     $QDecimals = $DSPConfig.QDecimals
@@ -83,7 +83,7 @@ $spinnerindex = 0
 do {
 
     # Check clipboard content
-    $buffer = get-clipboard -TextFormatType unicodetext
+    $buffer = get-clipboard
     $bufferHeader = $($buffer -split "`n")[0]
     if ($bufferHeader -in "Configurable_PEQ", "Generic", "Extended") {
         [array]$bands = Read-EQText `
@@ -91,7 +91,7 @@ do {
             -QDevider $QDevider `
             -QDecimals $QDecimals `
             -GainDecimals $GainDecimals `
-            -Delimiter $Delimiter
+            -DecimalSeparator $DecimalSeparator
         Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
         Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
         $bufferHeader = ""
@@ -104,7 +104,8 @@ do {
 
             write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
             Start-Sleep -Seconds $DSPConfig.TimeoutBeforePasteSecs
-           # [System.Windows.Forms.SendKeys]::SendWait('^a')
+            
+            # Start pasting EQ bands with configured keystrokes and mouse actions
             foreach ($band in $bands) {
                 foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
                     $keyToSend = $KeySet.keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain)
@@ -117,7 +118,7 @@ do {
             # $bands = $bands | Sort-Object { [double]$_.Freq }
 
             # Prepare transposed table for display
-            $bandsTable = [ordered]@{}
+           <# $bandsTable = [ordered]@{}
             for ($i = 0; $i -lt $bands.Count; $i++) {
                 $bandName = "Band$($i + 1)"
                 $bandsTable[$bandName] = $bands[$i]
@@ -135,7 +136,8 @@ do {
 
             # Display the transposed table
             Write-Host "`nPasted EQ Bands:" -ForegroundColor Green
-            $transposed | Format-Table -AutoSize
+            $transposed | Format-Table -AutoSize #>
+            Show-TransposedTable -bands $bands | Format-Table -AutoSize
             Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Green -NoNewline
         }
         else {

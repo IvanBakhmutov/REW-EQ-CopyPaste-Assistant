@@ -55,6 +55,11 @@ Donate **[paypal.me/IvanBakhmutov](https://paypal.me/IvanBakhmutov)** to support
 
 ## Change log
 
+### 10-11-2025:
+Back on track - account has been unblocked. 
+Implemented psm modules and floating point rounding, configurable decimal separator. 
+Testing in excel was not a bad idea, currently testing mouse operations, this will cover majority of DSPs.
+
 ### 09-11-2025:
 Breaking news. Someone released similar tool :) While I'm working on new features and testing the tool with variety of DSP software I'll open donates just not to miss the train, absolutely not necessary from your end, but I will be happy.
 
