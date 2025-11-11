@@ -95,7 +95,7 @@ do {
             -DecimalSeparator $DecimalSeparator
         Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
         Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
-        Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
+        Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
         $bufferHeader = ""
 
         $UserInput = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
@@ -103,9 +103,6 @@ do {
         if ($UserInput -eq $true) {
             Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
             Show-DSPWindowToFront -processName $ProcessName | Out-Null
-
-            write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
-            Start-Sleep -Seconds $DSPConfig.TimeoutBeforePasteSecs
 
             # Check if mouse actions are defined in the profile
             $hasMouseAction = $DSPConfig.KeystrokeSequence | Where-Object {
@@ -121,6 +118,9 @@ do {
                 Write-Host "No mouse actions detected in profile. Proceeding with keyboard input only." -ForegroundColor Yellow
                 Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started."
             }
+
+            write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
+            Start-Sleep -Seconds $DSPConfig.TimeoutBeforePasteSecs
 
             # Start pasting EQ bands with configured keystrokes and mouse actions
             foreach ($band in $bands) {
