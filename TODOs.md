@@ -12,6 +12,8 @@
 - DONE: Move functions to a psm1 module for better readability.
 - DONE: Separate function for transposed colsole output.
 
+- Transposed output isn't showing all bands, to be fixed
+- Update json file help in readme
 - Nakamichi, Musway, Awave DSPs navigation goes in different way. Main script and profiles format needs to adjusted.
 
 - DSP profiles list with your help can be expanded with:

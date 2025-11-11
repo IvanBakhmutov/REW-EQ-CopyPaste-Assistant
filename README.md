@@ -55,6 +55,9 @@ Donate **[paypal.me/IvanBakhmutov](https://paypal.me/IvanBakhmutov)** to support
 
 ## Change log
 
+### 11-11-2025:
+Tested Phoenix Gold software with mouse'n'keyboard input [watch on YouTube](https://www.youtube.com/watch?v=EdCybWHxmO4)
+
 ### 10-11-2025:
 Back on track - account has been unblocked. 
 Implemented psm modules and floating point rounding, configurable decimal separator. 
