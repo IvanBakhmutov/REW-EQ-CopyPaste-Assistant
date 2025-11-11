@@ -75,6 +75,7 @@ if ($processes.Count -eq 0) {
     return
 }
 Write-Host "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)" -ForegroundColor Green
+Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)`nWaiting for EQ data from REW in clipboard" 
 Write-Host "Hint: When finished with EQ close PowerShell window or hit ctrl-c and confirm exit" -ForegroundColor Yellow
 Write-Host "Waiting for EQ data from REW in clipboard  " -ForegroundColor Yellow -NoNewline
 $spinner = @('/', '-', '\', '|')
@@ -94,6 +95,7 @@ do {
             -DecimalSeparator $DecimalSeparator
         Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
         Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
+        Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
         $bufferHeader = ""
 
         $UserInput = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
@@ -104,7 +106,7 @@ do {
 
             write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
             Start-Sleep -Seconds $DSPConfig.TimeoutBeforePasteSecs
-            
+
             # Check if mouse actions are defined in the profile
             $hasMouseAction = $DSPConfig.KeystrokeSequence | Where-Object {
                $_.PSObject.Properties.Name -match '^mouse'
@@ -112,8 +114,12 @@ do {
 
             if($null -ne $hasMouseAction) {
                 Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
+                Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows."
                 $MouseX, $MouseY = Get-MousePosition
-                Write-Host "Current mouse position: X=$MouseX, Y=$MouseY"
+                Write-Host "Current mouse position: X=$MouseX, Y=$MouseY" -foregroundColor blue
+            } else {
+                Write-Host "No mouse actions detected in profile. Proceeding with keyboard input only." -ForegroundColor Yellow
+                Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started."
             }
 
             # Start pasting EQ bands with configured keystrokes and mouse actions
@@ -167,12 +173,14 @@ do {
             # Show transposed table of pasted bands
             Show-TransposedTable -bands $bands | Format-Table -AutoSize
             Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Green -NoNewline
+            Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste finished" -Message "Waiting for new data in clipboard"
             $MouseX = $null
             $MouseY = $null
             $keyToSend = $null
         }
         else {
             Write-Host "Cancelled by user. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
+            Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste canceled" -Message "Cancelled by user. Waiting for new data in clipboard"
             Set-Clipboard "Canceled"
         }
 

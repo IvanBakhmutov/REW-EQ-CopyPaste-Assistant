@@ -1,9 +1,9 @@
 {
     "version": "1.0",
-	"Description": "Phoenix Gold DSP software",
-    "processName": "PhoenixGold*",
+	"Description": "MUSWAY (no 512K) DSP software",
+    "processName": "Musway*",
     "QDevider": 1,
-    "QDecimals": 1,
+    "QDecimals": 2,
     "GainDecimals": 1,
     "DecimalSeparator": ".",
     "TimeoutBeforePasteSecs": 6,
@@ -14,11 +14,11 @@
             "delay_ms": 50
         },
         {
-            "keys": "FREQ",
+            "keys": "^aFREQ",
             "delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+27",
+            "mouseChangePositionY": "+22",
             "delay_ms": 10
         },
         {
@@ -26,11 +26,11 @@
             "delay_ms": 50
         },
         {
-            "keys": "QVALUE",
+            "keys": "^aQVALUE",
             "delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+27",
+            "mouseChangePositionY": "+22",
             "delay_ms": 10
         },
         {
@@ -38,15 +38,15 @@
             "delay_ms": 50
         },
         {
-            "keys": "GAIN",
+            "keys": "^aGAIN{ENTER}",
             "delay_ms": 200
         },
         {
-            "mouseChangePositionY": "-54",
+            "mouseChangePositionY": "-44",
             "delay_ms": 10
         },
         {
-            "mouseChangePositionX": "+51",
+            "mouseChangePositionX": "+34",
             "delay_ms": 10
         }
     ]

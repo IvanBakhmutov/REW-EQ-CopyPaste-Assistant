@@ -298,8 +298,46 @@ function Show-TransposedTable {
     return $transposed
 }
 
+# Show a desktop notification with specified title and message.
+<#
+.SYNOPSIS
+   Displays a desktop notification.
+.DESCRIPTION
+   This function creates a desktop notification with a specified title and message for a given timeout duration.
+.EXAMPLE
+   Show-Notification -Title "EQ Paste Assistant" -Message "Paste started" -Timeout 5000
+   This example shows a notification with the title "EQ Paste Assistant" and the message "Paste started" for 5 seconds.
+.INPUTS
+   [string] $Title - The title of the notification.
+   [string] $Message - The message body of the notification.
+   [int] $Timeout - The duration in milliseconds for which the notification is displayed.  Default is 5000 ms.
+.OUTPUTS
+   None.
+#>
+function Show-Notification {
+    param(
+        [string]$Title,
+        [string]$Message,
+        [int]$Timeout = 5000
+    )
+
+    Start-Job -ScriptBlock {
+        param($Title, $Message, $Timeout)
+        Add-Type -AssemblyName System.Windows.Forms
+        $notify = New-Object System.Windows.Forms.NotifyIcon
+        $notify.Icon = [System.Drawing.SystemIcons]::application #Information
+        $notify.BalloonTipTitle = $Title
+        $notify.BalloonTipText = $Message
+        $notify.Visible = $true
+        $notify.ShowBalloonTip($Timeout)
+        Start-Sleep -Milliseconds $Timeout
+        $notify.Dispose()
+    } -ArgumentList $Title, $Message, $Timeout | Out-Null
+}
+
 Export-ModuleMember -Function `
     Read-EQText, `
     Show-ConfirmationDialog, `
     Show-DSPWindowToFront, `
-    Show-TransposedTable
+    Show-TransposedTable,
+    Show-Notification
