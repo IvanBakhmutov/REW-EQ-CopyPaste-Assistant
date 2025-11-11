@@ -39,10 +39,11 @@ function Read-EQText {
     $results = @()
 
     $bands | where-Object { $_.Type -eq 'PK' } | ForEach-Object {
-        if($QDevider -ne 1){
+        if ($QDevider -ne 1) {
             # Adjust Q value based on QDevider and round to specified decimals
             $adjustedQ = [math]::round($([double]($_.Q -replace ",", ".") / $QDevider), $QDecimals)
-        } else {
+        }
+        else {
             $adjustedQ = [math]::round([double]($_.Q -replace ",", "."), $QDecimals)
         }
 
@@ -50,7 +51,7 @@ function Read-EQText {
         $adjustedGain = [math]::round([double]($_.'Gain(dB)' -replace ",", "."), $GainDecimals)
 
         # Replace decimal separator if needed
-        if($DecimalSeparator -eq ","){
+        if ($DecimalSeparator -eq ",") {
             $adjustedGain = $adjustedGain.tostring() -replace "\.", ","
             $adjustedQ = $adjustedQ.tostring() -replace "\.", ","
         }
@@ -255,12 +256,12 @@ public static class NativeMethods {
 # Show transposed table of EQ bands
 <#
 .SYNOPSIS
-   Displays a transposed table of EQ bands. 
+   Displays a transposed table of EQ bands.
 .DESCRIPTION
    This function takes an array of EQ band objects and transposes the data for better readability in the console.
-.EXAMPLE        
+.EXAMPLE
 Show-TransposedTable -Bands $bands | Format-Table -AutoSize
-   This example transposes the EQ bands and formats the output as a table.  
+   This example transposes the EQ bands and formats the output as a table.
    Output will be similar to:
     Property   Band1   Band2   Band3   ...
     -------    -----   -----   -----   ...
@@ -279,22 +280,21 @@ function Show-TransposedTable {
     )
 
     $bandsTable = [ordered]@{}
-    for ($i = 0; $i -lt $Bands.Count; $i++) {
+
+    for ($i = 0; $i -lt $bands.Count; $i++) {
         $bandName = "Band$($i + 1)"
-        $bandsTable[$bandName] = $Bands[$i]
+        $bandsTable[$bandName] = $bands[$i]
     }
 
     $transposed = @()
-    foreach ($property in $bandsTable.Values[0].PSObject.Properties.Name) {
-        $row = [ordered]@{}
-        $row["Parameter"] = $property
-        for ($i = 0; $i -lt $bandsTable.Count; $i++) {
-            $bandName = "Band$($i + 1)"
-            $row[$bandName] = $bandsTable[$bandName].$property
-        }
-        $transposed += [PSCustomObject]$row
-    }
 
+    foreach ($prop in "Freq", "Q", "Gain") {
+        $row = [ordered]@{ Property = $prop }
+        foreach ($band in $bandsTable.GetEnumerator()) {
+            $row[$band.Key] = $band.Value.$prop
+        }
+        $transposed += [pscustomobject]$row
+    }
     return $transposed
 }
 
