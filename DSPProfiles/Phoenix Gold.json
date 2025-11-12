@@ -6,7 +6,7 @@
     "QDecimals": 1,
     "GainDecimals": 1,
     "DecimalSeparator": ".",
-    "TimeoutBeforePasteSecs": 6,
+    "TimeoutBeforePasteSecs": 10,
     "StartingPositionHint": "Please hover mouse over 1 band Freq box and wait",
     "KeystrokeSequence": [
         {

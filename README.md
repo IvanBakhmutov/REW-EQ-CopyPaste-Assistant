@@ -55,6 +55,10 @@ Donate **[paypal.me/IvanBakhmutov](https://paypal.me/IvanBakhmutov)** to support
 
 ## Change log
 
+### 12-11-2025:
+GUI for profile selection added. Event notification popups added.
+Increased Phoenix Gold timeout before input as DSP software for some reason restores windowed mode instead of staying in maximized mode.
+
 ### 11-11-2025:
 Tested Phoenix Gold software with mouse'n'keyboard input [watch on YouTube](https://www.youtube.com/watch?v=EdCybWHxmO4)
 
