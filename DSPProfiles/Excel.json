@@ -8,6 +8,9 @@
     "DecimalSeparator": ".",
     "TimeoutBeforePasteSecs": 6,
     "StartingPositionHint": "Please select 1 cell",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "ProfilePerformActionHotkey": "F5",
+    "ProfileCancelActionHotkey": "F6",
     "KeystrokeSequence": [
         {
             "mouseClick": "left",

@@ -16,5 +16,6 @@
         <Button x:Name="EditBTN" Content="*Edit" Width="80" IsEnabled="False" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,30,100,5"/>
         <Button x:Name="CloseBTN" Content="Close" Width="80" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,30,10,5"/>
         <Button x:Name="GitHub" Content="GitHub project page" Width="156"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,5" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"/>
+        <Label x:Name="HotkeyHint" Content="HotkeyHint" HorizontalAlignment="Left" Margin="161,15,0,5" VerticalAlignment="Bottom" Visibility="Hidden"/>
     </Grid>
 </Window>

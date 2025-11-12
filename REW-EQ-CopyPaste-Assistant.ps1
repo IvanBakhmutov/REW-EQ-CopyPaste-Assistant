@@ -14,10 +14,19 @@ Remove-Module InputControls -ErrorAction SilentlyContinue
 Import-Module "$ModulesDir\REW-EQ-CopyPaste-Assistant.psm1"
 Import-Module "$ModulesDir\InputControls.psm1"
 
-Write-Host "Script started" -ForegroundColor Yellow
-$selectedProfile = $null
 # Set the console output encoding to UTF-8 to properly display Cyrillic characters
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+Write-Host "Script started" -ForegroundColor Yellow
+
+# Load global config
+$ConfigPath = Join-Path -Path $ResourcesDir -ChildPath "Config.json"
+$GlobalConfig = Get-Content $ConfigPath -Raw | ConvertFrom-Json
+$GlobalPerformActionHotkey = $GlobalConfig.GlobalPerformActionHotkey
+$GlobalCancelHotkey = $GlobalConfig.GlobalCancelHotkey
+$EffectivePerformActionHotkey = $GlobalPerformActionHotkey
+$EffectiveCancelHotkey = $GlobalCancelHotkey
+
+$selectedProfile = $null
 
 # Load the XAML file
 [xml]$xaml = (Get-Content -Path "$ResourcesDir\ChooseProfileGUI.xml" -Raw)
@@ -26,6 +35,10 @@ $selectedProfile = $null
 Add-Type -AssemblyName PresentationFramework
 $reader = (New-Object System.Xml.XmlNodeReader $xaml)
 $window = [Windows.Markup.XamlReader]::Load($reader)
+
+# Set hotkey hint label
+$hotkeyHintLabel = $window.FindName("HotkeyHint")
+$hotkeyHintLabel.Content = "Hotkeys: Perform - $GlobalPerformActionHotkey, Cancel - $GlobalCancelHotkey"
 
 # Populate the profiles list in the GUI
 $profileListBox = $window.FindName("ProfileList")
@@ -44,6 +57,8 @@ $window.FindName("OKBTN").Add_Click({
     $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem
     if ($null -ne $selectedProfileFileName) {
         $script:selectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
+        $script:PerformActionHotkey = $EffectivePerformActionHotkey
+        $script:CancelActionHotkey = $EffectiveCancelHotkey
         Write-Host "Profile selected: $selectedProfile" -ForegroundColor Yellow
        # Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Selected profile: $selectedProfileFileName"
         $window.Close()
@@ -57,6 +72,35 @@ $window.FindName("ProfileList").Add_SelectionChanged({
         $window.FindName("ProfileText").Text = $profileContent
         $window.FindName("OKBTN").IsEnabled = $true
        # $window.FindName("EditBTN").IsEnabled = $true
+        switch(($profileContent | convertfrom-json).HotkeyOrDelayPreference) {
+            "Hotkey" {
+                $hotkeyHintLabel.Visibility = "Visible"
+            }
+            "Delay" {
+                $hotkeyHintLabel.Visibility = "Hidden"
+            }
+            Default {
+                $hotkeyHintLabel.Visibility = "Hidden"
+            }
+        }
+
+        if((($profileContent | convertfrom-json).ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and `
+            ($null -ne ($profileContent | convertfrom-json).ProfilePerformActionHotkey)) {
+                $EffectivePerformActionHotkey = ($profileContent | convertfrom-json).ProfilePerformActionHotkey
+        } else {
+            $EffectivePerformActionHotkey = $GlobalPerformActionHotkey
+        }
+        if((($profileContent | convertfrom-json).ProfileCancelActionHotkey -ne $GlobalCancelHotkey) -and `
+            ($null -ne ($profileContent | convertfrom-json).ProfileCancelActionHotkey)) {
+                $EffectiveCancelHotkey = ($profileContent | convertfrom-json).ProfileCancelActionHotkey
+        } else {
+            $EffectiveCancelHotkey = $GlobalCancelHotkey
+        }
+
+        $hotkeyHintLabel.Content = "Hotkeys: Perform - $EffectivePerformActionHotkey, Cancel - $EffectiveCancelHotkey"
+        if(($GlobalPerformActionHotkey -ne $EffectivePerformActionHotkey) -or ($GlobalCancelHotkey -ne $EffectiveCancelHotkey)) {
+            $hotkeyHintLabel.Content += " (override)"
+        }
     } else {
         $window.FindName("ProfileText").Text = "Please select a profile"
         $window.FindName("OKBTN").IsEnabled = $false
@@ -69,10 +113,10 @@ $window.ShowDialog() | Out-Null
 # Load selected profile
 $DSPConfig = Get-Content $selectedProfile -Raw | ConvertFrom-Json
 $ProcessName = $DSPConfig.processName
-if($DSPConfig.QDevider){
+if($null -ne $DSPConfig.QDevider){
     $QDevider = $DSPConfig.QDevider
 }
-if($DSPConfig.DecimalSeparator){
+if($null -ne $DSPConfig.DecimalSeparator){
     $DecimalSeparator = $DSPConfig.DecimalSeparator
 } else {
     $DecimalSeparator = "."
@@ -121,15 +165,38 @@ do {
             -GainDecimals $GainDecimals `
             -DecimalSeparator $DecimalSeparator
         Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
+        
         Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
-        Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
+        Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
+            -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
         $bufferHeader = ""
 
-        $UserInput = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
+        Show-DSPWindowToFront -processName $ProcessName | Out-Null
+        if(($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -eq "Hotkey")) {
+            Write-Host "Waiting for user to press '$PerformActionHotkey' to proceed or '$CancelActionHotkey' to cancel. Timeout in $($GlobalConfig.HotkeyTimeoutSecs) seconds..." -ForegroundColor Yellow
+            $hotkeyResult = $(Wait-HotkeyInput -TimeoutSecs $GlobalConfig.HotkeyTimeoutSecs)
+            ##left here
+            switch ($hotkeyResult) {
+                $PerformActionHotkey {
+                    $UserHasConfirmedAction = $true
+                }
+                $CancelActionHotkey {
+                    $UserHasConfirmedAction = $false
+                }
+                default {
+                    Write-Host "No hotkey pressed within timeout. Canceling paste." -ForegroundColor Yellow
+                    $UserHasConfirmedAction = $false
+                }
+            }
+        } else {
+            $UserHasConfirmedAction = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
+            Write-Host "Waiting for user confirmation dialog to proceed with paste..." -ForegroundColor Yellow
+        }
+        
 
-        if ($UserInput -eq $true) {
+        if ($UserHasConfirmedAction -eq $true) {
             Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
-            Show-DSPWindowToFront -processName $ProcessName | Out-Null
+
 
             # Check if mouse actions are defined in the profile
             $hasMouseAction = $DSPConfig.KeystrokeSequence | Where-Object {

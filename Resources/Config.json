@@ -1,0 +1,5 @@
+{
+    "GlobalPerformActionHotkey": "F11",
+    "GlobalCancelHotkey": "F12",
+    "HotkeyTimeoutSecs": 60
+}
