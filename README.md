@@ -18,7 +18,7 @@ Once you tested your own DSP profile please share it in the Discussion section o
 
 If the PowerShell execution policy on your Windows machine is set to "Restricted," you can run the `.bat` file, which will execute the PowerShell process and run the script. Otherwise, you can run the `.ps1` file directly. The choice is yours.
 
-A demo video [https://youtu.be/s-LkXFBM7A4](https://youtu.be/s-LkXFBM7A4)
+A demo video <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://youtu.be/s-LkXFBM7A4)
 
 Special thanks to Denis GS for the ideas and collaboration!
 
@@ -56,11 +56,12 @@ Donate **[paypal.me/IvanBakhmutov](https://paypal.me/IvanBakhmutov)** to support
 ## Change log
 
 ### 12-11-2025:
-GUI for profile selection added. Event notification popups added.
-Increased Phoenix Gold timeout before input as DSP software for some reason restores windowed mode instead of staying in maximized mode.
+GUI for profile selection added. Event notification popups added.  
+Increased Phoenix Gold timeout before input as DSP software for some reason restores windowed mode instead of staying in maximized mode.  
+GUI demo <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=ccjcXb-yxC0)
 
 ### 11-11-2025:
-Tested Phoenix Gold software with mouse'n'keyboard input [watch on YouTube](https://www.youtube.com/watch?v=EdCybWHxmO4)
+Tested Phoenix Gold software with mouse'n'keyboard input <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=EdCybWHxmO4)
 
 ### 10-11-2025:
 Back on track - account has been unblocked. 
