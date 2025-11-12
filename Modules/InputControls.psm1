@@ -2,7 +2,7 @@
 # Module: Mouse and Keyboard Control Utilities for REW-EQ-CopyPaste-Assistant
 # Description: Provides mouse & keyboard control utilities
 # Author: Ivan Bakhmutov
-# Date: 2024-06-10
+# Date: 2025-11-12
 # ============================================
 
 # Ensure .NET types are defined only once

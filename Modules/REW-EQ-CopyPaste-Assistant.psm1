@@ -2,7 +2,7 @@
 # Module: REW-EQ-CopyPaste-Assistant
 # Description: Main module for REW-EQ-CopyPaste-Assistant
 # Author: Ivan Bakhmutov
-# Date: 2024-06-10
+# Date: 2025-11-12
 # ============================================
 
 # Parse copied EQ text data from clipboard and return an array of objects with Freq, Q, and Gain properties.
