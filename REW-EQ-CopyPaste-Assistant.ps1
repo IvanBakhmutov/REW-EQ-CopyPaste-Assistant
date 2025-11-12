@@ -1,43 +1,70 @@
-﻿$scriptDir = Split-Path -Parent $PSCommandPath
+﻿# ============================================
+# Script: REW-EQ-CopyPaste-Assistant
+# Description: Provides automated mouse & keyboard input to paste REW EQ settings into DSP software
+# Author: Ivan Bakhmutov
+# Date: 2025-06-12
+# ============================================
+
+$scriptDir = Split-Path -Parent $PSCommandPath
 $DSPProfilesDir = Join-Path -Path $scriptDir -ChildPath "DSPProfiles"
 $ModulesDir = Join-Path -Path $scriptDir -ChildPath "Modules"
+$ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources"
 Remove-Module REW-EQ-CopyPaste-Assistant -ErrorAction SilentlyContinue
 Remove-Module InputControls -ErrorAction SilentlyContinue
 Import-Module "$ModulesDir\REW-EQ-CopyPaste-Assistant.psm1"
 Import-Module "$ModulesDir\InputControls.psm1"
 
 Write-Host "Script started" -ForegroundColor Yellow
-
+$selectedProfile = $null
 # Set the console output encoding to UTF-8 to properly display Cyrillic characters
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-# Load DSP profiles
+# Load the XAML file
+[xml]$xaml = (Get-Content -Path "$ResourcesDir\ChooseProfileGUI.xml" -Raw)
+
+# Parse the XAML to create the GUI
+Add-Type -AssemblyName PresentationFramework
+$reader = (New-Object System.Xml.XmlNodeReader $xaml)
+$window = [Windows.Markup.XamlReader]::Load($reader)
+
+# Populate the profiles list in the GUI
+$profileListBox = $window.FindName("ProfileList")
 $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-
-# Check if any profiles found
-if ($DSPProfilesList.Count -eq 0) {
-    Write-Host "No JSON profiles found in $profilesPath"
-    exit
+foreach ($profileFileName in $DSPProfilesList) {
+    $profileListBox.Items.Add($profileFileName.Name.substring(0,$($profileFileName.Name.length -5))) | Out-Null
 }
 
-# Display numbered list
-Write-Host "`nAvailable DSP Profiles:`n"
-for ($i = 0; $i -lt $DSPProfilesList.Count; $i++) {
-    Write-Host "[$($i+1)] $($DSPProfilesList[$i].Name)"
-}
-
-# Ask user to choose
-$choice = Read-Host "`nEnter the number of the profile you want to use"
-
-# Validate and get selected file
-if ($choice -match '^\d+$' -and $choice -ge 1 -and $choice -le $DSPProfilesList.Count) {
-    $selectedProfile = $DSPProfilesList[$choice - 1].FullName
-    Write-Host "`nYou selected: $selectedProfile"
-}
-else {
-    Read-Host "Invalid selection. Hit ENTER to close powershell..."
-    exit
-}
+# Assign event handlers
+$window.FindName("GitHub").Add_Click({ start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant"})
+$window.FindName("CloseBTN").Add_Click({
+        $window.Close()
+        exit
+    })
+$window.FindName("OKBTN").Add_Click({
+    $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem
+    if ($null -ne $selectedProfileFileName) {
+        $script:selectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
+        Write-Host "Profile selected: $selectedProfile" -ForegroundColor Yellow
+       # Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Selected profile: $selectedProfileFileName"
+        $window.Close()
+    }
+})
+$window.FindName("ProfileList").Add_SelectionChanged({
+    $selectedItem = $window.FindName("ProfileList").SelectedItem
+    if ($null -ne $selectedItem) {
+        $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedItem).json"
+        $profileContent = Get-Content -Path $profilePath -Raw
+        $window.FindName("ProfileText").Text = $profileContent
+        $window.FindName("OKBTN").IsEnabled = $true
+       # $window.FindName("EditBTN").IsEnabled = $true
+    } else {
+        $window.FindName("ProfileText").Text = "Please select a profile"
+        $window.FindName("OKBTN").IsEnabled = $false
+       # $window.FindName("EditBTN").IsEnabled = $false
+    }
+})
+# Show the GUI
+$window.ShowDialog() | Out-Null
 
 # Load selected profile
 $DSPConfig = Get-Content $selectedProfile -Raw | ConvertFrom-Json
@@ -111,12 +138,14 @@ do {
 
             if($null -ne $hasMouseAction) {
                 Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
-                Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows."
+                Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" `
+                     -Message "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." `
+                     -Timeout 5000
                 $MouseX, $MouseY = Get-MousePosition
                 Write-Host "Current mouse position: X=$MouseX, Y=$MouseY" -foregroundColor blue
             } else {
                 Write-Host "No mouse actions detected in profile. Proceeding with keyboard input only." -ForegroundColor Yellow
-                Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started."
+                Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started." -Timeout 1000
             }
 
             write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow

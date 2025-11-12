@@ -318,14 +318,14 @@ function Show-Notification {
     param(
         [string]$Title,
         [string]$Message,
-        [int]$Timeout = 5000
+        [int]$Timeout = 3000
     )
 
     Start-Job -ScriptBlock {
         param($Title, $Message, $Timeout)
         Add-Type -AssemblyName System.Windows.Forms
         $notify = New-Object System.Windows.Forms.NotifyIcon
-        $notify.Icon = [System.Drawing.SystemIcons]::application #Information
+        $notify.Icon = [System.Drawing.SystemIcons]::Information
         $notify.BalloonTipTitle = $Title
         $notify.BalloonTipText = $Message
         $notify.Visible = $true
