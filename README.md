@@ -32,6 +32,8 @@ Hotkeys now as an option to start input (delay option remains in the script, but
 
 Global config with default values.
 
+Musway DSP v1.08 profile added (M4+ / M6 / M6v2 / DSP68PRO) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube]("https://youtu.be/70nI_DrytnA?si=IY8tHfrHuXiwoZ2I")
+
 ### 12-11-2025:
 GUI for profile selection added. Event notification popups added. GUI demo <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=ccjcXb-yxC0)
 
