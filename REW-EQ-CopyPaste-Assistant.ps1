@@ -193,10 +193,10 @@ do {
         Show-DSPWindowToFront -processName $ProcessName | Out-Null
         if(($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -eq "Hotkey")) {
             Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
-               -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$PerformActionHotkey' to proceed or '$CancelActionHotkey' to cancel."
+               -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."
 
-            Write-Host "Waiting for user to press '$PerformActionHotkey' to proceed or '$CancelActionHotkey' to cancel. Timeout in $($GlobalConfig.HotkeyTimeoutSecs) seconds..." -ForegroundColor Yellow
-            $hotkeyResult = $(Wait-HotkeyInput -TimeoutSecs $GlobalConfig.HotkeyTimeoutSecs -KeysToMonitor $($PerformActionHotkey,$CancelActionHotkey) )
+            Write-Host "Waiting for user to press '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel. Timeout in $($GlobalConfig.HotkeyTimeoutSecs) seconds..." -ForegroundColor Yellow
+            $hotkeyResult = $(Wait-HotkeyInput -TimeoutSecs $GlobalConfig.HotkeyTimeoutSecs -KeysToMonitor $($EffectivePerformActionHotkey,$EffectiveCancelActionHotkey) )
             switch ($hotkeyResult) {
                 "$EffectivePerformActionHotkey" {
                     $UserHasConfirmedAction = $true
