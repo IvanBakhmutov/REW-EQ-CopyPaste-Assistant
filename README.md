@@ -33,10 +33,9 @@ Hotkeys now as an option to start input (delay option remains in the script, but
 Global config with default values.
 
 ### 12-11-2025:
-GUI for profile selection added. Event notification popups added.
+GUI for profile selection added. Event notification popups added. GUI demo <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=ccjcXb-yxC0)
 
 Increased Phoenix Gold timeout before input as DSP software for some reason restores windowed mode instead of staying in maximized mode.
-GUI demo <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=ccjcXb-yxC0)
 
 ### 11-11-2025:
 Tested Phoenix Gold software with mouse'n'keyboard input <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=EdCybWHxmO4)
