@@ -1,0 +1,53 @@
+{
+    "version": "1.0",
+    "Description": "MUSWAY DSP V1.08 (M4+ / M6 / M6v2 / DSP68PRO)",
+    "processName": "M6-V1.08",
+    "QDevider": 1,
+    "QDecimals": 3,
+    "GainDecimals": 1,
+    "DecimalSeparator": ".",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "StartingPositionHint": "Please hover mouse over 1 band Freq box and press hotkey",
+    "KeystrokeSequence": [
+        {
+            "mouseClick": "left",
+            "delay_ms": 100
+        },
+        {
+            "keys": "FREQ",
+            "delay_ms": 100
+        },
+        {
+            "mouseChangePositionY": "+19",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 100
+        },
+        {
+            "keys": "QVALUE",
+            "delay_ms": 100
+        },
+        {
+            "mouseChangePositionY": "+19",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 100
+        },
+        {
+            "keys": "GAIN",
+            "delay_ms": 100
+        },
+        {
+            "mouseChangePositionY": "-38",
+            "delay_ms": 10
+        },
+        {
+            "mouseChangePositionX": "+30",
+            "delay_ms": 10
+        }
+    ]
+}
