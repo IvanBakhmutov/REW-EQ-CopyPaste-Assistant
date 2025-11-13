@@ -2,7 +2,7 @@
 # Module: Mouse and Keyboard Control Utilities for REW-EQ-CopyPaste-Assistant
 # Description: Provides mouse & keyboard control utilities
 # Author: Ivan Bakhmutov
-# Date: 2025-11-12
+# Date: 2024-06-10
 # ============================================
 
 # Ensure .NET types are defined only once
@@ -164,15 +164,16 @@ function Get-MousePosition {
     return $point.X, $point.Y
 }
 
-
 function Wait-HotkeyInput {
     param(
-        [int]$timeoutSecs = 60
+        [int]$timeoutSecs = 60,
+        [string[]]$KeysToMonitor # Array of key names to monitor (e.g., "F1", "F2")
     )
-Add-Type -AssemblyName System.Windows.Forms
 
-if (-not ("User32" -as [type])) {
-    Add-Type -TypeDefinition @"
+    Add-Type -AssemblyName System.Windows.Forms
+
+    if (-not ("User32" -as [type])) {
+        Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
 public class User32 {
@@ -180,47 +181,58 @@ public class User32 {
     public static extern short GetAsyncKeyState(int vKey);
 }
 "@
-}
-$UserActionStartTime = Get-Date
-$s_prev = ""            # initialize previous state
-    While ($UserActionStartTime.AddSeconds($timeoutSecs) -gt (Get-Date)) {
+    }
+
+    # Map key names to virtual key codes
+    $keyNameToCode = @{
+        "F1" = 112; "F2" = 113; "F3" = 114; "F4" = 115; "F5" = 116;
+        "F6" = 117; "F7" = 118; "F8" = 119; "F9" = 120; "F10" = 121;
+        "F11" = 122; "F12" = 123
+    }
+
+    # Convert key names to virtual key codes
+    $keyCodesToMonitor = $KeysToMonitor | ForEach-Object { $keyNameToCode[$_] }
+
+    $UserActionStartTime = Get-Date
+    $s_prev = "" # Initialize previous state
+
+    while ($UserActionStartTime.AddSeconds($timeoutSecs) -gt (Get-Date)) {
         $keys = @()
-        For ($k = 1; $k -le 255; $k++){
+        foreach ($k in $keyCodesToMonitor) {
             $null = [User32]::GetAsyncKeyState($k) # Flush keyboard buffers
-            If ([User32]::GetAsyncKeyState($k)) {
-                Switch ($k) {
-                    112	{$keys += "F1"}
-                    113	{$keys += "F2"}
-                    114	{$keys += "F3"}
-                    115	{$keys += "F4"}
-                    116	{$keys += "F5"}
-                    117	{$keys += "F6"}
-                    118	{$keys += "F7"}
-                    119	{$keys += "F8"}
-                    120	{$keys += "F9"}
-                    121	{$keys += "F10"}
-                    122	{$keys += "F11"}
-                    123	{$keys += "F12"}
+            if ([User32]::GetAsyncKeyState($k)) {
+                switch ($k) {
+                    112 { $keys += "F1" }
+                    113 { $keys += "F2" }
+                    114 { $keys += "F3" }
+                    115 { $keys += "F4" }
+                    116 { $keys += "F5" }
+                    117 { $keys += "F6" }
+                    118 { $keys += "F7" }
+                    119 { $keys += "F8" }
+                    120 { $keys += "F9" }
+                    121 { $keys += "F10" }
+                    122 { $keys += "F11" }
+                    123 { $keys += "F12" }
                 }
             }
         }
         $s = $keys -join ", "
         # Only return when a key is detected and it's different from the previous state
-        If (($s -ne "") -and ($s -ne $s_prev)) {
+        if (($s -ne "") -and ($s -ne $s_prev)) {
             $s_prev = $s
             return $s
         }
         $s_prev = $s
         Start-Sleep -Milliseconds 100
     }
-# thanks 0x000000000000004C from https://www.reddit.com/r/PowerShell/comments/wfn0io/detect_keypress_outside_powershell_during_time/
 }
 
 # --- Exported Functions ---
 Export-ModuleMember -Function `
     Invoke-MouseMoveBy,
     Invoke-MouseClickLeftAt,
-    Invoke-MouseClickRightAt,    
+    Invoke-MouseClickRightAt,
     Invoke-MouseClickRelative,
     Invoke-MouseLeftClick,
     Invoke-MouseRightClick,

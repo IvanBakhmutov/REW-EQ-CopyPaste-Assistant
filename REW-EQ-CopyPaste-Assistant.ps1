@@ -22,9 +22,9 @@ Write-Host "Script started" -ForegroundColor Yellow
 $ConfigPath = Join-Path -Path $ResourcesDir -ChildPath "Config.json"
 $GlobalConfig = Get-Content $ConfigPath -Raw | ConvertFrom-Json
 $GlobalPerformActionHotkey = $GlobalConfig.GlobalPerformActionHotkey
-$GlobalCancelHotkey = $GlobalConfig.GlobalCancelHotkey
+$GlobalCancelActionHotkey = $GlobalConfig.GlobalCancelActionHotkey
 $EffectivePerformActionHotkey = $GlobalPerformActionHotkey
-$EffectiveCancelHotkey = $GlobalCancelHotkey
+$EffectiveCancelActionHotkey = $GlobalCancelActionHotkey
 
 $selectedProfile = $null
 
@@ -38,7 +38,7 @@ $window = [Windows.Markup.XamlReader]::Load($reader)
 
 # Set hotkey hint label
 $hotkeyHintLabel = $window.FindName("HotkeyHint")
-$hotkeyHintLabel.Content = "Hotkeys: Perform - $GlobalPerformActionHotkey, Cancel - $GlobalCancelHotkey"
+$hotkeyHintLabel.Content = "Hotkeys: Perform - $script:GlobalPerformActionHotkey, Cancel - $script:GlobalCancelActionHotkey"
 
 # Populate the profiles list in the GUI
 $profileListBox = $window.FindName("ProfileList")
@@ -52,18 +52,17 @@ $window.FindName("GitHub").Add_Click({ start-process "https://github.com/IvanBak
 $window.FindName("CloseBTN").Add_Click({
         $window.Close()
         exit
-    })
+})
+
 $window.FindName("OKBTN").Add_Click({
     $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem
     if ($null -ne $selectedProfileFileName) {
         $script:selectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
-        $script:PerformActionHotkey = $EffectivePerformActionHotkey
-        $script:CancelActionHotkey = $EffectiveCancelHotkey
         Write-Host "Profile selected: $selectedProfile" -ForegroundColor Yellow
-       # Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Selected profile: $selectedProfileFileName"
         $window.Close()
     }
 })
+
 $window.FindName("ProfileList").Add_SelectionChanged({
     $selectedItem = $window.FindName("ProfileList").SelectedItem
     if ($null -ne $selectedItem) {
@@ -84,21 +83,21 @@ $window.FindName("ProfileList").Add_SelectionChanged({
             }
         }
 
-        if((($profileContent | convertfrom-json).ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and `
+        if((($profileContent | convertfrom-json).ProfilePerformActionHotkey -ne $script:GlobalPerformActionHotkey) -and `
             ($null -ne ($profileContent | convertfrom-json).ProfilePerformActionHotkey)) {
-                $EffectivePerformActionHotkey = ($profileContent | convertfrom-json).ProfilePerformActionHotkey
+                $script:EffectivePerformActionHotkey = ($profileContent | convertfrom-json).ProfilePerformActionHotkey
         } else {
-            $EffectivePerformActionHotkey = $GlobalPerformActionHotkey
+            $script:EffectivePerformActionHotkey = $script:GlobalPerformActionHotkey
         }
-        if((($profileContent | convertfrom-json).ProfileCancelActionHotkey -ne $GlobalCancelHotkey) -and `
+        if((($profileContent | convertfrom-json).ProfileCancelActionHotkey -ne $script:GlobalCancelActionHotkey) -and `
             ($null -ne ($profileContent | convertfrom-json).ProfileCancelActionHotkey)) {
-                $EffectiveCancelHotkey = ($profileContent | convertfrom-json).ProfileCancelActionHotkey
+                $script:EffectiveCancelActionHotkey = ($profileContent | convertfrom-json).ProfileCancelActionHotkey
         } else {
-            $EffectiveCancelHotkey = $GlobalCancelHotkey
+            $script:EffectiveCancelActionHotkey = $script:GlobalCancelActionHotkey
         }
 
-        $hotkeyHintLabel.Content = "Hotkeys: Perform - $EffectivePerformActionHotkey, Cancel - $EffectiveCancelHotkey"
-        if(($GlobalPerformActionHotkey -ne $EffectivePerformActionHotkey) -or ($GlobalCancelHotkey -ne $EffectiveCancelHotkey)) {
+        $hotkeyHintLabel.Content = "Hotkeys: Perform - $script:EffectivePerformActionHotkey, Cancel - $script:EffectiveCancelActionHotkey"
+        if(($script:GlobalPerformActionHotkey -ne $script:EffectivePerformActionHotkey) -or ($script:GlobalCancelActionHotkey -ne $script:EffectiveCancelActionHotkey)) {
             $hotkeyHintLabel.Content += " (override)"
         }
     } else {
@@ -107,8 +106,14 @@ $window.FindName("ProfileList").Add_SelectionChanged({
        # $window.FindName("EditBTN").IsEnabled = $false
     }
 })
+# to be added doubleclick
+#$window.FindName("ProfileList").Add_mouseDoubleClick({
+#    $window.FindName("ProfileList").selectio
+#}
 # Show the GUI
 $window.ShowDialog() | Out-Null
+
+write-host "Perform Action Hotkey = $effectivePerformActionHotkey and Cancel Action Hotkey = $EffectiveCancelActionHotkey"
 
 # Load selected profile
 $DSPConfig = Get-Content $selectedProfile -Raw | ConvertFrom-Json
@@ -119,17 +124,27 @@ if($null -ne $DSPConfig.QDevider){
 if($null -ne $DSPConfig.DecimalSeparator){
     $DecimalSeparator = $DSPConfig.DecimalSeparator
 } else {
-    $DecimalSeparator = "."
+    $DecimalSeparator = $GlobalConfig.DecimalSeparator
 }
 if($null -ne $DSPConfig.QDecimals){
     $QDecimals = $DSPConfig.QDecimals
 } else {
-    $QDecimals = 1
+    $QDecimals = $GlobalConfig.QDecimals
 }
 if($null -ne $DSPConfig.GainDecimals){
     $GainDecimals = $DSPConfig.GainDecimals
 } else {
-    $GainDecimals = 1
+    $GainDecimals = $GlobalConfig.GainDecimals
+}
+if($null -ne $DSPConfig.HotkeyOrDelayPreference) {
+    $HotkeyOrDelayPreference = $DSPConfig.HotkeyOrDelayPreference
+} else {
+    $HotkeyOrDelayPreference = $GlobalConfig.HotkeyOrDelayPreference
+}
+if($null -ne $DSPConfig.TimeoutBeforePasteSecs) {
+    $TimeoutBeforePasteSecs = $DSPConfig.TimeoutBeforePasteSecs
+} else {
+    $TimeoutBeforePasteSecs = $GlobalConfig.TimeoutBeforePasteSecs
 }
 $StartingPositionHint = $DSPConfig.StartingPositionHint
 
@@ -148,11 +163,18 @@ if ($processes.Count -eq 0) {
 Write-Host "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)" -ForegroundColor Green
 Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)`nWaiting for EQ data from REW in clipboard" 
 Write-Host "Hint: When finished with EQ close PowerShell window or hit ctrl-c and confirm exit" -ForegroundColor Yellow
+Write-Host "Hotkey Or Delay Preference: $HotkeyOrDelayPreference" -ForegroundColor Cyan
 Write-Host "Waiting for EQ data from REW in clipboard  " -ForegroundColor Yellow -NoNewline
+
 $spinner = @('/', '-', '\', '|')
 $spinnerindex = 0
 
 do {
+    $MouseX = $null
+    $MouseY = $null
+    $keyToSend = $null
+    $UserHasConfirmedAction = $false
+    $bufferHeader = $null
 
     # Check clipboard content
     $buffer = get-clipboard
@@ -165,34 +187,30 @@ do {
             -GainDecimals $GainDecimals `
             -DecimalSeparator $DecimalSeparator
         Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
-        
-        Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
-        Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
-            -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
-        $bufferHeader = ""
 
+        Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
+ 
         Show-DSPWindowToFront -processName $ProcessName | Out-Null
         if(($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -eq "Hotkey")) {
+            Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
+               -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$PerformActionHotkey' to proceed or '$CancelActionHotkey' to cancel."
+
             Write-Host "Waiting for user to press '$PerformActionHotkey' to proceed or '$CancelActionHotkey' to cancel. Timeout in $($GlobalConfig.HotkeyTimeoutSecs) seconds..." -ForegroundColor Yellow
-            $hotkeyResult = $(Wait-HotkeyInput -TimeoutSecs $GlobalConfig.HotkeyTimeoutSecs)
-            ##left here
+            $hotkeyResult = $(Wait-HotkeyInput -TimeoutSecs $GlobalConfig.HotkeyTimeoutSecs -KeysToMonitor $($PerformActionHotkey,$CancelActionHotkey) )
             switch ($hotkeyResult) {
-                $PerformActionHotkey {
+                "$EffectivePerformActionHotkey" {
                     $UserHasConfirmedAction = $true
                 }
-                $CancelActionHotkey {
-                    $UserHasConfirmedAction = $false
-                }
-                default {
-                    Write-Host "No hotkey pressed within timeout. Canceling paste." -ForegroundColor Yellow
+                "$EffectiveCancelActionHotkey" {
                     $UserHasConfirmedAction = $false
                 }
             }
         } else {
-            $UserHasConfirmedAction = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
+            Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
+               -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
             Write-Host "Waiting for user confirmation dialog to proceed with paste..." -ForegroundColor Yellow
+            $UserHasConfirmedAction = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
         }
-        
 
         if ($UserHasConfirmedAction -eq $true) {
             Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
@@ -206,8 +224,7 @@ do {
             if($null -ne $hasMouseAction) {
                 Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
                 Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" `
-                     -Message "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." `
-                     -Timeout 5000
+                     -Message "Make sure the DSP window is visible and not covered by other windows."
                 $MouseX, $MouseY = Get-MousePosition
                 Write-Host "Current mouse position: X=$MouseX, Y=$MouseY" -foregroundColor blue
             } else {
@@ -215,9 +232,11 @@ do {
                 Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started." -Timeout 1000
             }
 
-            write-host "Waiting $($DSPConfig.TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
-            Start-Sleep -Seconds $DSPConfig.TimeoutBeforePasteSecs
-
+            if((($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -ne "Hotkey")) `
+            -or (($null -eq $DSPConfig.HotkeyOrDelayPreference))) {
+                write-host "Waiting $($TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
+                Start-Sleep -Seconds $TimeoutBeforePasteSecs
+            }
             # Start pasting EQ bands with configured keystrokes and mouse actions
             foreach ($band in $bands) {
                 foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
@@ -268,15 +287,12 @@ do {
 
             # Show transposed table of pasted bands
             Show-TransposedTable -bands $bands | Format-Table -AutoSize
-            Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Green -NoNewline
+            Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
             Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste finished" -Message "Waiting for new data in clipboard"
-            $MouseX = $null
-            $MouseY = $null
-            $keyToSend = $null
         }
         else {
-            Write-Host "Cancelled by user. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
-            Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste canceled" -Message "Cancelled by user. Waiting for new data in clipboard"
+            Write-Host "Cancelled by user or timedout. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
+            Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste canceled" -Message "Cancelled by user or timedout. Waiting for new data in clipboard"
             Set-Clipboard "Canceled"
         }
 

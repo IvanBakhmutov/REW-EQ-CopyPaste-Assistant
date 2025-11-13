@@ -1,5 +1,10 @@
 {
     "GlobalPerformActionHotkey": "F11",
-    "GlobalCancelHotkey": "F12",
-    "HotkeyTimeoutSecs": 60
+    "GlobalCancelActionHotkey": "F12",
+    "HotkeyTimeoutSecs": 60,
+    "HotkeyOrDelayPreference": "Hotkey",
+    "GainDecimals": 1,
+    "QDecimals": 1,
+    "DecimalSeparator": ".",
+    "TimeoutBeforePasteSecs": 6
 }
