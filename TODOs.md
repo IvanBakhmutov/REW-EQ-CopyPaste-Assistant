@@ -8,7 +8,7 @@
 - Nakamichi, Musway, Awave DSPs navigation goes in different way. Main script and profiles format needs to adjusted.
 - Folders with brand names for DSP profiles?
 - Double click on selected profile in the list to open it
-
+- Review console and popup messages
 - DSP profiles list with your help can be expanded with:
  Musway,
  Light Audio,

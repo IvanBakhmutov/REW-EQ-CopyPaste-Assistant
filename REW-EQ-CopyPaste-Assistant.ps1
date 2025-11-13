@@ -215,12 +215,16 @@ do {
         if ($UserHasConfirmedAction -eq $true) {
             Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
 
+            if((($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -ne "Hotkey")) `
+            -or (($null -eq $DSPConfig.HotkeyOrDelayPreference))) {
+                write-host "Waiting $($TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
+                Start-Sleep -Seconds $TimeoutBeforePasteSecs
+            }
 
             # Check if mouse actions are defined in the profile
             $hasMouseAction = $DSPConfig.KeystrokeSequence | Where-Object {
-               $_.PSObject.Properties.Name -match '^mouse'
-            }
-
+                $_.PSObject.Properties.Name -match '^mouse'
+             }
             if($null -ne $hasMouseAction) {
                 Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
                 Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" `
@@ -232,11 +236,6 @@ do {
                 Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started." -Timeout 1000
             }
 
-            if((($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -ne "Hotkey")) `
-            -or (($null -eq $DSPConfig.HotkeyOrDelayPreference))) {
-                write-host "Waiting $($TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
-                Start-Sleep -Seconds $TimeoutBeforePasteSecs
-            }
             # Start pasting EQ bands with configured keystrokes and mouse actions
             foreach ($band in $bands) {
                 foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
