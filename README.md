@@ -1,6 +1,6 @@
 # REW-EQ-CopyPaste-Assistant
 
-[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)]()  
+[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -8,10 +8,8 @@
 
 Room EQ Wizard EQ Copy-Paste Assistant script for DSP software which not captures EQ settings from clipboard.
 
-Room EQ Wizard (REW) includes several predefined profiles for popular DSP models, and some DSP software allows you to paste EQ settings directly from REW. However, many DSP applications don’t support this feature, requiring you to enter the values manually. This is where this assistant script comes in. It assists with the EQ copy-paste procedure from REW software into your DSP app's EQ settings. You just need to run it in the background while working with REW EQ settings and ensure your DSP software is running. When you are ready with EQ filters, hit the "Copy" button in the EQ filters section of REW. This tool will then prompt you to confirm if you want to paste the copied data into your DSP app. After your confirmation, it will bring the DSP process to the foreground, and you will need to click on the first band where the keystroke sequence will start to paste the data.  
+Room EQ Wizard (REW) includes several predefined profiles for popular DSP models, and some DSP software allows you to paste EQ settings directly from REW. However, many DSP applications don’t support this feature, requiring you to enter the values manually. This is where this assistant script comes in. It assists with the EQ copy-paste procedure from REW software into your DSP app's EQ settings. You just need to run it in the background while working with REW EQ settings and ensure your DSP software is running. When you are ready with EQ filters, hit the "Copy" button in the EQ filters section of REW. This tool will then prompt you to confirm if you want to paste the copied data into your DSP app. After your confirmation, it will bring the DSP process to the foreground, and you will need to click on the first band where the keystroke sequence will start to paste the data.
 Isn't it better to do manipulations with imported DSP settings file directly? The answer is - no. You shouldn’t mess with an imported DSP settings file — it’s safer that way and helps avoid file corruption. Just watch what’s being passed to the settings. Some DSP files aren’t plain text; for example, ESX settings files are password-protected and look binary inside.
-
-The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain `{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software.
 
 This is just an initial version of the tool. Experiment with it, create your own DSP profiles, and have fun!
 Once you tested your own DSP profile please share it in the Discussion section of the repository so it will be added to the repo.
@@ -22,57 +20,38 @@ A demo video <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09
 
 Special thanks to Denis GS for the ideas and collaboration!
 
+Support this project <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/PayPal_Logo_Icon_2014.svg" alt="PayPal icon" height=12/> **[PayPal](https://paypal.me/IvanBakhmutov)**
+
 ## DSP Profile file format
-
-`{`  
-`"version": "1.0",` *// not used yet, ignored so far.*  
-`"Description": "<Human readable name of the app, for simplicity>",` *// A display message of a selected DSP profile when the script is running; does not affect functionality.*  
-`"processName": "<Windows process name, wildcards accepted>",` *// Once you run your DSP software, open Task Manager → Details and find its process name.  
-// Even though you launch SomeDSPApp.exe, the actual process name may differ  
-// (for instance, you might see SomeDSPConfigV4 in the list of tasks).  
-// This happens because the executable you run may act as a wrapper or archive  
-// that extracts and launches another binary internally.  
-// So, what will work is just SomeDSP* *  
-`"QDevider": 1,` *// A divider of a Q value: 1 if Q should remain the same;  
-// >1 will divide REW Q and paste smaller values in the DSP;  
-// <1 pastes greater values.*  
-`"TimeoutBeforePasteSecs": 6,` *// How much time the script waits before sending keystrokes.*  
-`"StartingPositionHint": "Please select 1 band Freq box",` *// A hint message — I'm guessing some DSPs may have a different first parameter than Freq.  
-// Just a message; does not affect functionality.*  
-`"KeystrokeSequence": [` *// Array of keystrokes, with delays between them.*  
-`{`  
-`"keys": "FREQ{ENTER}{DOWN}QVALUE{ENTER}{DOWN}GAIN{ENTER}",`  
-`"delay_ms": 200`  
-`},`  
-`{`  
-`"keys": "{RIGHT}{UP}{UP}",`  
-`"delay_ms": 200`  
-`}`  
-`]`  
-`}`  
-
-Donate **[paypal.me/IvanBakhmutov](https://paypal.me/IvanBakhmutov)** to support development
+The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse actions or key actions like`{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](DSPProfileFileFormat.md)
 
 ## Change log
 
+### 13-11-2025:
+Hotkeys now as an option to start input (delay option remains in the script, but now it depends on how profile is configured).
+
+Global config with default values.
+
 ### 12-11-2025:
-GUI for profile selection added. Event notification popups added.  
-Increased Phoenix Gold timeout before input as DSP software for some reason restores windowed mode instead of staying in maximized mode.  
+GUI for profile selection added. Event notification popups added.
+
+Increased Phoenix Gold timeout before input as DSP software for some reason restores windowed mode instead of staying in maximized mode.
 GUI demo <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=ccjcXb-yxC0)
 
 ### 11-11-2025:
 Tested Phoenix Gold software with mouse'n'keyboard input <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=EdCybWHxmO4)
 
 ### 10-11-2025:
-Back on track - account has been unblocked. 
-Implemented psm modules and floating point rounding, configurable decimal separator. 
+Back on track - account has been unblocked.
+
+Implemented psm modules and floating point rounding, configurable decimal separator.
+
 Testing in excel was not a bad idea, currently testing mouse operations, this will cover majority of DSPs.
 
 ### 09-11-2025:
-Breaking news. Someone released similar tool :) While I'm working on new features and testing the tool with variety of DSP software I'll open donates just not to miss the train, absolutely not necessary from your end, but I will be happy.
+Working on new features and testing the tool with variety of DSP software. I'll open donates just not to miss the train, absolutely not necessary from your end, but I will be happy.
 
 ### 08-11-2025:
-
 Great news! I’ve received positive feedback — a few people have already tested the tool, and the responses are encouraging.
 
 There are, however, some questions regarding certain DSP software (**Awave**, **Musway**, and **Nakamichi**). In these programs, navigating through bands with the `{TAB}` key doesn’t move to the next setting within the same band; instead, it jumps to the next band. For example, it loops through all Freq values first, then all Q values, and finally all Gain values. To handle this behavior properly, some adjustments in the code will be needed.
@@ -89,7 +68,8 @@ Let’s take ESX Toolkit as an example:
     <img src="Resources/ESXToolkit-EQ-ranges.png" alt="ESXToolkit EQ ranges" width=300 />
     <img src="Resources/Configurable_PEQ-for-ESXToolkit.png" alt="Configurable_PEQ for ESXToolkit" width=481 />
 </p>
-In a such case REW will calculate EQ using correct EQ settings which suit for ESX Toolkit. 
+In a such case REW will calculate EQ using correct EQ settings which suit for ESX Toolkit.
 
 Side note: ESX Toolkit won’t allow you to enter values outside the supported range. For example, if you’re adjusting the Gain of a selected band and try to input -13, it will accept -1 and then stop—you won’t be able to type the 3, and the value will remain -1 (since the minimum allowed value is -12).
+
 This is why a configurable EQ in REW is necessary; otherwise, the tool would paste incorrect settings into the DSP.
