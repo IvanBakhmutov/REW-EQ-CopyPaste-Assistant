@@ -89,7 +89,7 @@ function Invoke-MouseClickLeftAt {
         [int]$X,
         [int]$Y
     )
-    [MouseControl]::SetCursorPos($X, $Y) # Move cursor to the specified position
+    Move-CursorToPosition -X $X -Y $S # Move cursor to the specified position
     [MouseControl]::ClickAt($X, $Y)     # Perform the left click
 }
 
@@ -99,7 +99,7 @@ function Invoke-MouseClickRightAt {
         [int]$X,
         [int]$Y
     )
-    [MouseControl]::SetCursorPos($X, $Y) # Move cursor to the specified position
+    Move-CursorToPosition -X $X -Y $S # Move cursor to the specified position
     [MouseControl]::RightClick()         # Perform the right click
 }
 
@@ -109,7 +109,6 @@ function Invoke-MouseClickRelative {
         [int]$X,
         [int]$Y
     )
-    [MouseControl]::SetCursorPos($X, $Y) # Move cursor to the specified position
     [MouseControl]::ClickRelative($X, $Y) # Perform the relative click
 }
 
@@ -139,6 +138,15 @@ function Invoke-MouseScrollDown {
         [int]$Amount = 120
     )
     [MouseControl]::ScrollDown($Amount)
+}
+
+function Move-CursorToPosition {
+    [CmdletBinding()]
+    param (
+        [int]$X,
+        [int]$Y
+    )
+    [MouseControl]::SetCursorPos($X, $Y) # Move cursor to the specified position
 }
 
 # --- Keyboard wrapper function ---
@@ -241,6 +249,7 @@ Export-ModuleMember -Function `
     Invoke-MouseRightClick,
     Invoke-MouseScrollUp,
     Invoke-MouseScrollDown,
+    Move-CursorToPosition,
     Invoke-KeyStroke,
     Get-MousePosition,
     Wait-HotkeyInput
