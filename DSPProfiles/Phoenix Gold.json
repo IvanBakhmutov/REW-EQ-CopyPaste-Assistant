@@ -6,8 +6,8 @@
     "QDecimals": 1,
     "GainDecimals": 1,
     "DecimalSeparator": ".",
-    "TimeoutBeforePasteSecs": 10,
-    "StartingPositionHint": "Please hover mouse over 1 band Freq box and wait",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "StartingPositionHint": "Please hover mouse over 1 band Freq box and press hotkey",
     "KeystrokeSequence": [
         {
             "mouseClick": "left",

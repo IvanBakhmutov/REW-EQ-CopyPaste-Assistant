@@ -1,33 +1,21 @@
 {
     "version": "1.0",
-	"Description": "MUSWAY (no 512K) DSP software",
-    "processName": "Musway*",
+    "Description": "MUSWAY TUNEST_PC_V1.* (M4 / M4+V3 / M4+V4 / M6V3 / M6V4 / D8V3/ D8V4 / DSP68 / TUNE12 / M6PRO / M12 / M5 / M10 / M8)",
+    "processName": "TUNEST_PC_V1.*",
     "QDevider": 1,
     "QDecimals": 2,
     "GainDecimals": 1,
     "DecimalSeparator": ".",
-    "TimeoutBeforePasteSecs": 6,
-    "StartingPositionHint": "Please hover mouse over 1 band Freq box and wait",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "StartingPositionHint": "Please hover mouse over 1 band Freq box and press hotkey",
     "KeystrokeSequence": [
         {
             "mouseClick": "left",
-            "delay_ms": 50
+            "delay_ms": 100
         },
         {
-            "keys": "^aFREQ",
-            "delay_ms": 200
-        },
-        {
-            "mouseChangePositionY": "+22",
-            "delay_ms": 10
-        },
-        {
-            "mouseClick": "left",
-            "delay_ms": 50
-        },
-        {
-            "keys": "^aQVALUE",
-            "delay_ms": 200
+            "keys": "FREQ",
+            "delay_ms": 100
         },
         {
             "mouseChangePositionY": "+22",
@@ -35,11 +23,23 @@
         },
         {
             "mouseClick": "left",
-            "delay_ms": 50
+            "delay_ms": 100
         },
         {
-            "keys": "^aGAIN{ENTER}",
-            "delay_ms": 200
+            "keys": "QVALUE",
+            "delay_ms": 100
+        },
+        {
+            "mouseChangePositionY": "+22",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 100
+        },
+        {
+            "keys": "GAIN",
+            "delay_ms": 100
         },
         {
             "mouseChangePositionY": "-44",
