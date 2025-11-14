@@ -36,6 +36,7 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 | Nakamichi | Nakamichi-K | NDSK4065AU, NDSK4165AU |
 | Nakamichi | Nakamichi-K | NDSK4085AU, NDSK4185AU, NDSK4285AU |
 | Phoenix | Phoenix Gold DSP software | (to be verified) |
+| Sennuopu | Sennuopu DP-X680 PC Software EN | DP-X680 |
 
 ## DSP Profile file format
 
