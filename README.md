@@ -23,7 +23,22 @@ Special thanks to Denis GS for the ideas and collaboration!
 
 Support this project <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/PayPal_Logo_Icon_2014.svg" alt="PayPal icon" height=12/> **[PayPal](https://paypal.me/IvanBakhmutov)**
 
+### Tested profiles
+
+Some DSP profiles were already tested and added to `./DSPProfiles`
+| Brand | DSP Software | DSP devices |
+| :---- | ---- | ---- |
+| ESX | ESX Toolkit | D66SP, QM66SP, D68SP, VE900.7SP, QL810SP, QL812SP, VE1300.11SP, QE812SP |
+| Hellion | Hellion DSP software | (to be verified) |
+| Musway | MUSWAY DSP V1.08 | M4+, M6, M6v2, DSP68PRO |
+| Musway | MUSWAY TUNEST_PC_V1.* | M4, M4+V3, M4+V4, M6V3, M6V4, D8V3, D8V4, DSP68, TUNE12, M6PRO, M12, M5, M10, M8 |
+| Nakamichi | Nakamichi-K | NDSK4265AU |
+| Nakamichi | Nakamichi-K | NDSK4065AU, NDSK4165AU |
+| Nakamichi | Nakamichi-K | NDSK4085AU, NDSK4185AU, NDSK4285AU |
+| Phoenix | Phoenix Gold DSP software | (to be verified) |
+
 ## DSP Profile file format
+
 The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse actions or key actions like`{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](DSPProfileFileFormat.md)
 
 ## Change log
