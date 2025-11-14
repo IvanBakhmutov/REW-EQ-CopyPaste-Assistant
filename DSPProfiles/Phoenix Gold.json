@@ -18,7 +18,7 @@
             "delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+27",
+            "mouseChangePositionY": "+20",
             "delay_ms": 10
         },
         {
@@ -30,7 +30,7 @@
             "delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+27",
+            "mouseChangePositionY": "+20",
             "delay_ms": 10
         },
         {
@@ -42,11 +42,11 @@
             "delay_ms": 200
         },
         {
-            "mouseChangePositionY": "-54",
+            "mouseChangePositionY": "-40",
             "delay_ms": 10
         },
         {
-            "mouseChangePositionX": "+51",
+            "mouseChangePositionX": "+34",
             "delay_ms": 10
         }
     ]
