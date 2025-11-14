@@ -9,6 +9,7 @@
 - Folders with brand names for DSP profiles?
 - Double click on selected profile in the list to open it
 - Review console and popup messages
+- Reported issue with confirmation dialog
 - DSP profiles list with your help can be expanded with:
  Musway,
  Light Audio,
