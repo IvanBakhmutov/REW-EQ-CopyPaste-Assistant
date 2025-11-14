@@ -31,6 +31,12 @@ The script uses its own profiles (in JSON format), which store the DSP software 
 ### 14-11-2025:
 MUSWAY TUNEST_PC_V1.* Profile added, DSPs list: M4 / M4+V3 / M4+V4 / M6V3 / M6V4 / D8V3/ D8V4 / DSP68 / TUNE12 / M6PRO / M12 / M5 / M10 / M8
 
+Added 3 separate profiles for Nakamichi-K DSP software:  
+Nakamichi-K 31-Band EQ with ONLY GAINS (NDSK4265AU)  
+Nakamichi-K 15-Band EQ (NDSK4065AU / NDSK4165AU)  
+Nakamichi-K 31-Band EQ (NDSK4085AU / NDSK4185AU / NDSK4285AU)  
+For Nakamichi keep eye what it performs, I tried to implement some workarounds in the profile. Timeouts tweaking may be needed in your case.
+
 ### 13-11-2025:
 Hotkeys now as an option to start input (delay option remains in the script, but now it depends on how profile is configured).
 

@@ -1,0 +1,25 @@
+{
+    "version": "1.0",
+    "Description": "Nakamichi-K 31-Band EQ with ONLY GAINS (NDSK4265AU)",
+    "processName": "Nakamichi-K",
+    "QDevider": 1,
+    "QDecimals": 3,
+    "GainDecimals": 1,
+    "DecimalSeparator": ".",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "StartingPositionHint": "Please hover mouse over 1 band Freq box and press hotkey",
+    "KeystrokeSequence": [
+        {
+            "mouseClick": "left",
+            "delay_ms": 150
+        },
+        {
+            "keys": "^a{BACKSPACE}{BACKSPACE}{BACKSPACE}{DEL}{DEL}{DEL}GAIN",
+            "delay_ms": 100
+        },
+        {
+            "mouseChangePositionX": "+35",
+            "delay_ms": 10
+        }
+    ]
+}
