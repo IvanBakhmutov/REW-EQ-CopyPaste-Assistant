@@ -21,7 +21,7 @@ A demo video <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09
 
 Special thanks to Denis GS for the ideas and collaboration!
 
-Support this project <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/PayPal_Logo_Icon_2014.svg" alt="PayPal icon" height=12/> **[PayPal](https://paypal.me/IvanBakhmutov)**
+Support this project <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/PayPal_Logo_Icon_2014.svg" alt="PayPal icon" height=12/> **[PayPal](https://paypal.me/IvanBakhmutovDonate)**
 
 ### Tested profiles
 
@@ -37,12 +37,18 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 | Nakamichi | Nakamichi-K | NDSK4085AU, NDSK4185AU, NDSK4285AU |
 | Phoenix | Phoenix Gold DSP software | (to be verified) |
 | Sennuopu | Sennuopu DP-X680 PC Software EN | DP-X680 |
+| Zapco | PC Program (Windows) for ADSP series | ADSP-Z8 IV AT, ADSP-Z8 IV-6AT, ADSP-Z12 IV-10A, ADSP-Z16 IV-12A |
 
 ## DSP Profile file format
 
 The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse actions or key actions like`{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](DSPProfileFileFormat.md)
 
 ## Change log
+
+### 16-11-2025:
+Tests with Zapco DSP software showed we need a new variable for each band with the band number. The keyword for it in keystrokes is `BANDNUMBER`. The reason - with Zapco software you have to select band by typing its number (handy, innit?). So I updated the main script to work with the new variable, updated the module which parses data from REW. During testing also noticed weird behaviour as in the DSP software decimals number and step settings, so I eventually come up with the following Configurable PEQ in REW:  
+<img src="Resources/ZAPCO ADSP-Z16 IV-12A.png" alt="Configurable_PEQ for Zapco ADSP" width=481 />  
+And only after this it started to work fine. So for now ADSP series is fine.
 
 ### 14-11-2025:
 MUSWAY TUNEST_PC_V1.* Profile added, DSPs list: M4 / M4+V3 / M4+V4 / M6V3 / M6V4 / D8V3/ D8V4 / DSP68 / TUNE12 / M6PRO / M12 / M5 / M10 / M8
@@ -58,7 +64,7 @@ Hotkeys now as an option to start input (delay option remains in the script, but
 
 Global config with default values.
 
-Musway DSP v1.08 profile added (M4+ / M6 / M6v2 / DSP68PRO) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube]("https://youtu.be/70nI_DrytnA?si=IY8tHfrHuXiwoZ2I")
+Musway DSP v1.08 profile added (M4+ / M6 / M6v2 / DSP68PRO) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://youtu.be/70nI_DrytnA?si=IY8tHfrHuXiwoZ2I)
 
 ### 12-11-2025:
 GUI for profile selection added. Event notification popups added. GUI demo <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=ccjcXb-yxC0)

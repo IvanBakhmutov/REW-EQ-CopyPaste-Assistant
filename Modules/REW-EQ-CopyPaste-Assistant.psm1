@@ -37,7 +37,7 @@ function Read-EQText {
     $bands = $lines[1..$lines.count] | ConvertFrom-Csv -Delimiter "`t"
 
     $results = @()
-
+    $bandNumber = 1
     $bands | where-Object { $_.Type -eq 'PK' } | ForEach-Object {
         if ($QDevider -ne 1) {
             # Adjust Q value based on QDevider and round to specified decimals
@@ -60,7 +60,9 @@ function Read-EQText {
             Freq = [string]($_.'Frequency(Hz)')
             Q    = [string]($adjustedQ)
             Gain = [string]($adjustedGain)
+            bandNumber = [string]($bandNumber)
         }
+        $bandNumber++
     }
 
     if ($results.count -gt 0) {
@@ -72,7 +74,9 @@ function Read-EQText {
         return @()
     }
 }
-
+# debug start
+# Read-EQText -text $(get-clipboard -raw) -QDevider 1 -QDecimals 1 -GainDecimals 1 -DecimalSeparator "."
+# debug end
 
 # Show a confirmation dialog to the user and return their response as a boolean.
 <#

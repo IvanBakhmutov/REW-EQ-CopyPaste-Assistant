@@ -275,7 +275,7 @@ do {
                             Write-Host -ForegroundColor Blue "Mouse scroll down by $($KeySet.MouseScrollDown)"
                         }
                         "keys" {
-                            $keyToSend = $KeySet.keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain)
+                            $keyToSend = $KeySet.keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber)
                             Invoke-KeyStroke -Keys $keyToSend
                             Start-Sleep -Milliseconds $KeySet.delay_ms
                             Write-Host -ForegroundColor Blue "Sent keystrokes: $keyToSend"
