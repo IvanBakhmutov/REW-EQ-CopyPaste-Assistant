@@ -49,18 +49,18 @@ The script uses its own profiles (in JSON format), which store the DSP software 
 
 ### 16-11-2025:
 
-Added Awave DSP profile for variety of models.
+Added Awave DSP profile for variety of models [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> ](https://www.youtube.com/watch?v=EXtoCs05dEA)
 
-Tests with Zapco DSP software showed we need a new variable for each band with the band number. The keyword for it in keystrokes is `BANDNUMBER`. The reason - with Zapco software you have to select band by typing its number (handy, innit?). So I updated the main script to work with the new variable, updated the module which parses data from REW. During testing also noticed weird behaviour as in the DSP software decimals number and step settings, so I eventually come up with the following Configurable PEQ in REW:  
+Tests with Zapco DSP software [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> ](https://www.youtube.com/watch?v=dU5p3sIC9YQ) showed we need a new variable for each band with the band number. The keyword for it in keystrokes is `BANDNUMBER`. The reason - with Zapco software you have to select band by typing its number (handy, innit?). So I updated the main script to work with the new variable, updated the module which parses data from REW. During testing also noticed weird behaviour as in the DSP software decimals number and step settings, so I eventually come up with the following Configurable PEQ in REW:  
 <img src="Resources/ZAPCO ADSP-Z16 IV-12A.png" alt="Configurable_PEQ for Zapco ADSP" width=481 />  
 And only after this it started to work fine. So for now ADSP series is fine.
 
- Profile for ONKYO R-MS Series, models: R-MS66, R-MS55, R-MS25, R-MS10 - this is the first DSP software which runs under admin rights, so the CopyPaste tools in a such case also require to be running with admin rights, otherwise it won't be able to send input keys to DSP software.
+ Profile for ONKYO R-MS Series [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> ](https://www.youtube.com/watch?v=0dX5bmcYrgo), models: R-MS66, R-MS55, R-MS25, R-MS10 - this is the first DSP software which runs under admin rights, so the CopyPaste tools in a such case also require to be running with admin rights, otherwise it won't be able to send input keys to DSP software.
 
 ### 14-11-2025:
-MUSWAY TUNEST_PC_V1.* Profile added, DSPs list: M4 / M4+V3 / M4+V4 / M6V3 / M6V4 / D8V3/ D8V4 / DSP68 / TUNE12 / M6PRO / M12 / M5 / M10 / M8
+MUSWAY TUNEST_PC_V1.* Profile added [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> ](https://www.youtube.com/watch?v=HZ_NLD_EYd4), DSPs list: M4 / M4+V3 / M4+V4 / M6V3 / M6V4 / D8V3/ D8V4 / DSP68 / TUNE12 / M6PRO / M12 / M5 / M10 / M8
 
-Added 3 separate profiles for Nakamichi-K DSP software:  
+Added 3 separate profiles for Nakamichi-K DSP software [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> ](https://www.youtube.com/watch?v=IfmVdbgM--k):  
 Nakamichi-K 31-Band EQ with ONLY GAINS (NDSK4265AU)  
 Nakamichi-K 15-Band EQ (NDSK4065AU / NDSK4165AU)  
 Nakamichi-K 31-Band EQ (NDSK4085AU / NDSK4185AU / NDSK4285AU)  
@@ -71,15 +71,15 @@ Hotkeys now as an option to start input (delay option remains in the script, but
 
 Global config with default values.
 
-Musway DSP v1.08 profile added (M4+ / M6 / M6v2 / DSP68PRO) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://youtu.be/70nI_DrytnA?si=IY8tHfrHuXiwoZ2I)
+Musway DSP v1.08 profile added (M4+ / M6 / M6v2 / DSP68PRO) [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> ](https://youtu.be/70nI_DrytnA?si=IY8tHfrHuXiwoZ2I)
 
 ### 12-11-2025:
-GUI for profile selection added. Event notification popups added. GUI demo <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=ccjcXb-yxC0)
+GUI for profile selection added. Event notification popups added. GUI demo [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/>](https://www.youtube.com/watch?v=ccjcXb-yxC0)
 
 Increased Phoenix Gold timeout before input as DSP software for some reason restores windowed mode instead of staying in maximized mode.
 
 ### 11-11-2025:
-Tested Phoenix Gold software with mouse'n'keyboard input <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/> [watch on YouTube](https://www.youtube.com/watch?v=EdCybWHxmO4)
+Tested Phoenix Gold software with mouse'n'keyboard input [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/512px-YouTube_full-color_icon_%282017%29.svg.png?20240107144800" alt="YouTube icon" height=12/>](https://www.youtube.com/watch?v=EdCybWHxmO4)
 
 ### 10-11-2025:
 Back on track - account has been unblocked.
