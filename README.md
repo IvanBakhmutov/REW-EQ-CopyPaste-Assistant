@@ -39,6 +39,7 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 | Sennuopu | Sennuopu DP-X680 PC Software EN | DP-X680 |
 | Zapco | PC Program (Windows) for ADSP series | ADSP-Z8 IV AT, ADSP-Z8 IV-6AT, ADSP-Z12 IV-10A, ADSP-Z16 IV-12A |
 | Awave | DSP PC Tool | DSPA6, DSP12DMAX, DSP16DMAX, DSPA6II, DSP6V5,  DSPM6, DSPA8D, DSPA10II, DSP10D, DSP10DMAX, DSPT10, DSP8.1, DSPA12, DSPA12D, DSPA12D PRO, DSP12DMAXII, DSPA16D, DSPA16DMAXII,DSPA24D |
+| ONKYO | R-MS Series | R-MS66, R-MS55, R-MS25, R-MS10: Important - DSP software runs with admin rights, so CopyPaste tool should be running with admin rights as well |
 
 ## DSP Profile file format
 
@@ -53,6 +54,8 @@ Added Awave DSP profile for variety of models.
 Tests with Zapco DSP software showed we need a new variable for each band with the band number. The keyword for it in keystrokes is `BANDNUMBER`. The reason - with Zapco software you have to select band by typing its number (handy, innit?). So I updated the main script to work with the new variable, updated the module which parses data from REW. During testing also noticed weird behaviour as in the DSP software decimals number and step settings, so I eventually come up with the following Configurable PEQ in REW:  
 <img src="Resources/ZAPCO ADSP-Z16 IV-12A.png" alt="Configurable_PEQ for Zapco ADSP" width=481 />  
 And only after this it started to work fine. So for now ADSP series is fine.
+
+ Profile for ONKYO R-MS Series, models: R-MS66, R-MS55, R-MS25, R-MS10 - this is the first DSP software which runs under admin rights, so the CopyPaste tools in a such case also require to be running with admin rights, otherwise it won't be able to send input keys to DSP software.
 
 ### 14-11-2025:
 MUSWAY TUNEST_PC_V1.* Profile added, DSPs list: M4 / M4+V3 / M4+V4 / M6V3 / M6V4 / D8V3/ D8V4 / DSP68 / TUNE12 / M6PRO / M12 / M5 / M10 / M8

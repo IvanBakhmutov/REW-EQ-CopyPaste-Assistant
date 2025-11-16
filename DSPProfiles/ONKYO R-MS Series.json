@@ -1,0 +1,17 @@
+{
+    "version": "1.0",
+    "Description": "ONKYO R-MS Series (R-MS66 / R-MS55 / R-MS25 / R-MS10)",
+    "processName": "ONKYO R-MS*",
+    "QDevider": 1,
+    "QDecimals": 2,
+    "GainDecimals": 1,
+    "HotkeyOrDelayPreference": "Hotkey",
+    "TimeoutBeforePasteSecs": 6,
+    "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
+    "KeystrokeSequence": [
+        {
+            "keys": "FREQ{TAB}QVALUE{TAB}GAIN{TAB}",
+            "delay_ms": 50
+        }
+    ]
+}
