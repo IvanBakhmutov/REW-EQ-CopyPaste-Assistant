@@ -10,18 +10,22 @@
 - Double click on selected profile in the list to open it
 - Review console and popup messages
 - Reported issue with confirmation dialog
-- DSP profiles list with your help can be expanded with:
- Musway,
- Light Audio,
- MadBit,
- Контур,
- Best Balance,
- Nakamichi,
- Tonemix,
- новые URAL,
- Awave,
- Sennuopu,
- Mobridge,
- Zapco,
- Phoenix Gold,
+- DSP profiles list with your help can be expanded with:  
+ ~~Musway~~,  
+ ~~Nakamichi~~,  
+ ~~Zapco ADSP~~,  
+ ~~Phoenix Gold~~,  
+ ~~Awave~~,  
+ Zapco HDSP,  
+ Down 4 Sound,  
+ Light Audio,  
+ MadBit,  
+ Контур,  
+ Best Balance,  
+ Tonemix,  
+ новые URAL,  
+ Awave,  
+ Sennuopu,  
+ Mobridge (https://mobridge.us/mobridge-dsp/),  
+ JIB DSP,  
  JL and others

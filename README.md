@@ -38,6 +38,7 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 | Phoenix | Phoenix Gold DSP software | (to be verified) |
 | Sennuopu | Sennuopu DP-X680 PC Software EN | DP-X680 |
 | Zapco | PC Program (Windows) for ADSP series | ADSP-Z8 IV AT, ADSP-Z8 IV-6AT, ADSP-Z12 IV-10A, ADSP-Z16 IV-12A |
+| Awave | DSP PC Tool | DSPA6, DSP12DMAX, DSP16DMAX, DSPA6II, DSP6V5,  DSPM6, DSPA8D, DSPA10II, DSP10D, DSP10DMAX, DSPT10, DSP8.1, DSPA12, DSPA12D, DSPA12D PRO, DSP12DMAXII, DSPA16D, DSPA16DMAXII,DSPA24D |
 
 ## DSP Profile file format
 
@@ -46,6 +47,9 @@ The script uses its own profiles (in JSON format), which store the DSP software 
 ## Change log
 
 ### 16-11-2025:
+
+Added Awave DSP profile for variety of models.
+
 Tests with Zapco DSP software showed we need a new variable for each band with the band number. The keyword for it in keystrokes is `BANDNUMBER`. The reason - with Zapco software you have to select band by typing its number (handy, innit?). So I updated the main script to work with the new variable, updated the module which parses data from REW. During testing also noticed weird behaviour as in the DSP software decimals number and step settings, so I eventually come up with the following Configurable PEQ in REW:  
 <img src="Resources/ZAPCO ADSP-Z16 IV-12A.png" alt="Configurable_PEQ for Zapco ADSP" width=481 />  
 And only after this it started to work fine. So for now ADSP series is fine.
