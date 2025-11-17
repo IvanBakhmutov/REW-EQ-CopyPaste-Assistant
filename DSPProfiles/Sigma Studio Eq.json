@@ -1,0 +1,17 @@
+{
+    "version": "1.0",
+    "Description": "Sigma Studio Eq module (adau1701 processors)",
+    "processName": "SStudio",
+    "QDevider": 1,
+    "QDecimals": 2,
+    "GainDecimals": 1,
+    "DecimalSeparator": ".",
+    "StartingPositionHint": "Please select Freq box of 1 band and hit hotkey",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "KeystrokeSequence": [
+        {
+            "keys": "^aFREQ{TAB}QVALUE{TAB}GAIN{TAB}{TAB}{TAB}{TAB}{TAB}",
+            "delay_ms": 500
+        }
+    ]
+}

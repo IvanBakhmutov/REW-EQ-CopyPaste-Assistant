@@ -41,7 +41,7 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 | Awave | DSP PC Tool | ❎ | DSPA6, DSP12DMAX, DSP16DMAX, DSPA6II, DSP6V5,  DSPM6, DSPA8D, DSPA10II, DSP10D, DSP10DMAX, DSPT10, DSP8.1, DSPA12, DSPA12D, DSPA12D PRO, DSP12DMAXII, DSPA16D, DSPA16DMAXII,DSPA24D |
 | ONKYO | R-MS Series | 🚩 | R-MS66, R-MS55, R-MS25, R-MS10: Important - DSP software runs with admin rights, so CopyPaste tool should be running with admin rights as well |
 | the t.racks | DSP 4x4 Mini Editor V1.05 | ❎ | DSP 4×4 Mini |
-
+| Sigma | Sigma Studio | ❎ | adau1701 processors |
 ## DSP Profile file format
 
 The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse actions or key actions like`{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](DSPProfileFileFormat.md)
@@ -53,9 +53,9 @@ Admin rights validation added (in case if they're needed)
 
 Freq decimals added, some DSP software stucks on input if for example it does not allow you input decimals in Freq box, but you're using Generic/Generic or Generic/Exetended EQs which put extra zeroes at the end of Freq.  
 
-Thanks to Salvo Garà a new profile added for the t.racks DSP 4x4 Mini Editor V1.05. Home audio enthusiasts joined us!
+👍 Thanks to Salvo Garà a new profile added for the Sigma studio (adau1701 processors) and t.racks DSP 4x4 Mini Editor V1.05. Home audio enthusiasts joined us!
 
-Added Generic profiles, TAB navigated and Enter navigated.
+Added Generic profiles, TAB navigated and ENTER navigated.
 
 ### 16-11-2025:
 
