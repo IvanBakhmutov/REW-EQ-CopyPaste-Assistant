@@ -7,6 +7,7 @@
     "GainDecimals": 1,
     "HotkeyOrDelayPreference": "Hotkey",
     "TimeoutBeforePasteSecs": 6,
+    "AdminRightsRequired": true,
     "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
     "KeystrokeSequence": [
         {

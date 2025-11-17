@@ -117,6 +117,20 @@ write-host "Perform Action Hotkey = $effectivePerformActionHotkey and Cancel Act
 
 # Load selected profile
 $DSPConfig = Get-Content $selectedProfile -Raw | ConvertFrom-Json
+
+if($null -ne $DSPConfig.AdminRightsRequired) {
+    if($DSPConfig.AdminRightsRequired -eq "true") {
+        if(Get-RunningAsAdminFlag) {
+            Write-Host "Running with administrative privileges as required by the DSP profile." -ForegroundColor Yellow
+        } else {
+            Write-Host "This DSP profile requires administrative privileges. Please run the script as an administrator." -ForegroundColor Red
+            start-sleep -Seconds 3
+            exit
+        }
+    }
+} else {
+    Write-Host "No AdminRightsRequired flag found in profile. Proceeding without admin rights." -ForegroundColor Yellow
+}
 $ProcessName = $DSPConfig.processName
 if($null -ne $DSPConfig.QDevider){
     $QDevider = $DSPConfig.QDevider
@@ -125,6 +139,11 @@ if($null -ne $DSPConfig.DecimalSeparator){
     $DecimalSeparator = $DSPConfig.DecimalSeparator
 } else {
     $DecimalSeparator = $GlobalConfig.DecimalSeparator
+}
+if($null -ne $DSPConfig.FreqDecimals){
+    $FreqDecimals = $DSPConfig.FreqDecimals
+} else {
+    $FreqDecimals = $GlobalConfig.FreqDecimals
 }
 if($null -ne $DSPConfig.QDecimals){
     $QDecimals = $DSPConfig.QDecimals
@@ -183,6 +202,7 @@ do {
         [array]$bands = Read-EQText `
             -Text ($buffer | Out-String) `
             -QDevider $QDevider `
+            -FreqDecimals $FreqDecimals `
             -QDecimals $QDecimals `
             -GainDecimals $GainDecimals `
             -DecimalSeparator $DecimalSeparator

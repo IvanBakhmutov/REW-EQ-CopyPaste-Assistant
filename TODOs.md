@@ -8,8 +8,13 @@
 - Folders with brand names for DSP profiles?
 - Double click on selected profile in the list to open it
 - Review console and popup messages
-- Reported issue with confirmation dialog
-- JSON profile file format validation  
+- Reported issue with confirmation dialog (in parallels desktop)
+- JSON profile file format validation on load, as a function in the module
+- ~~AdminRightsRequired check for some DSP brands~~
+- Configurable PEQ guideslines for each profile in a separate text box
+- ~~Freq decimals in configs~~
+- Remove "True" word output in console when a mouse pointer operation happens
+- Experimental: Try to make this script to connect to REW API (roomeqwizard.exe -api) to set default Configurable PEQ with DSP model specific options http://127.0.0.1:4735/eq/default-equaliser
 
 - DSP profiles list to check:
  ~~ESX~~,  

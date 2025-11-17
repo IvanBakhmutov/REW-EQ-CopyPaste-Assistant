@@ -26,6 +26,7 @@ function Read-EQText {
     param(
         [Parameter(Mandatory = $true)][string]$Text,
         [Parameter(Mandatory = $true)][double]$QDevider,
+        [Parameter(Mandatory = $true)][int]$FreqDecimals,
         [Parameter(Mandatory = $true)][int]$QDecimals,
         [Parameter(Mandatory = $true)][int]$GainDecimals,
         [Parameter(Mandatory = $true)][string]$DecimalSeparator
@@ -47,19 +48,23 @@ function Read-EQText {
             $adjustedQ = [math]::round([double]($_.Q -replace ",", "."), $QDecimals)
         }
 
+        # Round Frequency to specified decimals
+        $adjustedFreq = [math]::round([double]($_.'Frequency(Hz)' -replace ",", "."), $FreqDecimals)
+
         # Round Gain to specified decimals
         $adjustedGain = [math]::round([double]($_.'Gain(dB)' -replace ",", "."), $GainDecimals)
 
         # Replace decimal separator if needed
         if ($DecimalSeparator -eq ",") {
+            $adjustedFreq = $adjustedFreq.tostring() -replace "\.", ","
             $adjustedGain = $adjustedGain.tostring() -replace "\.", ","
             $adjustedQ = $adjustedQ.tostring() -replace "\.", ","
         }
 
         $results += [PSCustomObject]@{
-            Freq = [string]($_.'Frequency(Hz)')
-            Q    = [string]($adjustedQ)
-            Gain = [string]($adjustedGain)
+            Freq       = [string]($adjustedFreq)
+            Q          = [string]($adjustedQ)
+            Gain       = [string]($adjustedGain)
             bandNumber = [string]($bandNumber)
         }
         $bandNumber++
@@ -75,7 +80,7 @@ function Read-EQText {
     }
 }
 # debug start
-# Read-EQText -text $(get-clipboard -raw) -QDevider 1 -QDecimals 1 -GainDecimals 1 -DecimalSeparator "."
+# Read-EQText -text $(get-clipboard -raw) -QDevider 1 -QDecimals 1 -GainDecimals 1 -DecimalSeparator "." -FreqDecimals 1 | Format-Table -AutoSize
 # debug end
 
 # Show a confirmation dialog to the user and return their response as a boolean.
@@ -339,9 +344,33 @@ function Show-Notification {
     } -ArgumentList $Title, $Message, $Timeout | Out-Null
 }
 
+function Get-RunningAsAdminFlag {
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+
+    $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+    if (-not $isAdmin) {
+        try {
+            Add-Type -AssemblyName PresentationCore,PresentationFramework -ErrorAction SilentlyContinue
+            $ButtonType   = [System.Windows.MessageBoxButton]::OK
+            $MessageIcon  = [System.Windows.MessageBoxImage]::Error
+            $MessageBody  = "Selected DSP profile requires administrative privileges. Please run the script as an administrator."
+            $MessageTitle = "Administrative Privileges Required"
+            [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
+        }
+        catch {
+            Write-Host "Selected DSP profile requires administrative privileges. Please run the script as an administrator." -ForegroundColor Red
+        }
+    }
+
+    return $isAdmin
+}
+
 Export-ModuleMember -Function `
     Read-EQText, `
     Show-ConfirmationDialog, `
     Show-DSPWindowToFront, `
     Show-TransposedTable,
-    Show-Notification
+    Show-Notification,
+    Get-RunningAsAdminFlag

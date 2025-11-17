@@ -5,6 +5,7 @@
     "HotkeyOrDelayPreference": "Hotkey",
     "GainDecimals": 1,
     "QDecimals": 1,
+    "FreqDecimals": 0,
     "DecimalSeparator": ".",
     "TimeoutBeforePasteSecs": 6
 }

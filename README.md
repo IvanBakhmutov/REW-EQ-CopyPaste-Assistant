@@ -26,20 +26,20 @@ Support this project **[<img src="Img/PayPal_Logo.png" alt="PayPal icon" height=
 ### Tested profiles
 
 Some DSP profiles were already tested and added to `./DSPProfiles`
-| Brand | DSP Software | DSP devices |
-| :---- | ---- | ---- |
-| ESX | ESX Toolkit | D66SP, QM66SP, D68SP, VE900.7SP, QL810SP, QL812SP, VE1300.11SP, QE812SP |
-| Hellion | Hellion DSP software | (to be verified) |
-| Musway | MUSWAY DSP V1.08 | M4+, M6, M6v2, DSP68PRO |
-| Musway | MUSWAY TUNEST_PC_V1.* | M4, M4+V3, M4+V4, M6V3, M6V4, D8V3, D8V4, DSP68, TUNE12, M6PRO, M12, M5, M10, M8 |
-| Nakamichi | Nakamichi-K | NDSK4265AU |
-| Nakamichi | Nakamichi-K | NDSK4065AU, NDSK4165AU |
-| Nakamichi | Nakamichi-K | NDSK4085AU, NDSK4185AU, NDSK4285AU |
-| Phoenix | Phoenix Gold DSP software | (to be verified) |
-| Sennuopu | Sennuopu DP-X680 PC Software EN | DP-X680 |
-| Zapco | PC Program (Windows) for ADSP series | ADSP-Z8 IV AT, ADSP-Z8 IV-6AT, ADSP-Z12 IV-10A, ADSP-Z16 IV-12A |
-| Awave | DSP PC Tool | DSPA6, DSP12DMAX, DSP16DMAX, DSPA6II, DSP6V5,  DSPM6, DSPA8D, DSPA10II, DSP10D, DSP10DMAX, DSPT10, DSP8.1, DSPA12, DSPA12D, DSPA12D PRO, DSP12DMAXII, DSPA16D, DSPA16DMAXII,DSPA24D |
-| ONKYO | R-MS Series | R-MS66, R-MS55, R-MS25, R-MS10: Important - DSP software runs with admin rights, so CopyPaste tool should be running with admin rights as well |
+| Brand | DSP Software | Requires admin rights | DSP devices | 
+| :---- | ---- | ---- | ---- |
+| ESX | ESX Toolkit | ❎ |D66SP, QM66SP, D68SP, VE900.7SP, QL810SP, QL812SP, VE1300.11SP, QE812SP |
+| Hellion | Hellion DSP software | ❎ | (to be verified) |
+| Musway | MUSWAY DSP V1.08 | ❎ | M4+, M6, M6v2, DSP68PRO |
+| Musway | MUSWAY TUNEST_PC_V1.* | ❎ | M4, M4+V3, M4+V4, M6V3, M6V4, D8V3, D8V4, DSP68, TUNE12, M6PRO, M12, M5, M10, M8 |
+| Nakamichi | Nakamichi-K | ❎ | NDSK4265AU |
+| Nakamichi | Nakamichi-K | ❎ | NDSK4065AU, NDSK4165AU |
+| Nakamichi | Nakamichi-K | ❎ | NDSK4085AU, NDSK4185AU, NDSK4285AU |
+| Phoenix | Phoenix Gold DSP software | ❎ | (to be verified) |
+| Sennuopu | Sennuopu DP-X680 PC Software EN | ❎ | DP-X680 |
+| Zapco | PC Program (Windows) for ADSP series | ❎ | ADSP-Z8 IV AT, ADSP-Z8 IV-6AT, ADSP-Z12 IV-10A, ADSP-Z16 IV-12A |
+| Awave | DSP PC Tool | ❎ | DSPA6, DSP12DMAX, DSP16DMAX, DSPA6II, DSP6V5,  DSPM6, DSPA8D, DSPA10II, DSP10D, DSP10DMAX, DSPT10, DSP8.1, DSPA12, DSPA12D, DSPA12D PRO, DSP12DMAXII, DSPA16D, DSPA16DMAXII,DSPA24D |
+| ONKYO | R-MS Series | 🚩 | R-MS66, R-MS55, R-MS25, R-MS10: Important - DSP software runs with admin rights, so CopyPaste tool should be running with admin rights as well |
 
 ## DSP Profile file format
 
