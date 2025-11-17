@@ -1,6 +1,6 @@
 {
     "version": "1.0",
-	"Description": "Generic profile (non specific to any DSP brand/software). Navigation through Freq, Q and Gain boxes with TAB key.",
+	"Description": "Generic profile (non specific to any DSP brand/software). Navigation through Freq, Q and Gain boxes with the ENTER key.",
     "processName": "Generic",
     "QDevider": 1,
     "FreqDecimals": 0,
