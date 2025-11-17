@@ -36,10 +36,10 @@ URAL (новые DSP) (URAL DSP PC Tool),
 Sennuopu DSP (Sennuopu DSP Tool),  
 Ground Zero DSP (GZ DSP PC Software),  
 Hertz H8 DSP (Hertz H8 DSP Software),  
-Focal (FSP-8 и др.) (Focal FSP-8 DSP Tool),  
+Focal (FSP-8 and others) (Focal FSP-8 DSP Tool),  
 Stetsom / Banda DSP (Stetsom DSP Software / Banda DSP Manager),  
 JIB DSP (JIB DSP Software),  
 Zapco HDSP,  
 Mobridge (https://mobridge.us/mobridge-dsp/),  
 JIB DSP,  
-JL and others
+and others
