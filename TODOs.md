@@ -15,6 +15,7 @@
 - ~~Freq decimals in configs~~
 - Remove "True" word output in console when a mouse pointer operation happens
 - Experimental: Try to make this script to connect to REW API (roomeqwizard.exe -api) to set default Configurable PEQ with DSP model specific options http://127.0.0.1:4735/eq/default-equaliser
+- FB / Yakub Altıner reported issue with "Musway DSP v3" - needs to be checked
 
 - DSP profiles list to check:
  ~~ESX~~,  

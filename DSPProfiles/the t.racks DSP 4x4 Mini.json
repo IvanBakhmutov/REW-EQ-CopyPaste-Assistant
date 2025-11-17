@@ -1,0 +1,17 @@
+{
+    "version": "1.0",
+    "Description": "the t.racks DSP 4x4 Mini Editor",
+    "processName": "the t.racks DSP 4x4 Mini Editor V1.05",
+    "QDevider": 1,
+    "QDecimals": 2,
+    "GainDecimals": 1,
+    "DecimalSeparator": ".",
+    "StartingPositionHint": "Please select Freq edit box",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "KeystrokeSequence": [
+        {
+            "keys": "^aFREQ{TAB}QVALUE{TAB}GAIN{TAB}{TAB}{TAB}",
+            "delay_ms": 500
+        }
+    ]
+}
