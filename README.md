@@ -53,9 +53,13 @@ Admin rights validation added (in case if they're needed)
 
 Freq decimals added, some DSP software stucks on input if for example it does not allow you input decimals in Freq box, but you're using Generic/Generic or Generic/Exetended EQs which put extra zeroes at the end of Freq.  
 
-👍 Thanks to Salvo Garà a new profile added for the Sigma studio (adau1701 processors) and t.racks DSP 4x4 Mini Editor V1.05. Home audio enthusiasts joined us!
+👍 Thanks to Salvo Garà a new profile added for the Sigma studio (adau1701 processors) and t.racks DSP 4x4 Mini Editor V1.05. Home audio enthusiasts joined us!  
 
-Added Generic profiles, TAB navigated and ENTER navigated.
+Added `Generic` profiles, TAB navigated and ENTER navigated.  
+
+Double click action on selected profile open, no need to click OK after selection.  
+
+JSON profile file format validation on load. Intentionally corrupted profile in ./DSPProfiles/Examples  
 
 ### 16-11-2025:
 

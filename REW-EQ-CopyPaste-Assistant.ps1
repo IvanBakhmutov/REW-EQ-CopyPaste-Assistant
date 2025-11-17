@@ -67,38 +67,45 @@ $window.FindName("ProfileList").Add_SelectionChanged({
     $selectedItem = $window.FindName("ProfileList").SelectedItem
     if ($null -ne $selectedItem) {
         $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedItem).json"
-        $profileContent = Get-Content -Path $profilePath -Raw
-        $window.FindName("ProfileText").Text = $profileContent
-        $window.FindName("OKBTN").IsEnabled = $true
-       # $window.FindName("EditBTN").IsEnabled = $true
-        switch(($profileContent | convertfrom-json).HotkeyOrDelayPreference) {
-            "Hotkey" {
-                $hotkeyHintLabel.Visibility = "Visible"
+        try {
+            Read-JSONFile -FilePath $profilePath | Out-Null
+            $profileContent = Get-Content -Path $profilePath -Raw
+            $window.FindName("ProfileText").Text = $profileContent
+            $window.FindName("OKBTN").IsEnabled = $true
+            # $window.FindName("EditBTN").IsEnabled = $true
+            switch(($profileContent | convertfrom-json).HotkeyOrDelayPreference) {
+                "Hotkey" {
+                    $hotkeyHintLabel.Visibility = "Visible"
+                }
+                "Delay" {
+                    $hotkeyHintLabel.Visibility = "Hidden"
+                }
+                Default {
+                    $hotkeyHintLabel.Visibility = "Hidden"
+                }
             }
-            "Delay" {
-                $hotkeyHintLabel.Visibility = "Hidden"
-            }
-            Default {
-                $hotkeyHintLabel.Visibility = "Hidden"
-            }
-        }
 
-        if((($profileContent | convertfrom-json).ProfilePerformActionHotkey -ne $script:GlobalPerformActionHotkey) -and `
-            ($null -ne ($profileContent | convertfrom-json).ProfilePerformActionHotkey)) {
-                $script:EffectivePerformActionHotkey = ($profileContent | convertfrom-json).ProfilePerformActionHotkey
-        } else {
-            $script:EffectivePerformActionHotkey = $script:GlobalPerformActionHotkey
-        }
-        if((($profileContent | convertfrom-json).ProfileCancelActionHotkey -ne $script:GlobalCancelActionHotkey) -and `
-            ($null -ne ($profileContent | convertfrom-json).ProfileCancelActionHotkey)) {
-                $script:EffectiveCancelActionHotkey = ($profileContent | convertfrom-json).ProfileCancelActionHotkey
-        } else {
-            $script:EffectiveCancelActionHotkey = $script:GlobalCancelActionHotkey
-        }
+            if((($profileContent | convertfrom-json).ProfilePerformActionHotkey -ne $script:GlobalPerformActionHotkey) -and `
+                ($null -ne ($profileContent | convertfrom-json).ProfilePerformActionHotkey)) {
+                    $script:EffectivePerformActionHotkey = ($profileContent | convertfrom-json).ProfilePerformActionHotkey
+            } else {
+                $script:EffectivePerformActionHotkey = $script:GlobalPerformActionHotkey
+            }
+            if((($profileContent | convertfrom-json).ProfileCancelActionHotkey -ne $script:GlobalCancelActionHotkey) -and `
+                ($null -ne ($profileContent | convertfrom-json).ProfileCancelActionHotkey)) {
+                    $script:EffectiveCancelActionHotkey = ($profileContent | convertfrom-json).ProfileCancelActionHotkey
+            } else {
+                $script:EffectiveCancelActionHotkey = $script:GlobalCancelActionHotkey
+            }
 
-        $hotkeyHintLabel.Content = "Hotkeys: Perform - $script:EffectivePerformActionHotkey, Cancel - $script:EffectiveCancelActionHotkey"
-        if(($script:GlobalPerformActionHotkey -ne $script:EffectivePerformActionHotkey) -or ($script:GlobalCancelActionHotkey -ne $script:EffectiveCancelActionHotkey)) {
-            $hotkeyHintLabel.Content += " (override)"
+            $hotkeyHintLabel.Content = "Hotkeys: Perform - $script:EffectivePerformActionHotkey, Cancel - $script:EffectiveCancelActionHotkey"
+            if(($script:GlobalPerformActionHotkey -ne $script:EffectivePerformActionHotkey) -or ($script:GlobalCancelActionHotkey -ne $script:EffectiveCancelActionHotkey)) {
+                $hotkeyHintLabel.Content += " (override)"
+            }
+        } catch {
+            $window.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file."
+            $window.FindName("OKBTN").IsEnabled = $false
+           # $window.FindName("EditBTN").IsEnabled = $false
         }
     } else {
         $window.FindName("ProfileText").Text = "Please select a profile"
@@ -106,10 +113,15 @@ $window.FindName("ProfileList").Add_SelectionChanged({
        # $window.FindName("EditBTN").IsEnabled = $false
     }
 })
-# to be added doubleclick
-#$window.FindName("ProfileList").Add_mouseDoubleClick({
-#    $window.FindName("ProfileList").selectio
-#}
+# List doubleclick
+$window.FindName("ProfileList").Add_mouseDoubleClick({
+    $window.FindName("ProfileList").SelectedItem = $window.FindName("ProfileList").SelectedItem
+    Start-Sleep -Milliseconds 100
+    if($window.FindName("OKBTN").IsEnabled -eq $true){
+        $RoutedEventArgs = New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)
+        $window.FindName("OKBTN").RaiseEvent($RoutedEventArgs)
+    }
+})
 # Show the GUI
 $window.ShowDialog() | Out-Null
 
@@ -133,7 +145,7 @@ if($null -ne $DSPConfig.AdminRightsRequired) {
 }
 if($null -ne $DSPConfig.processName){
     if($DSPConfig.processName -eq "Generic"){
-        $ProcessName = "Generic"    
+        $ProcessName = "Generic"
     } else {
         $ProcessName = $DSPConfig.processName
     }
@@ -180,7 +192,7 @@ Write-Host "`nUsing DSP Profile: $($DSPConfig.Description)" -ForegroundColor Gre
 
 if($ProcessName -eq "Generic") {
     Write-Host "Using Generic profile. DSP software will not automatically shown in foreground." -ForegroundColor Yellow
-    Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Using Generic profile.`nWaiting for EQ data from REW in clipboard"     
+    Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Using Generic profile.`nWaiting for EQ data from REW in clipboard"
 } else {
     # find DSP Software processes with window
     $processes = Get-Process | Where-Object {
@@ -224,7 +236,7 @@ do {
         Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
 
         Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
-        
+
         if($ProcessName -ne "Generic") {
             Show-DSPWindowToFront -processName $ProcessName | Out-Null
         }

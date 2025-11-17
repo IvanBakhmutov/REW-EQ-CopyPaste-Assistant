@@ -6,16 +6,15 @@
 - Mouse pointer highlight before copypaste
 - Review logic behind hotkey or delay choice global vs dsp config
 - Folders with brand names for DSP profiles?
-- Double click on selected profile in the list to open it
+- ~~Double click on selected profile in the list to open it~~
 - Review console and popup messages
 - Reported issue with confirmation dialog (in parallels desktop)
-- JSON profile file format validation on load, as a function in the module
+- ~~JSON profile file format validation on load, as a function in the module~~
 - ~~AdminRightsRequired check for some DSP brands~~
 - Configurable PEQ guideslines for each profile in a separate text box
 - ~~Freq decimals in configs~~
 - Remove "True" word output in console when a mouse pointer operation happens
 - Experimental: Try to make this script to connect to REW API (roomeqwizard.exe -api) to set default Configurable PEQ with DSP model specific options http://127.0.0.1:4735/eq/default-equaliser
-- FB / Yakub Altıner reported issue with "Musway DSP v3" - needs to be checked
 - ~~Generic profile. Script update to handle it~~
 
 - DSP profiles list to check:

@@ -2,7 +2,7 @@
 # Module: REW-EQ-CopyPaste-Assistant
 # Description: Main module for REW-EQ-CopyPaste-Assistant
 # Author: Ivan Bakhmutov
-# Date: 2025-11-12
+# Date: 2025-11-18
 # ============================================
 
 # Parse copied EQ text data from clipboard and return an array of objects with Freq, Q, and Gain properties.
@@ -343,7 +343,19 @@ function Show-Notification {
         $notify.Dispose()
     } -ArgumentList $Title, $Message, $Timeout | Out-Null
 }
-
+<#
+.SYNOPSIS
+   Checks if the current script is running with administrative privileges.
+.DESCRIPTION
+   This function determines if the current PowerShell session has administrative rights. If not, it displays an error message prompting the user to run the script as an administrator.
+.EXAMPLE
+   $isAdmin = Get-RunningAsAdminFlag
+   This example checks if the script is running with administrative privileges and stores the result in $isAdmin.
+.INPUTS
+   None.
+.OUTPUTS
+   [bool] - True if running as administrator, False otherwise.
+#>
 function Get-RunningAsAdminFlag {
     $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
@@ -367,10 +379,31 @@ function Get-RunningAsAdminFlag {
     return $isAdmin
 }
 
+# Read and validate JSON file format
+function Read-JSONFile {
+    param(
+        [Parameter(Mandatory = $true)][string]$FilePath
+    )
+
+    # Read the actual JSON file
+    if (-not (Test-Path -Path $FilePath)) {
+        throw "File not found: $FilePath"
+    }
+
+    try {
+        $jsonContent = Get-Content -Path $FilePath -Raw | ConvertFrom-Json
+        return $jsonContent
+    }
+    catch {
+        throw "Failed to read or parse JSON file: $FilePath. Error: $_"
+    }
+}
+
 Export-ModuleMember -Function `
     Read-EQText, `
     Show-ConfirmationDialog, `
     Show-DSPWindowToFront, `
-    Show-TransposedTable,
-    Show-Notification,
-    Get-RunningAsAdminFlag
+    Show-TransposedTable, `
+    Show-Notification, `
+    Get-RunningAsAdminFlag, `
+    Read-JSONFile
