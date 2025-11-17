@@ -131,7 +131,15 @@ if($null -ne $DSPConfig.AdminRightsRequired) {
 } else {
     Write-Host "No AdminRightsRequired flag found in profile. Proceeding without admin rights." -ForegroundColor Yellow
 }
-$ProcessName = $DSPConfig.processName
+if($null -ne $DSPConfig.processName){
+    if($DSPConfig.processName -eq "Generic"){
+        $ProcessName = "Generic"    
+    } else {
+        $ProcessName = $DSPConfig.processName
+    }
+} else {
+    $ProcessName = "Generic"
+}
 if($null -ne $DSPConfig.QDevider){
     $QDevider = $DSPConfig.QDevider
 }
@@ -167,20 +175,27 @@ if($null -ne $DSPConfig.TimeoutBeforePasteSecs) {
 }
 $StartingPositionHint = $DSPConfig.StartingPositionHint
 
-Write-Host "`nUsing DSP Profile: $($DSPConfig.Description)`nQ devider value: $($DSPConfig.QDevider)" -ForegroundColor Green
+Write-Host "`nUsing DSP Profile: $($DSPConfig.Description)" -ForegroundColor Green
 
-# find DSP Software processes with window
-$processes = Get-Process | Where-Object {
-    $_.ProcessName -like $ProcessName -and $_.ProcessName -ne "conhost" -and $_.MainWindowHandle -ne [IntPtr]::Zero
+
+if($ProcessName -eq "Generic") {
+    Write-Host "Using Generic profile. DSP software will not automatically shown in foreground." -ForegroundColor Yellow
+    Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Using Generic profile.`nWaiting for EQ data from REW in clipboard"     
+} else {
+    # find DSP Software processes with window
+    $processes = Get-Process | Where-Object {
+        $_.ProcessName -like $ProcessName -and $_.ProcessName -ne "conhost" -and $_.MainWindowHandle -ne [IntPtr]::Zero
+    }
+
+    if ($processes.Count -eq 0) {
+        Write-Host "No $ProcessName process found running. Please run $($DSPConfig.Description) before proceeding.`nHit ENTER to close PowerShell..." -ForegroundColor Yellow
+        Read-host
+        return
+    }
+    Write-Host "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)" -ForegroundColor Green
+    Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)`nWaiting for EQ data from REW in clipboard" 
 }
 
-if ($processes.Count -eq 0) {
-    Write-Host "No $ProcessName process found running. Please run $($DSPConfig.Description) before proceeding.`nHit ENTER to close PowerShell..." -ForegroundColor Yellow
-    Read-host
-    return
-}
-Write-Host "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)" -ForegroundColor Green
-Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)`nWaiting for EQ data from REW in clipboard" 
 Write-Host "Hint: When finished with EQ close PowerShell window or hit ctrl-c and confirm exit" -ForegroundColor Yellow
 Write-Host "Hotkey Or Delay Preference: $HotkeyOrDelayPreference" -ForegroundColor Cyan
 Write-Host "Waiting for EQ data from REW in clipboard  " -ForegroundColor Yellow -NoNewline
@@ -209,8 +224,10 @@ do {
         Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
 
         Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
- 
-        Show-DSPWindowToFront -processName $ProcessName | Out-Null
+        
+        if($ProcessName -ne "Generic") {
+            Show-DSPWindowToFront -processName $ProcessName | Out-Null
+        }
         if(($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -eq "Hotkey")) {
             Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
                -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."

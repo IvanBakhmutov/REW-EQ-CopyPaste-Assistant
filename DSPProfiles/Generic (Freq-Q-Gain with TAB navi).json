@@ -1,0 +1,18 @@
+{
+    "version": "1.0",
+	"Description": "Generic profile (non specific to any DSP brand/software). Navigation through Freq, Q and Gain boxes with TAB key.",
+    "processName": "Generic",
+    "QDevider": 1,
+    "FreqDecimals": 0,
+    "QDecimals": 1,
+    "GainDecimals": 1,
+    "DecimalSeparator": ".",
+    "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "KeystrokeSequence": [
+        {
+            "keys": "FREQ{TAB}QVALUE{TAB}GAIN{TAB}",
+            "delay_ms": 200
+        }
+    ]
+}

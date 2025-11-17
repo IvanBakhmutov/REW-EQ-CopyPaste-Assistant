@@ -55,6 +55,8 @@ Freq decimals added, some DSP software stucks on input if for example it does no
 
 Thanks to Salvo Garà a new profile added for the t.racks DSP 4x4 Mini Editor V1.05. Home audio enthusiasts joined us!
 
+Added Generic profiles, TAB navigated and Enter navigated.
+
 ### 16-11-2025:
 
 Added Awave DSP profile for variety of models [<img src="Img/YouTube_Logo.png" alt="YouTube icon" height=12/> ](https://www.youtube.com/watch?v=EXtoCs05dEA)
