@@ -1,0 +1,27 @@
+{
+    "version": "1.0",
+    "Description": "Best Balance (DSP-6L, DSP-6.8)",
+    "processName": "DSP_BestBalance*",
+    "QDevider": 1,
+    "FreqDecimals": 0,
+    "QDecimals": 1,
+    "GainDecimals": 1,
+    "DecimalSeparator": ".",
+    "AdminRightsRequired": true,
+    "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "KeystrokeSequence": [
+        {
+            "keys": "^a{BACKSPACE}FREQ{TAB}",
+            "delay_ms": 200
+        },
+        {
+            "keys": "^a{BACKSPACE}QVALUE{TAB}",
+            "delay_ms": 200
+        },
+        {
+            "keys": "^a{BACKSPACE}GAIN{TAB}",
+            "delay_ms": 200
+        }
+    ]
+}

@@ -42,6 +42,9 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 | ONKYO | R-MS Series | 🚩 | R-MS66, R-MS55, R-MS25, R-MS10: Important - DSP software runs with admin rights, so CopyPaste tool should be running with admin rights as well |
 | the t.racks | DSP 4x4 Mini Editor V1.05 | ❎ | DSP 4×4 Mini |
 | Sigma | Sigma Studio | ❎ | adau1701 processors |
+| Best Balance | DSP_BestBalance | 🚩 | DSP-6L, DSP-6.8 |
+| Best Balance | BestBalance V2 | ❎ | DSP-6H |
+
 ## DSP Profile file format
 
 The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse actions or key actions like`{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](DSPProfileFileFormat.md)
@@ -60,6 +63,10 @@ Added `Generic` profiles, TAB navigated and ENTER navigated.
 Double click action on selected profile open, no need to click OK after selection.  
 
 JSON profile file format validation on load. Intentionally corrupted profile in ./DSPProfiles/Examples  
+
+Best Balance DSP-6H profile added [<img src="Img/YouTube_Logo.png" alt="YouTube icon" height=12/> ](https://www.youtube.com/watch?v=GD_sJT3Yoho)  
+
+Best Balance DSP-6L DSP-6.8 profile added [<img src="Img/YouTube_Logo.png" alt="YouTube icon" height=12/> ](https://www.youtube.com/watch?v=CewPLgmcHxk)  
 
 ### 16-11-2025:
 
