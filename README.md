@@ -28,6 +28,7 @@ Support this project **[<img src="Img/PayPal_Logo.png" alt="PayPal icon" height=
 Some DSP profiles were already tested and added to `./DSPProfiles`
 | Brand | DSP Software | Requires admin rights | DSP devices | 
 | :---- | ---- | ---- | ---- |
+| Generic profile | (No specific app) | ❎ | May work on some DSPs as is or after some keystroke adjustments. It just types wherever you want, for instance in notepad |
 | ESX | ESX Toolkit | ❎ |D66SP, QM66SP, D68SP, VE900.7SP, QL810SP, QL812SP, VE1300.11SP, QE812SP |
 | Hellion | Hellion DSP software | ❎ | (to be verified) |
 | Musway | MUSWAY DSP V1.08 | ❎ | M4+, M6, M6v2, DSP68PRO |
