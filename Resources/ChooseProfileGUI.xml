@@ -1,21 +1,29 @@
 <Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="REW EQ CopyPaste Assistant - Choose DSP profile" Height="450" Width="800" ResizeMode="NoResize">
-    <Grid>
-        <GroupBox Header="Profile list" Margin="0,0,526,35">
+        Title="REW EQ CopyPaste Assistant - Choose DSP profile" Height="602" Width="800" MinWidth="800" MinHeight="450">
+ <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="37"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="159*"/>
+            <ColumnDefinition Width="238*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="DSP profile list" Margin="0,0,4,3">
             <ListBox x:Name="ProfileList" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
         </GroupBox>
 
-        <GroupBox Header="Profile settings" Margin="279,0,0,35">
+        <GroupBox Header="Profile settings" Margin="7,0,0,3" Grid.Column="1">
             <TextBox x:Name="ProfileText" TextWrapping="Wrap" Text="Please select a profile" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
         </GroupBox>
 
-        <Button x:Name="OKBTN" Content="OK" Width="80" IsEnabled="False" IsDefault="True" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,30,280,5"/>
-        <Button x:Name="NewProfileBTN" Content="*New Profile" Width="80" IsEnabled="False" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,30,190,5"/>
-        <Button x:Name="EditBTN" Content="Edit" Width="80" IsEnabled="False" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,30,100,5"/>
-        <Button x:Name="CloseBTN" Content="Close" Width="80" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,30,10,5"/>
-        <Button x:Name="GitHub" Content="GitHub project page" Width="156"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,5" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"/>
-        <Label x:Name="HotkeyHint" Content="HotkeyHint" HorizontalAlignment="Left" Margin="161,15,0,5" VerticalAlignment="Bottom" Visibility="Hidden"/>
+        <Button x:Name="OKBTN" Content="OK" Width="80" IsEnabled="False" IsDefault="True" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,280,10" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="NewProfileBTN" Content="*New Profile" Width="80" IsEnabled="False" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,190,10" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="EditBTN" Content="Edit" Width="80" IsEnabled="False" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,10" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="CloseBTN" Content="Close" Width="80" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="GitHub" Content="GitHub project page" Width="156"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1"/>
+        <Label x:Name="HotkeyHint" Content="HotkeyHint" HorizontalAlignment="Left" Margin="161,0,0,5" VerticalAlignment="Bottom" Visibility="Hidden" Height="26" Width="70" Grid.Row="1"/>
     </Grid>
 </Window>

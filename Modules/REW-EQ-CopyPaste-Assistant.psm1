@@ -399,26 +399,6 @@ function Read-JSONFile {
     }
 }
 
-Function Show-EditProfileGui {
-    param (
-        [Parameter(Mandatory = $true)][string]$FilePath
-    )
-    $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
-    [xml]$xaml = (Get-Content -Path "$ResourcesDir\ProfileEditorGUI.xml" -Raw)
-    # Parse the XAML to create the GUI
-    Add-Type -AssemblyName PresentationFramework
-    $reader = (New-Object System.Xml.XmlNodeReader $xaml)
-    $window = [Windows.Markup.XamlReader]::Load($reader)
-
-    $window.FindName("CancelBTN").Add_Click({
-        $window.Close()
-      #  exit
-    })
-
-    # Show the GUI
-    $window.ShowDialog() | Out-Null
-}
-
 Export-ModuleMember -Function `
     Read-EQText, `
     Show-ConfirmationDialog, `
@@ -426,5 +406,4 @@ Export-ModuleMember -Function `
     Show-TransposedTable, `
     Show-Notification, `
     Get-RunningAsAdminFlag, `
-    Read-JSONFile, `
-    Show-EditProfileGui
+    Read-JSONFile
