@@ -1,0 +1,53 @@
+{
+    "version": "1.0",
+	"Description": "Sennuopu DP-X10",
+    "processName": "Sennuopu DP-X10*",
+    "QDevider": 1,
+    "QDecimals": 1,
+    "GainDecimals": 1,
+    "DecimalSeparator": ".",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "StartingPositionHint": "Please hover mouse over 1 band Q box and press hotkey",
+   "KeystrokeSequence": [
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "^aFREQ{ENTER}",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "+19",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "^aQVALUE{ENTER}",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "+19",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "^aGAIN{ENTER}",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "-38",
+            "delay_ms": 10
+        },
+        {
+            "mouseChangePositionX": "+31",
+            "delay_ms": 10
+        }
+    ]
+}
