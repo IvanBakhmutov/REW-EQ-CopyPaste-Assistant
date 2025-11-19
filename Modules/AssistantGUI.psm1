@@ -2,20 +2,37 @@ Function Show-EditProfileGui {
     param (
         [Parameter(Mandatory = $true)][string]$FilePath
     )
+
+    $result = [PSCustomObject]@{
+        FilePath = $FilePath
+        Action = "none"
+    }
+
     $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
     [xml]$xaml = (Get-Content -Path "$ResourcesDir\ProfileEditorGUI.xml" -Raw)
+    $profileFolderPath = Split-Path -Path $FilePath -Parent
     # Parse the XAML to create the GUI
     Add-Type -AssemblyName PresentationFramework
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $window = [Windows.Markup.XamlReader]::Load($reader)
 
+    $window.FindName("FilePathEdit").Text = (get-item $FilePath).BaseName
+
+    $window.findname("SaveBTN").Add_Click({
+        $result.FilePath = $window.FindName("FilePathEdit").Text
+        $result.Action = "Save"
+        $window.Close()
+    })
+
     $window.FindName("CancelBTN").Add_Click({
+    $result.Action = "Cancel"
         $window.Close()
       #  exit
     })
 
     # Show the GUI
     $window.ShowDialog() | Out-Null
+    return $result
 }
 
 Function Show-SelectProfileGui {
@@ -60,7 +77,8 @@ Function Show-SelectProfileGui {
             #return
     })
     $window.FindName("EditBTN").Add_Click({
-        $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedItem).json"
+        $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
+        write-host "Editing profile at $profilePath"
         Show-EditProfileGui -FilePath $profilePath
     })
     $window.FindName("OKBTN").Add_Click({
