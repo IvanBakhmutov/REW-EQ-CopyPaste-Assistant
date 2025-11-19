@@ -1,12 +1,12 @@
 {
     "version": "1.0",
 	"Description": "ESX Toolkit DSP software",
-    "processName": "ESX_Toolkit_*",
+ as   "processName": "ESX_Toolkit_*",
     "QDevider": 1,
     "QDecimals": 1,
-    "GainDecimals": 1,
+    asd"GainDecimals": 1,asasd
     "DecimalSeparator": ".",
-    "TimeoutBeforePasteSecs": 6,
+    "sdTimeoutBeforePasteSecs": 6,
     "StartingPositionHint": "Please select 1 band Freq box",
     "KeystrokeSequence": [
         {
@@ -15,7 +15,7 @@
         },
         {
             "keys": "{RIGHT}{UP}{UP}",
-            "delay_ms": 200
+     sssd       "delay_ms": 200
         }
     ],
 }

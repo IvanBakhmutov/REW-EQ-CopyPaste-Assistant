@@ -9,8 +9,9 @@ $scriptDir = Split-Path -Parent $PSCommandPath
 $DSPProfilesDir = Join-Path -Path $scriptDir -ChildPath "DSPProfiles"
 $ModulesDir = Join-Path -Path $scriptDir -ChildPath "Modules"
 $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources"
-Remove-Module REW-EQ-CopyPaste-Assistant -ErrorAction SilentlyContinue
-Remove-Module InputControls -ErrorAction SilentlyContinue
+Remove-Module REW-EQ-CopyPaste-Assistant -ErrorAction SilentlyContinue -Force
+Remove-Module InputControls -ErrorAction SilentlyContinue -Force 
+Remove-Module AssistantGUI -ErrorAction SilentlyContinue -Force
 Import-Module "$ModulesDir\REW-EQ-CopyPaste-Assistant.psm1"
 Import-Module "$ModulesDir\InputControls.psm1"
 Import-Module "$ModulesDir\AssistantGUI.psm1"
@@ -22,14 +23,28 @@ Write-Host "Script started" -ForegroundColor Yellow
 # Load global config
 $ConfigPath = Join-Path -Path $ResourcesDir -ChildPath "Config.json"
 $GlobalConfig = Get-Content $ConfigPath -Raw | ConvertFrom-Json
-$GlobalPerformActionHotkey = $GlobalConfig.GlobalPerformActionHotkey
-$GlobalCancelActionHotkey = $GlobalConfig.GlobalCancelActionHotkey
-$EffectivePerformActionHotkey = $GlobalPerformActionHotkey
-$EffectiveCancelActionHotkey = $GlobalCancelActionHotkey
+$EffectivePerformActionHotkey = $null #$GlobalConfig.GlobalPerformActionHotkey
+$EffectiveCancelActionHotkey =  $null #$GlobalConfig.GlobalCancelActionHotkey
 
 $selectedProfile = $null
 
-################
+$ProfileSelectionResult = Show-SelectProfileGui `
+                                -ResourcesDir $ResourcesDir `
+                                -GlobalPerformActionHotkey $GlobalConfig.GlobalPerformActionHotkey `
+                                -GlobalCancelActionHotkey $GlobalConfig.GlobalCancelActionHotkey
+
+
+if ($ProfileSelectionResult.Action -eq "Cancel" -or $null -eq $ProfileSelectionResult.SelectedProfile) {
+    Write-Host "No profile selected. Exiting script." -ForegroundColor Blue
+    exit
+} elseif( $ProfileSelectionResult.Action -eq "Open" -and $null -ne $ProfileSelectionResult.SelectedProfile) {
+    $selectedProfile = $ProfileSelectionResult.SelectedProfile
+    $EffectivePerformActionHotkey = $ProfileSelectionResult.EffectivePerformActionHotkey
+    $EffectiveCancelActionHotkey = $ProfileSelectionResult.EffectiveCancelActionHotkey
+} else {
+    Write-Host "Unexpected action from profile selection GUI. Exiting script." -ForegroundColor Red
+    exit
+}
 
 write-host "Perform Action Hotkey = $effectivePerformActionHotkey and Cancel Action Hotkey = $EffectiveCancelActionHotkey"
 

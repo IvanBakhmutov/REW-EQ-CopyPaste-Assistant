@@ -1,4 +1,4 @@
-Function c {
+Function Show-EditProfileGui {
     param (
         [Parameter(Mandatory = $true)][string]$FilePath
     )
@@ -19,8 +19,20 @@ Function c {
 }
 
 Function Show-SelectProfileGui {
+    param (
+        [Parameter(Mandatory = $true)][string]$ResourcesDir,
+        [Parameter(Mandatory = $true)][string]$GlobalPerformActionHotkey,
+        [Parameter(Mandatory = $true)][string]$GlobalCancelActionHotkey
+    )
+
+    $result = [PSCustomObject]@{
+        Action = "Cancel"
+        SelectedProfile = $null
+        EffectivePerformActionHotkey = $GlobalPerformActionHotkey   # initialize to global defaults
+        EffectiveCancelActionHotkey  = $GlobalCancelActionHotkey
+    }
+
     # Load the XAML file
-    $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
     [xml]$xaml = (Get-Content -Path "$ResourcesDir\ChooseProfileGUI.xml" -Raw)
 
     # Parse the XAML to create the GUI
@@ -30,32 +42,33 @@ Function Show-SelectProfileGui {
 
     # Set hotkey hint label
     $hotkeyHintLabel = $window.FindName("HotkeyHint")
-    $hotkeyHintLabel.Content = "Hotkeys: Perform - $script:GlobalPerformActionHotkey, Cancel - $script:GlobalCancelActionHotkey"
+    $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
 
     # Populate the profiles list in the GUI
     $profileListBox = $window.FindName("ProfileList")
     $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
     foreach ($profileFileName in $DSPProfilesList) {
-        $profileListBox.Items.Add($profileFileName.Name.substring(0,$($profileFileName.Name.length -5))) | Out-Null
+        $profileListBox.Items.Add($profileFileName.baseName) | Out-Null
     }
 
     # Assign event handlers
-    $window.FindName("GitHub").Add_Click({ start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant"})
-    $window.FindName("CloseBTN").Add_Click({
-            $window.Close()
-            return
+    $window.FindName("GitHub").Add_Click({ 
+        start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant"
     })
-
+    $window.FindName("CloseBTN").Add_Click({
+        $window.Close()
+            #return
+    })
     $window.FindName("EditBTN").Add_Click({
         $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedItem).json"
         Show-EditProfileGui -FilePath $profilePath
     })
-
     $window.FindName("OKBTN").Add_Click({
         $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem
         if ($null -ne $selectedProfileFileName) {
-            $script:selectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
-            Write-Host "Profile selected: $selectedProfile" -ForegroundColor Yellow
+            $result.Action = "Open"
+            $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
+            # $result.EffectivePerformActionHotkey and CancelActionHotkey already updated by SelectionChanged
             $window.Close()
         }
     })
@@ -65,39 +78,41 @@ Function Show-SelectProfileGui {
         if ($null -ne $selectedItem) {
             $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedItem).json"
             try {
-                Read-JSONFile -FilePath $profilePath | Out-Null
-                $profileContent = Get-Content -Path $profilePath -Raw
+                # Read-JSONFile now returns the parsed JSON object or throws on error
+                $profileJson = Read-JSONFile -FilePath $profilePath -ErrorAction Stop
+
+                # Show nicely formatted JSON in the text box
+                $profileContent = $profileJson | ConvertTo-Json -Depth 10
                 $window.FindName("ProfileText").Text = $profileContent
+
                 $window.FindName("OKBTN").IsEnabled = $true
                 $window.FindName("EditBTN").IsEnabled = $true
-                switch(($profileContent | convertfrom-json).HotkeyOrDelayPreference) {
-                    "Hotkey" {
-                        $hotkeyHintLabel.Visibility = "Visible"
-                    }
-                    "Delay" {
-                        $hotkeyHintLabel.Visibility = "Hidden"
-                    }
-                    Default {
-                        $hotkeyHintLabel.Visibility = "Hidden"
-                    }
+
+                # Use $profileJson directly for hotkey decisions
+                if (($profileJson.ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and
+                    ($null -ne $profileJson.ProfilePerformActionHotkey)) {
+                    $result.EffectivePerformActionHotkey = $profileJson.ProfilePerformActionHotkey
+                } else {
+                    $result.EffectivePerformActionHotkey = $GlobalPerformActionHotkey
                 }
 
-                if((($profileContent | convertfrom-json).ProfilePerformActionHotkey -ne $script:GlobalPerformActionHotkey) -and `
-                    ($null -ne ($profileContent | convertfrom-json).ProfilePerformActionHotkey)) {
-                        $script:EffectivePerformActionHotkey = ($profileContent | convertfrom-json).ProfilePerformActionHotkey
+                if (($profileJson.ProfileCancelActionHotkey -ne $GlobalCancelActionHotkey) -and
+                    ($null -ne $profileJson.ProfileCancelActionHotkey)) {
+                    $result.EffectiveCancelActionHotkey = $profileJson.ProfileCancelActionHotkey
                 } else {
-                    $script:EffectivePerformActionHotkey = $script:GlobalPerformActionHotkey
-                }
-                if((($profileContent | convertfrom-json).ProfileCancelActionHotkey -ne $script:GlobalCancelActionHotkey) -and `
-                    ($null -ne ($profileContent | convertfrom-json).ProfileCancelActionHotkey)) {
-                        $script:EffectiveCancelActionHotkey = ($profileContent | convertfrom-json).ProfileCancelActionHotkey
-                } else {
-                    $script:EffectiveCancelActionHotkey = $script:GlobalCancelActionHotkey
+                    $result.EffectiveCancelActionHotkey = $GlobalCancelActionHotkey
                 }
 
-                $hotkeyHintLabel.Content = "Hotkeys: Perform - $script:EffectivePerformActionHotkey, Cancel - $script:EffectiveCancelActionHotkey"
-                if(($script:GlobalPerformActionHotkey -ne $script:EffectivePerformActionHotkey) -or ($script:GlobalCancelActionHotkey -ne $script:EffectiveCancelActionHotkey)) {
+                $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
+                if (($GlobalPerformActionHotkey -ne $result.EffectivePerformActionHotkey) -or
+                    ($GlobalCancelActionHotkey -ne $result.EffectiveCancelActionHotkey)) {
                     $hotkeyHintLabel.Content += " (override)"
+                }
+
+                switch ($profileJson.HotkeyOrDelayPreference) {
+                    "Hotkey" { $hotkeyHintLabel.Visibility = "Visible" }
+                    "Delay"  { $hotkeyHintLabel.Visibility = "Hidden" }
+                    Default  { $hotkeyHintLabel.Visibility = "Hidden" }
                 }
             } catch {
                 $window.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file."
@@ -121,12 +136,12 @@ Function Show-SelectProfileGui {
     })
 
     $window.Add_Closed({
-        Write-Host "Window closed. Exiting script." -ForegroundColor Red
         return
     })
 
     # Show the GUI
     $window.ShowDialog() | Out-Null
+    return $result
 }
 
 

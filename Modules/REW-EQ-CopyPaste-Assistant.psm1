@@ -385,18 +385,23 @@ function Read-JSONFile {
         [Parameter(Mandatory = $true)][string]$FilePath
     )
 
-    # Read the actual JSON file
     if (-not (Test-Path -Path $FilePath)) {
-        throw "File not found: $FilePath"
+        throw "Read-JSONFile: File not found: $FilePath"
     }
 
     try {
-        $jsonContent = Get-Content -Path $FilePath -Raw | ConvertFrom-Json
-        return $jsonContent
+        $raw = Get-Content -Path $FilePath -Raw -ErrorAction Stop
+    } catch {
+        throw "Read-JSONFile: Failed to read file '$FilePath'. $_"
     }
-    catch {
-        throw "Failed to read or parse JSON file: $FilePath. Error: $_"
+
+    try {
+        $obj = $raw | ConvertFrom-Json -ErrorAction Stop
+    } catch {
+        throw "Read-JSONFile: Invalid JSON in '$FilePath'. $($_.Exception.Message)"
     }
+
+    return $obj
 }
 
 Export-ModuleMember -Function `
