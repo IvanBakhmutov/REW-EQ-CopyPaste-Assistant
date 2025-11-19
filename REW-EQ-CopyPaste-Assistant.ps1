@@ -54,6 +54,11 @@ $window.FindName("CloseBTN").Add_Click({
         exit
 })
 
+$window.FindName("EditBTN").Add_Click({
+    $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedItem).json"
+    Show-EditProfileGui -FilePath $profilePath
+})
+
 $window.FindName("OKBTN").Add_Click({
     $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem
     if ($null -ne $selectedProfileFileName) {
@@ -72,7 +77,7 @@ $window.FindName("ProfileList").Add_SelectionChanged({
             $profileContent = Get-Content -Path $profilePath -Raw
             $window.FindName("ProfileText").Text = $profileContent
             $window.FindName("OKBTN").IsEnabled = $true
-            # $window.FindName("EditBTN").IsEnabled = $true
+            $window.FindName("EditBTN").IsEnabled = $true
             switch(($profileContent | convertfrom-json).HotkeyOrDelayPreference) {
                 "Hotkey" {
                     $hotkeyHintLabel.Visibility = "Visible"
@@ -105,12 +110,12 @@ $window.FindName("ProfileList").Add_SelectionChanged({
         } catch {
             $window.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file."
             $window.FindName("OKBTN").IsEnabled = $false
-           # $window.FindName("EditBTN").IsEnabled = $false
+            $window.FindName("EditBTN").IsEnabled = $false
         }
     } else {
         $window.FindName("ProfileText").Text = "Please select a profile"
         $window.FindName("OKBTN").IsEnabled = $false
-       # $window.FindName("EditBTN").IsEnabled = $false
+        $window.FindName("EditBTN").IsEnabled = $false
     }
 })
 # List doubleclick
