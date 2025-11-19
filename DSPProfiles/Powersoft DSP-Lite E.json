@@ -1,0 +1,21 @@
+{
+    "version": "1.0",
+	"Description": "Powersoft DSP-Lite E",
+    "processName": "ArmoniaPlus",
+    "QDevider": 1,
+    "QDecimals": 1,
+    "GainDecimals": 1,
+    "DecimalSeparator": ".",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "StartingPositionHint": "Attenzione su REW impostare i filtri che hai a disposizione su Armonia. Metti il puntatore del mouse al centro del quadratino del primo filtro e clicca F11",
+    "KeystrokeSequence": [
+	    {
+            "keys": "{TAB}{TAB}{TAB}{ENTER}{TAB}{TAB}^aFREQ{TAB}QVALUE{TAB}GAIN",
+            "delay_ms": 500
+        },
+        {
+            "keys": "+{TAB}",
+            "delay_ms": 200
+        }
+    ]
+}

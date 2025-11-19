@@ -1,0 +1,54 @@
+{
+    "version": "1.0",
+    "Description": "Down 4 Sound (EZY-DSP612, EZY-DSP68+, EZY-DSP612+)",
+    "processName": "EZY-DSP6*",
+    "QDevider": 1,
+    "QDecimals": 3,
+    "GainDecimals": 1,
+    "FreqDecimals": 0,
+    "DecimalSeparator": ".",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "StartingPositionHint": "Please hover mouse over 1 band Freq box and press hotkey",
+    "KeystrokeSequence": [
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "QVALUE",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "+27",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "GAIN",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "+140",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
+        },
+        {
+            "keys": "FREQ",
+            "delay_ms": 200
+        },
+        {
+            "mouseChangePositionY": "-167",
+            "delay_ms": 10
+        },
+        {
+            "mouseChangePositionX": "+32",
+            "delay_ms": 10
+        }
+    ]
+}

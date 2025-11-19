@@ -45,12 +45,19 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 | Sigma | Sigma Studio | ❎ | adau1701 processors |
 | Best Balance | DSP_BestBalance | 🚩 | DSP-6L, DSP-6.8 |
 | Best Balance | BestBalance V2 | ❎ | DSP-6H |
+| Down 4 Sound | EZY-DSP68 | ❎ | EZY-DSP68 |
+| Down 4 Sound | EZY-DSP6* | ❎ | EZY-DSP612, EZY-DSP68+, EZY-DSP612+ |
 
 ## DSP Profile file format
 
 The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse actions or key actions like`{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](DSPProfileFileFormat.md)
 
 ## Change log
+
+### 18-11-2025:
+Down 4 Sound profiles added - EZY-DSP68, EZY-DSP612, EZY-DSP68+, EZY-DSP612+  
+
+Sigma studio profile hint updated. (In any way needs to reviewed again)  
 
 ### 17-11-2025:
 Admin rights validation added (in case if they're needed)  

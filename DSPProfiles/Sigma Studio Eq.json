@@ -6,7 +6,7 @@
     "QDecimals": 2,
     "GainDecimals": 1,
     "DecimalSeparator": ".",
-    "StartingPositionHint": "Please select Freq box of 1 band and hit hotkey",
+    "StartingPositionHint": "!!! Before paste, create manually the same number of filters in Sigma Studio EQ module as REW generated.`n Then select Freq box of 1 band and hit hotkey",
     "HotkeyOrDelayPreference": "Hotkey",
     "KeystrokeSequence": [
         {
