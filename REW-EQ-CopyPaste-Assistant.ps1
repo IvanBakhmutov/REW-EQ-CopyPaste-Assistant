@@ -10,7 +10,7 @@ $DSPProfilesDir = Join-Path -Path $scriptDir -ChildPath "DSPProfiles"
 $ModulesDir = Join-Path -Path $scriptDir -ChildPath "Modules"
 $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources"
 Remove-Module REW-EQ-CopyPaste-Assistant -ErrorAction SilentlyContinue -Force
-Remove-Module InputControls -ErrorAction SilentlyContinue -Force 
+Remove-Module InputControls -ErrorAction SilentlyContinue -Force
 Remove-Module AssistantGUI -ErrorAction SilentlyContinue -Force
 Import-Module "$ModulesDir\REW-EQ-CopyPaste-Assistant.psm1"
 Import-Module "$ModulesDir\InputControls.psm1"
@@ -126,7 +126,7 @@ if($ProcessName -eq "Generic") {
         return
     }
     Write-Host "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)" -ForegroundColor Green
-    Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)`nWaiting for EQ data from REW in clipboard" 
+    Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($processes[0].ProcessName)`nWaiting for EQ data from REW in clipboard"
 }
 
 Write-Host "Hint: When finished with EQ close PowerShell window or hit ctrl-c and confirm exit" -ForegroundColor Yellow

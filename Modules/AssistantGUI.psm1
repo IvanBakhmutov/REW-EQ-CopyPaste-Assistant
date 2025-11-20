@@ -11,7 +11,7 @@ Function Show-EditProfileGui {
     $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
     [xml]$xaml = (Get-Content -Path "$ResourcesDir\ProfileEditorGUI.xml" -Raw -Encoding UTF8)
     $profilesFolderPath = Split-Path -Path $FilePath -Parent
-    
+
     # Load the JSON profile for reference and to populate form fields
     $originalProfile = $null
     try {
@@ -33,14 +33,14 @@ Function Show-EditProfileGui {
             KeystrokeSequence = @()
         }
     }
-    
+
     # Parse the XAML to create the GUI
     Add-Type -AssemblyName PresentationFramework
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $window = [Windows.Markup.XamlReader]::Load($reader)
 
     $window.FindName("FileNameEdit").Text = (get-item $FilePath).BaseName
-    
+
     # Populate form fields from the loaded JSON profile
     if ($null -ne $originalProfile.Description) { $window.FindName("DescriptionEdit").Text = $originalProfile.Description }
     if ($null -ne $originalProfile.processName) { $window.FindName("ProcessNameEdit").Text = $originalProfile.processName }
@@ -49,14 +49,14 @@ Function Show-EditProfileGui {
     if ($null -ne $originalProfile.GainDecimals) { $window.FindName("GainDecimalsEdit").Text = $originalProfile.GainDecimals.ToString() }
     if ($null -ne $originalProfile.QDevider) { $window.FindName("QDeviderEdit").Text = $originalProfile.QDevider.ToString() }
     if ($null -ne $originalProfile.StartingPositionHint) { $window.FindName("StartingPositionEdit").Text = $originalProfile.StartingPositionHint }
-    
+
     # Decimal separator radio buttons
     if ($originalProfile.DecimalSeparator -eq ",") {
         $window.FindName("DecimalSeparatorComma").IsChecked = $true
     } else {
         $window.FindName("DecimalSeparatorDot").IsChecked = $true
     }
-    
+
     # Hotkey or Delay radio buttons
     if ($originalProfile.HotkeyOrDelayPreference -eq "Delay") {
         $window.FindName("DelaySelected").IsChecked = $true
@@ -214,7 +214,47 @@ Function Show-EditProfileGui {
     if ($null -ne $keystrokesDG) {
         if ($keystrokesDG.ItemsSource -eq $null) {
             $keystrokeCollection = New-Object 'System.Collections.ObjectModel.ObservableCollection[object]'
-            foreach ($it in $keystrokesDG.Items) { $keystrokeCollection.Add($it) }
+
+            # Populate from loaded profile's KeystrokeSequence if available
+            if (($null -ne $originalProfile) -and ($null -ne $originalProfile.KeystrokeSequence)) {
+                Write-Host "Loading KeystrokeSequence with $($originalProfile.KeystrokeSequence.Count) items" -ForegroundColor Cyan
+                foreach ($ks in $originalProfile.KeystrokeSequence) {
+                    # Determine the action type based on properties present
+                    $action = 'key'
+                    $value = ''
+                    $delayMs = 100
+
+                    if ($null -ne $ks.keys) {
+                        $action = 'key'
+                        $value = [string]$ks.keys  # Read as-is, these are SendKeys strings like ^a, {ENTER}, +{TAB}
+                        Write-Host "  Loaded key action: $value" -ForegroundColor Yellow
+                    } elseif ($null -ne $ks.mouseClick) {
+                        $action = 'mouseClick'
+                        $value = [string]$ks.mouseClick
+                    } elseif ($null -ne $ks.moveMousePositionX) {
+                        $action = 'moveMousePositionX'
+                        $value = [string]$ks.moveMousePositionX
+                    } elseif ($null -ne $ks.moveMousePositionY) {
+                        $action = 'moveMousePositionY'
+                        $value = [string]$ks.moveMousePositionY
+                    }
+
+                    if ($null -ne $ks.delay_ms) {
+                        $delayMs = $ks.delay_ms
+                    }
+
+                    $rowItem = [pscustomobject]@{
+                        Action = $action
+                        Value = $value
+                        DelayMs = $delayMs
+                    }
+                    $keystrokeCollection.Add($rowItem) | Out-Null
+                }
+                Write-Host "KeystrokeCollection now has $($keystrokeCollection.Count) items" -ForegroundColor Green
+            } else {
+                Write-Host "No KeystrokeSequence found in profile" -ForegroundColor Red
+            }
+
             $keystrokesDG.ItemsSource = $keystrokeCollection
         } else {
             $keystrokeCollection = $keystrokesDG.ItemsSource
