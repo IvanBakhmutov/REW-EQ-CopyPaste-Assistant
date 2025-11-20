@@ -330,6 +330,58 @@ Function Show-EditProfileGui {
         }
     })
 
+    # Move selected action up by 1 position
+    $window.FindName('MoveActionUpBTN').Add_Click({
+        if ($null -eq $keystrokeCollection) { return }
+        $sel = $keystrokesDG.SelectedItem
+        if ($null -eq $sel) { return }
+        $idx = $keystrokeCollection.IndexOf($sel)
+        if ($idx -gt 0) {
+            $keystrokeCollection.Move($idx, $idx - 1)
+            $keystrokesDG.SelectedItem = $sel
+            $window.FindName('SaveBTN').IsEnabled = $true
+        }
+    })
+
+    # Move selected action down by 1 position
+    $window.FindName('MoveActionDownBTN').Add_Click({
+        if ($null -eq $keystrokeCollection) { return }
+        $sel = $keystrokesDG.SelectedItem
+        if ($null -eq $sel) { return }
+        $idx = $keystrokeCollection.IndexOf($sel)
+        if ($idx -lt ($keystrokeCollection.Count - 1)) {
+            $keystrokeCollection.Move($idx, $idx + 1)
+            $keystrokesDG.SelectedItem = $sel
+            $window.FindName('SaveBTN').IsEnabled = $true
+        }
+    })
+
+    # Move selected action to the top of the list
+    $window.FindName('MoveActionToTopBTN').Add_Click({
+        if ($null -eq $keystrokeCollection) { return }
+        $sel = $keystrokesDG.SelectedItem
+        if ($null -eq $sel) { return }
+        $idx = $keystrokeCollection.IndexOf($sel)
+        if ($idx -gt 0) {
+            $keystrokeCollection.Move($idx, 0)
+            $keystrokesDG.SelectedItem = $sel
+            $window.FindName('SaveBTN').IsEnabled = $true
+        }
+    })
+
+    # Move selected action to the end of the list
+    $window.FindName('MoveActionToEndBTN').Add_Click({
+        if ($null -eq $keystrokeCollection) { return }
+        $sel = $keystrokesDG.SelectedItem
+        if ($null -eq $sel) { return }
+        $idx = $keystrokeCollection.IndexOf($sel)
+        if ($idx -lt ($keystrokeCollection.Count - 1)) {
+            $keystrokeCollection.Move($idx, $keystrokeCollection.Count - 1)
+            $keystrokesDG.SelectedItem = $sel
+            $window.FindName('SaveBTN').IsEnabled = $true
+        }
+    })
+
     # Enable/disable Remove button depending on selection
     if ($null -ne $keystrokesDG) {
         $keystrokesDG.Add_SelectionChanged({
