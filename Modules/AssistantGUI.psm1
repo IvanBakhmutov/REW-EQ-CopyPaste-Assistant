@@ -30,6 +30,20 @@ Function Show-EditProfileGui {
       #  exit
     })
 
+    $window.findname("HotkeyOrDelayGroup").Add_Checked({
+        $selectedRadioButton = $window.findname("HotkeyOrDelayGroup").CheckedRadioButton
+        switch ($selectedRadioButton.Name) {
+       <#     "UseHotkeyRB" {
+                $window.FindName("HotkeySettingsPanel").Visibility = "Visible"
+                $window.FindName("DelaySettingsPanel").Visibility = "Hidden"
+            }
+            "UseDelayRB" {
+                $window.FindName("HotkeySettingsPanel").Visibility = "Hidden"
+                $window.FindName("DelaySettingsPanel").Visibility = "Visible"
+            }#>
+        }
+    })
+
     # Show the GUI
     $window.ShowDialog() | Out-Null
     return $result
