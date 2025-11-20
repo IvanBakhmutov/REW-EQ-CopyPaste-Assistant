@@ -9,14 +9,14 @@ Function Show-EditProfileGui {
     }
 
     $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
-    [xml]$xaml = (Get-Content -Path "$ResourcesDir\ProfileEditorGUI.xml" -Raw)
-    $profileFolderPath = Split-Path -Path $FilePath -Parent
+    [xml]$xaml = (Get-Content -Path "$ResourcesDir\ProfileEditorGUI.xml" -Raw -Encoding UTF8)
+    $profilesFolderPath = Split-Path -Path $FilePath -Parent
     # Parse the XAML to create the GUI
     Add-Type -AssemblyName PresentationFramework
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $window = [Windows.Markup.XamlReader]::Load($reader)
 
-    $window.FindName("FilePathEdit").Text = (get-item $FilePath).BaseName
+    $window.FindName("FileNameEdit").Text = (get-item $FilePath).BaseName
 
     $window.findname("SaveBTN").Add_Click({
         $result.FilePath = $window.FindName("FilePathEdit").Text
@@ -69,7 +69,7 @@ Function Show-SelectProfileGui {
     }
 
     # Assign event handlers
-    $window.FindName("GitHub").Add_Click({ 
+    $window.FindName("GitHub").Add_Click({
         start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant"
     })
     $window.FindName("CloseBTN").Add_Click({
@@ -77,16 +77,17 @@ Function Show-SelectProfileGui {
             #return
     })
     $window.FindName("EditBTN").Add_Click({
-        $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
-        write-host "Editing profile at $profilePath"
-        Show-EditProfileGui -FilePath $profilePath
+        $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem
+        if ($null -ne $selectedProfileFileName) {
+            $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
+        }
+        Show-EditProfileGui -FilePath $result.SelectedProfile
     })
     $window.FindName("OKBTN").Add_Click({
         $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem
         if ($null -ne $selectedProfileFileName) {
             $result.Action = "Open"
             $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
-            # $result.EffectivePerformActionHotkey and CancelActionHotkey already updated by SelectionChanged
             $window.Close()
         }
     })

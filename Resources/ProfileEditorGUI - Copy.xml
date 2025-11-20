@@ -1,0 +1,92 @@
+<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:WpfApp1"
+
+        Title="Edit profile" Height="600" Width="800" MinWidth="800" MinHeight="600" Margin="-3,0,0,0">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="521*"/>
+            <RowDefinition Height="48*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="103*"/>
+            <ColumnDefinition Width="161*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Keystroke and mouse actions" Margin="14,10,10,0" Grid.Column="1">
+            <Grid Margin="10,10,10,2">
+                <Button x:Name="AddActionBTN" Content="Add" Margin="0,0,222,9" HorizontalAlignment="Right" Width="75" Height="20" VerticalAlignment="Bottom"/>
+                <Button x:Name="RemoveActionBTN" Content="Remove" Margin="0,0,142,9" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
+                <Button x:Name="MoveActionToEndBTN" Content="⇓" FontFamily="Segoe UI Symbol" Margin="0,0,112,9" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="25"/>
+                <Button x:Name="MoveActionDownBTN" Content="↓" FontFamily="Segoe UI Symbol" Margin="0,0,82,9" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="25"/>
+                <Button x:Name="MoveActionUpBTN" Content="↑" FontFamily="Segoe UI Symbol" Margin="0,0,52,9" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="25"/>
+                <Button x:Name="MoveActionToTopBTN" Content="⇑" FontFamily="Segoe UI Symbol" Margin="0,0,22,9" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="25"/>
+                <DataGrid Margin="10,10,10,41" x:Name="MyDataGrid"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTemplateColumn Header="Action" Width="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Action}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox SelectedItem="{Binding Action, Mode=TwoWay}">
+                                        <sys:String>key</sys:String>
+                                        <sys:String>mouseClick</sys:String>
+                                        <sys:String>moveMousePositionX</sys:String>
+                                        <sys:String>moveMousePositionY</sys:String>
+                                    </ComboBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Value" Width="180" Binding="{Binding Value, Mode=TwoWay}" />
+
+                        <DataGridTextColumn Header="delay_ms" Width="100" Binding="{Binding DelayMs, Mode=TwoWay}" />
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+        </GroupBox>
+        <TextBox x:Name="FileNameEdit" Height="23" Margin="24,36,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Label Content="File Name" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="26" Width="63"/>
+        <TextBox x:Name="DescriptionEdit" Height="68" Margin="24,90,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Label Content="Description" HorizontalAlignment="Left" Margin="24,64,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
+        <TextBox x:Name="ProcessNameEdit" Height="22" Margin="24,189,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Label Content="DSP Software Process Name" HorizontalAlignment="Left" Margin="24,163,0,0" VerticalAlignment="Top" Height="26" Width="159"/>
+        <TextBox x:Name="QDeviderEdit" HorizontalAlignment="Left" Height="23" Margin="181,465,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
+        <Label Content="Q devider" HorizontalAlignment="Left" Margin="181,439,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
+        <GroupBox Header="Decimals" Height="167" Margin="24,216,15,0" VerticalAlignment="Top">
+            <Grid Margin="10,0,10,10">
+                <TextBox x:Name="FreqDecimalsEdit" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="70"/>
+                <Label Content="Freq" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="QDecimalsEdit" HorizontalAlignment="Left" Height="23" Margin="85,36,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
+                <Label Content="Q" HorizontalAlignment="Left" Margin="85,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="GainDecimalsEdit" HorizontalAlignment="Left" Height="23" Margin="160,36,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
+                <Label Content="Gain" HorizontalAlignment="Left" Margin="160,10,0,0" VerticalAlignment="Top"/>
+                <Label Content="Decimal separator" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top"/>
+                <RadioButton x:Name="DecimalSeparatorDot" Content="Dot &quot;.&quot;" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup" IsChecked="True"/>
+                <RadioButton x:Name="DecimalSeparatorComma" Content="Comma &quot;,&quot;" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup"/>
+            </Grid>
+        </GroupBox>
+        <TextBox x:Name="StartingPositionEdit" Height="23" Margin="24,411,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Label Content="Starting position hint" HorizontalAlignment="Left" Margin="24,385,0,0" VerticalAlignment="Top" Height="26" Width="159"/>
+        <Label Content="Hotkey or delay" HorizontalAlignment="Left" Margin="24,439,0,0" VerticalAlignment="Top" Height="26" Width="94"/>
+        <RadioButton x:Name="HotkeyOrDelayDot" Content="Hotkey" HorizontalAlignment="Left" Margin="24,470,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" IsChecked="True" Height="15" Width="57"/>
+        <RadioButton x:Name="HotkeyOrDelayDelay" Content="Delay" HorizontalAlignment="Left" Margin="24,490,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" Height="15" Width="49"/>
+        <Button x:Name="SaveBTN" Content="Save" Grid.Column="1" Margin="0,0,90,10" Grid.Row="1" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" IsEnabled="False"/>
+        <Button x:Name="CancelBTN" Content="Cancel" Grid.Column="1" Margin="0,0,10,10" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Height="20"/>
+
+    </Grid>
+</Window>
