@@ -50,7 +50,7 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 | Sennuopu | Sennuopu DP-X10 | ❎ | DP-X10 |
 | Hellion | HAM8.80DSP | ❎ | HAM 6.80DSP, HAM 8.80DSP, HAM 8.100DSP |
 | Hellion | HAM8.10DSP | ❎ | HAM 8.10DSP, 4.6pinDSP,  4.8pinDSP,  DHL-6 , DHL-10 |
-| Hellion | HAM16.150DSP | ❎ | HAM 16.150DSP, HAM 12.80DSP
+| Hellion | HAM16.150DSP | ❎ | HAM 16.150DSP, HAM 12.80DSP |
 
 ## DSP Profile file format
 
