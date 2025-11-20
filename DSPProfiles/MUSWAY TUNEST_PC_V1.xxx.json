@@ -7,47 +7,11 @@
     "GainDecimals": 1,
     "DecimalSeparator": ".",
     "HotkeyOrDelayPreference": "Hotkey",
-    "StartingPositionHint": "Please hover mouse over 1 band Freq box and press hotkey",
+    "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
     "KeystrokeSequence": [
         {
-            "mouseClick": "left",
+            "keys": "FREQ{TAB}QVALUE{TAB}GAIN{TAB}",
             "delay_ms": 100
-        },
-        {
-            "keys": "FREQ",
-            "delay_ms": 100
-        },
-        {
-            "mouseChangePositionY": "+22",
-            "delay_ms": 10
-        },
-        {
-            "mouseClick": "left",
-            "delay_ms": 100
-        },
-        {
-            "keys": "QVALUE",
-            "delay_ms": 100
-        },
-        {
-            "mouseChangePositionY": "+22",
-            "delay_ms": 10
-        },
-        {
-            "mouseClick": "left",
-            "delay_ms": 100
-        },
-        {
-            "keys": "GAIN",
-            "delay_ms": 100
-        },
-        {
-            "mouseChangePositionY": "-44",
-            "delay_ms": 10
-        },
-        {
-            "mouseChangePositionX": "+34",
-            "delay_ms": 10
         }
     ]
 }
