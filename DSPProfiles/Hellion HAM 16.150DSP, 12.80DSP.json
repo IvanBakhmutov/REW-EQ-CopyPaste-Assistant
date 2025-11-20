@@ -1,0 +1,16 @@
+{
+    "version": "1.0",
+    "Description": "Hellion DSP software (HAM 16.150DSP, HAM 12.80DSP)",
+    "processName": "HAM16.150DSP*",
+    "QDevider": 1,
+    "QDecimals": 2,
+    "GainDecimals": 1,
+    "HotkeyOrDelayPreference": "Hotkey",
+    "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
+    "KeystrokeSequence": [
+        {
+            "keys": "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
+            "delay_ms": 100
+        }
+    ]
+}

@@ -48,6 +48,9 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 | Down 4 Sound | EZY-DSP68 | ❎ | EZY-DSP68 |
 | Down 4 Sound | EZY-DSP6* | ❎ | EZY-DSP612, EZY-DSP68+, EZY-DSP612+ |
 | Sennuopu | Sennuopu DP-X10 | ❎ | DP-X10 |
+| Hellion | HAM8.80DSP | ❎ | HAM 6.80DSP, HAM 8.80DSP, HAM 8.100DSP |
+| Hellion | HAM8.10DSP | ❎ | HAM 8.10DSP, 4.6pinDSP,  4.8pinDSP,  DHL-6 , DHL-10 |
+| Hellion | HAM16.150DSP | ❎ | HAM 16.150DSP, HAM 12.80DSP
 
 ## DSP Profile file format
 
@@ -61,6 +64,8 @@ Down 4 Sound profiles added - EZY-DSP68, EZY-DSP612, EZY-DSP68+, EZY-DSP612+
 Sigma studio profile hint updated. (In any way needs to reviewed again)  
 
 Added Sennuopu DP-X10  
+
+Added Hellion profiles for HAM 6.80DSP, HAM 8.80DSP, HAM 8.100DSP, HAM 8.10DSP, 4.6pinDSP,  4.8pinDSP,  DHL-6 , DHL-10, HAM 16.150DSP, HAM 12.80DSP  
 
 ### 17-11-2025:
 Admin rights validation added (in case if they're needed)  
