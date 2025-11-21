@@ -14,8 +14,12 @@
             "delay_ms": 500
         },
         {
-            "keys": "+{TAB}",
-            "delay_ms": 200
+            "mouseChangePositionX": "+85",
+            "delay_ms": 10
+        },
+        {
+            "mouseClick": "left",
+            "delay_ms": 50
         }
     ]
 }
