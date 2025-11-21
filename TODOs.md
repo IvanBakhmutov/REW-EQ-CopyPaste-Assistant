@@ -21,7 +21,7 @@
 - Remove "True" word output in console when a mouse pointer operation happens, check why keystroke output is missing
 
 ## Future plans
-- Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  
+- Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/REW-API-Experimental.ps1)  
     Breakdown of the idea: the tool checks "Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'" | Select-Object CommandLine" if it has -api argument. If it is - direct api connection:  
     In case if it it running with -api arg, then  
     - Check API connectivity on the tool startup, notification if roomeqwizard.exe runs in API enabled mode
