@@ -56,6 +56,9 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 
 The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse move and click actions and key actions like `{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](DSPProfileFileFormat.md)
 
+## Project plans
+Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
+
 ## Change log
 
 ### 20-11-2025:

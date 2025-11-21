@@ -1,24 +1,30 @@
 # Items to do
 
+## Finished
 - ~~GUI for editing profiles~~
-- Transposed output isn't showing all bands, to be fixed
 - ~~Update json file help in readme~~
+- ~~Double click on selected profile in the list to open it~~
+- ~~JSON profile file format validation on load, as a function in the module~~
+- ~~AdminRightsRequired check for some DSP brands~~
+- ~~Freq decimals in configs~~
+- ~~Generic profile. Script update to handle it~~
+
+## Immediate plans
+- admin flag in profile edit gui needs to be added
+- Transposed output isn't showing all bands, to be fixed
 - Mouse pointer highlight before copypaste
 - Review logic behind hotkey or delay choice global vs dsp config
 - Folders with brand names for DSP profiles?
-- ~~Double click on selected profile in the list to open it~~
 - Review console and popup messages
 - Reported issue with confirmation dialog (in parallels desktop)
-- ~~JSON profile file format validation on load, as a function in the module~~
-- ~~AdminRightsRequired check for some DSP brands~~
-- Configurable PEQ guideslines for each profile in a separate text box
-- ~~Freq decimals in configs~~
-- Remove "True" word output in console when a mouse pointer operation happens
-- Experimental: Try to make this script to connect to REW API (roomeqwizard.exe -api) to set default Configurable PEQ with DSP model specific options http://127.0.0.1:4735/eq/default-equaliser
-- ~~Generic profile. Script update to handle it~~
-- admin flag in profile edit gui needs to be added
+- Configurable PEQ guidelines for each profile in a separate text box
+- Remove "True" word output in console when a mouse pointer operation happens, check why keystroke output is missing
+
+## Future plans
+- Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed
+- Experimental: Try to make this script to connect to REW API to set default Configurable PEQ with DSP model specific options http://127.0.0.1:4735/eq/default-equaliser
   
-- DSP profiles list to check:
+## DSP profiles list to check
  ~~ESX~~,  
  ~~Musway~~,  
  ~~Nakamichi~~,  
@@ -49,4 +55,5 @@ JIB DSP (JIB DSP Software),
 Zapco HDSP,  
 Mobridge (https://mobridge.us/mobridge-dsp/),  
 JIB DSP,  
+Goldhorn  
 and others
