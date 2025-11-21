@@ -42,10 +42,10 @@
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
                                     <ComboBox SelectedItem="{Binding Action, Mode=TwoWay}">
-                                        <sys:String>key</sys:String>
+                                        <sys:String>keys</sys:String>
                                         <sys:String>mouseClick</sys:String>
-                                        <sys:String>moveMousePositionX</sys:String>
-                                        <sys:String>moveMousePositionY</sys:String>
+                                        <sys:String>mouseChangePositionX</sys:String>
+                                        <sys:String>mouseChangePositionY</sys:String>
                                     </ComboBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
@@ -59,6 +59,7 @@
 
                     </DataGrid.Columns>
                 </DataGrid>
+                 <Button x:Name="Help" Content="Help" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Margin="10,0,0,9" HorizontalAlignment="Left" Width="75" Height="20" VerticalAlignment="Bottom"/>
             </Grid>
 
         </GroupBox>

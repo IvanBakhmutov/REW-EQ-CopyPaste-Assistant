@@ -93,7 +93,9 @@ Function Show-EditProfileGui {
             $window.FindName("HotkeyDefault").IsChecked = $true
         }
     }
-
+    $window.FindName("Help").Add_Click({
+        start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/blob/main/DSPProfileFileFormat.md"
+    })
     $window.findname("SaveBTN").Add_Click({
         # Validate keystroke rows: if Action is mouseClick ensure Value is Left/Right
         try {
@@ -106,16 +108,234 @@ Function Show-EditProfileGui {
             }
         } catch {
         }
-        $result.FilePath = $window.FindName("FilePathEdit").Text
-        $result.Action = "Save"
-        $window.Close()
+
+        # Build the profile object from form data
+        $profile = [ordered]@{
+            version = "1.0"
+        }
+
+        # Basic fields
+        if ($window.FindName("DescriptionEdit").Text) {
+            $profile.Description = $window.FindName("DescriptionEdit").Text
+        }
+        if ($window.FindName("ProcessNameEdit").Text) {
+            $profile.processName = $window.FindName("ProcessNameEdit").Text
+        }
+
+        # Decimals
+        try { $profile.QDevider = [int]$window.FindName("QDeviderEdit").Text } catch { $profile.QDevider = 1 }
+        try { $profile.QDecimals = [int]$window.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
+        try { $profile.GainDecimals = [int]$window.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
+        try { $profile.FreqDecimals = [int]$window.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
+
+        # Decimal separator
+        if ($window.FindName("DecimalSeparatorComma").IsChecked) {
+            $profile.DecimalSeparator = ","
+        } else {
+            $profile.DecimalSeparator = "."
+        }
+
+        # Starting position hint
+        if ($window.FindName("StartingPositionEdit").Text) {
+            $profile.StartingPositionHint = $window.FindName("StartingPositionEdit").Text
+        }
+
+        # Hotkey or Delay preference
+        if ($window.FindName("DelaySelected").IsChecked) {
+            $profile.HotkeyOrDelayPreference = "Delay"
+            try { $profile.TimeoutBeforePasteSecs = [int]$window.FindName("DelayEdit").Text } catch { $profile.TimeoutBeforePasteSecs = 6 }
+        } else {
+            $profile.HotkeyOrDelayPreference = "Hotkey"
+            # Only include hotkey overrides if Override radio is checked
+            if ($window.FindName("HotkeyOverride").IsChecked) {
+                $actionIdx = $window.FindName("ActionHotkeyCombo").SelectedIndex
+                $cancelIdx = $window.FindName("CancelHotkeyCombo").SelectedIndex
+                if (($actionIdx -ge 0) -and ($actionIdx -lt 12)) {
+                    $profile.ProfilePerformActionHotkey = "F$($actionIdx + 1)"
+                }
+                if (($cancelIdx -ge 0) -and ($cancelIdx -lt 12)) {
+                    $profile.ProfileCancelActionHotkey = "F$($cancelIdx + 1)"
+                }
+            }
+        }
+
+        # Build KeystrokeSequence from DataGrid
+        $profile.KeystrokeSequence = @()
+        if ($null -ne $keystrokeCollection) {
+            foreach ($row in $keystrokeCollection) {
+                $ksItem = [ordered]@{}
+                switch ($row.Action) {
+                    'keys' {
+                        # Use the JSON property 'keys' (keystroke SendKeys string)
+                        $ksItem.keys = [string]$row.Value
+                    }
+                    'mouseClick' {
+                        $ksItem.mouseClick = [string]$row.Value
+                    }
+                    'mouseChangePositionX' {
+                        $ksItem.mouseChangePositionX = [string]$row.Value
+                    }
+                    'mouseChangePositionY' {
+                        $ksItem.mouseChangePositionY = [string]$row.Value
+                    }
+                }
+                try { $ksItem.delay_ms = [int]$row.DelayMs } catch { $ksItem.delay_ms = 100 }
+                $profile.KeystrokeSequence += $ksItem
+            }
+        }
+
+        # Save to file
+        try {
+            $jsonContent = $profile | ConvertTo-Json -Depth 10
+            Set-Content -Path $FilePath -Value $jsonContent -Encoding UTF8 -Force
+            $result.Action = "Saved"
+            $window.Close()
+        } catch {
+            [System.Windows.MessageBox]::Show("Error saving profile: $($_.Exception.Message)", "Save Error", 
+                [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
+        }
     })
 
+    # Save As - open SaveFileDialog in the profiles folder, require user confirmation
+    $window.FindName('SaveAsBTN').Add_Click({
+        # Validate keystroke rows: if Action is mouseClick ensure Value is Left/Right
+        try {
+            if ($null -ne $keystrokeCollection) {
+                foreach ($it in $keystrokeCollection) {
+                    if ($it.Action -eq 'mouseClick') {
+                        if (($it.Value -ne 'Left') -and ($it.Value -ne 'Right')) { $it.Value = 'Left' }
+                    }
+                }
+            }
+        } catch {
+        }
+
+        # Build the profile object from form data (same as Save)
+        $profile = [ordered]@{
+            version = "1.0"
+        }
+
+        if ($window.FindName("DescriptionEdit").Text) {
+            $profile.Description = $window.FindName("DescriptionEdit").Text
+        }
+        if ($window.FindName("ProcessNameEdit").Text) {
+            $profile.processName = $window.FindName("ProcessNameEdit").Text
+        }
+
+        try { $profile.QDevider = [int]$window.FindName("QDeviderEdit").Text } catch { $profile.QDevider = 1 }
+        try { $profile.QDecimals = [int]$window.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
+        try { $profile.GainDecimals = [int]$window.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
+        try { $profile.FreqDecimals = [int]$window.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
+
+        if ($window.FindName("DecimalSeparatorComma").IsChecked) {
+            $profile.DecimalSeparator = ","
+        } else {
+            $profile.DecimalSeparator = "."
+        }
+
+        if ($window.FindName("StartingPositionEdit").Text) {
+            $profile.StartingPositionHint = $window.FindName("StartingPositionEdit").Text
+        }
+
+        if ($window.FindName("DelaySelected").IsChecked) {
+            $profile.HotkeyOrDelayPreference = "Delay"
+            try { $profile.TimeoutBeforePasteSecs = [int]$window.FindName("DelayEdit").Text } catch { $profile.TimeoutBeforePasteSecs = 6 }
+        } else {
+            $profile.HotkeyOrDelayPreference = "Hotkey"
+            if ($window.FindName("HotkeyOverride").IsChecked) {
+                $actionIdx = $window.FindName("ActionHotkeyCombo").SelectedIndex
+                $cancelIdx = $window.FindName("CancelHotkeyCombo").SelectedIndex
+                if (($actionIdx -ge 0) -and ($actionIdx -lt 12)) {
+                    $profile.ProfilePerformActionHotkey = "F$($actionIdx + 1)"
+                }
+                if (($cancelIdx -ge 0) -and ($cancelIdx -lt 12)) {
+                    $profile.ProfileCancelActionHotkey = "F$($cancelIdx + 1)"
+                }
+            }
+        }
+
+        $profile.KeystrokeSequence = @()
+        if ($null -ne $keystrokeCollection) {
+            foreach ($row in $keystrokeCollection) {
+                $ksItem = [ordered]@{}
+                switch ($row.Action) {
+                    'keys' { $ksItem.keys = [string]$row.Value }
+                    'mouseClick' { $ksItem.mouseClick = [string]$row.Value }
+                    'mouseChangePositionX' { $ksItem.mouseChangePositionX = [string]$row.Value }
+                    'mouseChangePositionY' { $ksItem.mouseChangePositionY = [string]$row.Value }
+                }
+                try { $ksItem.delay_ms = [int]$row.DelayMs } catch { $ksItem.delay_ms = 100 }
+                $profile.KeystrokeSequence += $ksItem
+            }
+        }
+
+        # Show SaveFileDialog in the same folder with prepopulated filename
+        try {
+            $sfd = New-Object Microsoft.Win32.SaveFileDialog
+            $sfd.InitialDirectory = $profilesFolderPath
+            $sfd.Filter = "JSON files (*.json)|*.json"
+            $base = (Get-Item $FilePath).BaseName
+            $sfd.FileName = "$base - copy.json"
+            $dlgRes = $sfd.ShowDialog()
+            if ($dlgRes -eq $true) {
+                try {
+                    $jsonContent = $profile | ConvertTo-Json -Depth 10
+                    Set-Content -Path $sfd.FileName -Value $jsonContent -Encoding UTF8 -Force
+                    $result.Action = "SavedAs"
+                    # expose new filepath to caller so caller can refresh and select it
+                    $result.FilePath = $sfd.FileName
+                    $window.Close()
+                } catch {
+                    [System.Windows.MessageBox]::Show("Error saving profile: $($_.Exception.Message)", "Save As Error", 
+                        [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
+                }
+            } else {
+                # User cancelled Save As — keep editor open
+            }
+        } catch {
+            [System.Windows.MessageBox]::Show("Error showing Save dialog: $($_.Exception.Message)", "Save As Error", 
+                [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
+        }
+    })
     $window.FindName("CancelBTN").Add_Click({
     $result.Action = "Cancel"
         $window.Close()
       #  exit
     })
+
+    # Change tracking - enable Save button when any field is modified
+    $enableSaveButton = {
+        $window.FindName('SaveBTN').IsEnabled = $true
+    }
+
+    # Track text changes in TextBox controls
+    $textBoxes = @('FileNameEdit', 'DescriptionEdit', 'ProcessNameEdit', 'FreqDecimalsEdit', 
+                   'QDecimalsEdit', 'GainDecimalsEdit', 'QDeviderEdit', 'StartingPositionEdit', 'DelayEdit')
+    foreach ($name in $textBoxes) {
+        $ctrl = $window.FindName($name)
+        if ($null -ne $ctrl) {
+            $ctrl.Add_TextChanged($enableSaveButton)
+        }
+    }
+
+    # Track radio button changes
+    $radioButtons = @('DecimalSeparatorDot', 'DecimalSeparatorComma', 'HotkeySelected', 
+                      'DelaySelected', 'HotkeyDefault', 'HotkeyOverride')
+    foreach ($name in $radioButtons) {
+        $ctrl = $window.FindName($name)
+        if ($null -ne $ctrl) {
+            $ctrl.Add_Checked($enableSaveButton)
+        }
+    }
+
+    # Track combo box changes
+    $comboBoxes = @('ActionHotkeyCombo', 'CancelHotkeyCombo')
+    foreach ($name in $comboBoxes) {
+        $ctrl = $window.FindName($name)
+        if ($null -ne $ctrl) {
+            $ctrl.Add_SelectionChanged($enableSaveButton)
+        }
+    }
 
     # Radio buttons share the same logical group. Attach the same Checked handler to both
     $updateHotkeyDelayVisibility = {
@@ -217,26 +437,25 @@ Function Show-EditProfileGui {
 
             # Populate from loaded profile's KeystrokeSequence if available
             if (($null -ne $originalProfile) -and ($null -ne $originalProfile.KeystrokeSequence)) {
-                Write-Host "Loading KeystrokeSequence with $($originalProfile.KeystrokeSequence.Count) items" -ForegroundColor Cyan
+                #Write-Host "Loading KeystrokeSequence with $($originalProfile.KeystrokeSequence.Count) items" -ForegroundColor Cyan
                 foreach ($ks in $originalProfile.KeystrokeSequence) {
                     # Determine the action type based on properties present
-                    $action = 'key'
+                    $action = 'keys'
                     $value = ''
                     $delayMs = 100
 
                     if ($null -ne $ks.keys) {
-                        $action = 'key'
+                        $action = 'keys'
                         $value = [string]$ks.keys  # Read as-is, these are SendKeys strings like ^a, {ENTER}, +{TAB}
-                        Write-Host "  Loaded key action: $value" -ForegroundColor Yellow
                     } elseif ($null -ne $ks.mouseClick) {
                         $action = 'mouseClick'
                         $value = [string]$ks.mouseClick
-                    } elseif ($null -ne $ks.moveMousePositionX) {
-                        $action = 'moveMousePositionX'
-                        $value = [string]$ks.moveMousePositionX
-                    } elseif ($null -ne $ks.moveMousePositionY) {
-                        $action = 'moveMousePositionY'
-                        $value = [string]$ks.moveMousePositionY
+                    } elseif ($null -ne $ks.mouseChangePositionX) {
+                        $action = 'mouseChangePositionX'
+                        $value = [string]$ks.mouseChangePositionX
+                    } elseif ($null -ne $ks.mouseChangePositionY) {
+                        $action = 'mouseChangePositionY'
+                        $value = [string]$ks.mouseChangePositionY
                     }
 
                     if ($null -ne $ks.delay_ms) {
@@ -250,7 +469,7 @@ Function Show-EditProfileGui {
                     }
                     $keystrokeCollection.Add($rowItem) | Out-Null
                 }
-                Write-Host "KeystrokeCollection now has $($keystrokeCollection.Count) items" -ForegroundColor Green
+                # Write-Host "KeystrokeCollection now has $($keystrokeCollection.Count) items" -ForegroundColor Green
             } else {
                 Write-Host "No KeystrokeSequence found in profile" -ForegroundColor Red
             }
@@ -261,8 +480,7 @@ Function Show-EditProfileGui {
         }
     }
 
-    # When user finishes editing the Action cell, if it was changed to mouseClick,
-    # populate the Value with 'Left' (if empty or invalid).
+    # When user finishes editing the Action cell, reset the Value based on the new action type
     if ($null -ne $keystrokesDG) {
         $keystrokesDG.Add_CellEditEnding({
             param($s, $e)
@@ -281,11 +499,27 @@ Function Show-EditProfileGui {
                             $newAction = $editingElement.Text
                         }
                     }
-                    if ($newAction -eq 'mouseClick') {
-                        # Use Dispatcher to set Value after edit completes
+                    
+                    # Reset Value based on the new action type
+                    if ($null -ne $newAction) {
                         $null = $keystrokesDG.Dispatcher.BeginInvoke([System.Action]{
-                            if (($rowItem.Value -ne 'Left') -and ($rowItem.Value -ne 'Right')) {
-                                $rowItem.Value = 'Left'
+                            switch ($newAction) {
+                                'mouseClick' {
+                                    # Default to Left for mouse click
+                                    $rowItem.Value = 'Left'
+                                }
+                                'mouseChangePositionX' {
+                                    # Default to 0 for mouse move
+                                    $rowItem.Value = '0'
+                                }
+                                'mouseChangePositionY' {
+                                    # Default to 0 for mouse move
+                                    $rowItem.Value = '0'
+                                }
+                                'keys' {
+                                    # Reset to empty for key action
+                                    $rowItem.Value = ''
+                                }
                             }
                         })
                     }
@@ -299,7 +533,7 @@ Function Show-EditProfileGui {
     $window.FindName('AddActionBTN').Add_Click({
         if ($null -eq $keystrokeCollection) { return }
         $new = [pscustomobject]@{
-            Action = 'key'
+            Action = 'keys'
             Value = ''
             DelayMs = 100
         }
@@ -442,7 +676,43 @@ Function Show-SelectProfileGui {
         if ($null -ne $selectedProfileFileName) {
             $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
         }
-        Show-EditProfileGui -FilePath $result.SelectedProfile
+        $editResult = Show-EditProfileGui -FilePath $result.SelectedProfile
+        # If the profile was saved (overwritten or saved as new), refresh the list and select the saved item
+        if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
+            # reload available profiles
+            $window.FindName('ProfileList').Items.Clear()
+            $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+            foreach ($profileFileName in $DSPProfilesList) { $window.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null }
+
+            # determine the base name of saved file and select it
+            try {
+                $savedPath = $editResult.FilePath
+                if ($null -eq $savedPath) { $savedPath = $result.SelectedProfile }
+                $savedBase = (Get-Item -LiteralPath $savedPath).BaseName
+                $window.FindName('ProfileList').SelectedItem = $savedBase
+
+                # update profile preview and hotkey hint using the same logic as SelectionChanged
+                $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($savedBase).json"
+                $profileJson = Read-JSONFile -FilePath $profilePath -ErrorAction Stop
+                $window.FindName('ProfileText').Text = ($profileJson | ConvertTo-Json -Depth 10)
+
+                # Update effective hotkeys and hint label
+                if (($profileJson.ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and ($null -ne $profileJson.ProfilePerformActionHotkey)) {
+                    $result.EffectivePerformActionHotkey = $profileJson.ProfilePerformActionHotkey
+                } else { $result.EffectivePerformActionHotkey = $GlobalPerformActionHotkey }
+                if (($profileJson.ProfileCancelActionHotkey -ne $GlobalCancelActionHotkey) -and ($null -ne $profileJson.ProfileCancelActionHotkey)) {
+                    $result.EffectiveCancelActionHotkey = $profileJson.ProfileCancelActionHotkey
+                } else { $result.EffectiveCancelActionHotkey = $GlobalCancelActionHotkey }
+                $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
+                if (($GlobalPerformActionHotkey -ne $result.EffectivePerformActionHotkey) -or ($GlobalCancelActionHotkey -ne $result.EffectiveCancelActionHotkey)) { $hotkeyHintLabel.Content += " (override)" }
+
+                # enable buttons
+                $window.FindName('OKBTN').IsEnabled = $true
+                $window.FindName('EditBTN').IsEnabled = $true
+            } catch {
+                # ignore selection refresh errors
+            }
+        }
     })
     $window.FindName("OKBTN").Add_Click({
         $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem

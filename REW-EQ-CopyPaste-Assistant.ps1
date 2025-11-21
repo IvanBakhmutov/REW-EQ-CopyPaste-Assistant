@@ -23,8 +23,8 @@ Write-Host "Script started" -ForegroundColor Yellow
 # Load global config
 $ConfigPath = Join-Path -Path $ResourcesDir -ChildPath "Config.json"
 $GlobalConfig = Get-Content $ConfigPath -Raw | ConvertFrom-Json
-$EffectivePerformActionHotkey = $null #$GlobalConfig.GlobalPerformActionHotkey
-$EffectiveCancelActionHotkey =  $null #$GlobalConfig.GlobalCancelActionHotkey
+$EffectivePerformActionHotkey = $null
+$EffectiveCancelActionHotkey =  $null
 
 $selectedProfile = $null
 
