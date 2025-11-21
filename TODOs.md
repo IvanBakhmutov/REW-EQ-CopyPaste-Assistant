@@ -21,7 +21,15 @@
 - Remove "True" word output in console when a mouse pointer operation happens, check why keystroke output is missing
 
 ## Future plans
-- Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed
+- Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  
+    Breakdown of the idea: the tool checks "Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'" | Select-Object CommandLine" if it has -api argument. If it is - direct api connection:  
+    In case if it it running with -api arg, then  
+    - Check API connectivity on the tool startup, notification if roomeqwizard.exe runs in API enabled mode
+    - GET /measurements/selected-uuid
+    - GET /measurements/{id}/filters
+    - Filter EQ bands leaving only ones with PK filters
+    - wait for hotkey and then proceed with DSP software inputs  
+Otherwise - backward compatibility with manual hit copy button on EQ window and then proceeding with hotkeys/delays.
 - Experimental: Try to make this script to connect to REW API to set default Configurable PEQ with DSP model specific options http://127.0.0.1:4735/eq/default-equaliser
   
 ## DSP profiles list to check
