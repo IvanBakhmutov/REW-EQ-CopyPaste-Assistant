@@ -62,6 +62,8 @@ The script uses its own profiles (in JSON format), which store the DSP software 
 
 ⭐ NEW! Big update - Profile editor GUI implemented. It can be used for editing existing profiles (instead of manual edits of JSON files), saving existing profiles as templates to new profiles.  
 
+Behringer DCX-Remote DCX2496 profile added - needs to be tested  
+
 ### 18-11-2025:
 Down 4 Sound profiles added - EZY-DSP68, EZY-DSP612, EZY-DSP68+, EZY-DSP612+  
 

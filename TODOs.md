@@ -16,7 +16,8 @@
 - Remove "True" word output in console when a mouse pointer operation happens
 - Experimental: Try to make this script to connect to REW API (roomeqwizard.exe -api) to set default Configurable PEQ with DSP model specific options http://127.0.0.1:4735/eq/default-equaliser
 - ~~Generic profile. Script update to handle it~~
-
+- admin flag in profile edit gui needs to be added
+  
 - DSP profiles list to check:
  ~~ESX~~,  
  ~~Musway~~,  
