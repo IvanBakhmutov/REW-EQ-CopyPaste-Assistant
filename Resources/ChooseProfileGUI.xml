@@ -23,7 +23,8 @@
         <Button x:Name="NewProfileBTN" Content="*New Profile" Width="80" IsEnabled="False" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,190,10" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="EditBTN" Content="Edit" Width="80" IsEnabled="False" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,10" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="CloseBTN" Content="Close" Width="80" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Grid.Column="1" Grid.Row="1"/>
-        <Button x:Name="GitHub" Content="GitHub project page" Width="156"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1"/>
+        <Button x:Name="GitHub" Content="GitHub project page" Width="130"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1"/>
         <Label x:Name="HotkeyHint" Content="HotkeyHint" HorizontalAlignment="Left" Margin="161,0,0,10" VerticalAlignment="Bottom" Visibility="Hidden" Height="26" Grid.Row="1" Grid.ColumnSpan="2" />
+        <Button x:Name="Donate" Content="❤️" Width="29"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="145,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1" ToolTip="Support the project (PayPal)"/>
     </Grid>
 </Window>

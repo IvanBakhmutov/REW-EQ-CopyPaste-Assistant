@@ -645,7 +645,7 @@ Function Show-SelectProfileGui {
     }
 
     # Load the XAML file
-    [xml]$xaml = (Get-Content -Path "$ResourcesDir\ChooseProfileGUI.xml" -Raw)
+    [xml]$xaml = (Get-Content -Path "$ResourcesDir\ChooseProfileGUI.xml" -Raw -Encoding UTF8)
 
     # Parse the XAML to create the GUI
     Add-Type -AssemblyName PresentationFramework
@@ -666,6 +666,9 @@ Function Show-SelectProfileGui {
     # Assign event handlers
     $window.FindName("GitHub").Add_Click({
         start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant"
+    })
+        $window.FindName("Donate").Add_Click({
+        start-process "https://paypal.me/IvanBakhmutovDonate"
     })
     $window.FindName("CloseBTN").Add_Click({
         $window.Close()
