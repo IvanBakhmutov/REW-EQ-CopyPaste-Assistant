@@ -1,5 +1,21 @@
 ## DSP Profile file format
 
+There are four action types supported in the KeystrokeSequence: `mouseClick`, `mouseChangePositionX`, `mouseChangePositionY`, and `keys`.
+
+`mouseChangePositionX` and `mouseChangePositionY` accept integer values. Values are relative to the current cursor position: positive numbers move the cursor right/down, and negative numbers move it left/up (screen origin is top-left).  
+`mouseClick` accepts two values: `left` and `right`.  
+`keys` emulates keyboard input. Four keywords — `FREQ`, `GAIN`, `QVALUE` and `BANDNUMBER` — will be replaced with the actual values for the current band before the keys are sent. `BANDNUMBER` is unique to Zapco ADSP software where you have to type band number, but may be used in other software as well. Common navigation key codes (used by many DSP UIs) include: `{ENTER}`, `{TAB}`, `{LEFT}`, `{RIGHT}`, `{UP}`, `{DOWN}`.  
+To send modifier combinations use SendKeys notation:  
+`^` = Ctrl (example: `^a` is Ctrl+A to select all),  
+`+` = Shift (example: `+{TAB}` is Shift+Tab),  
+`%` = Alt (example: `%{F4}` is Alt+F4 - this is just an example, don't put it in your DSP profile)  
+
+For a complete list of SendKeys codes see the Microsoft docs: [learn.microsoft.com](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=windowsdesktop-9.0)*  
+
+`processName` can be set to `Generic` this will allow to run the script without specific DSP app selected. In this case DSP software will not be automatically moved to foreground and you will have to bring it forward manually.  
+
+Sample DSP profile with comments:  
+
 `{`  
 `"version": "1.0",` *// not used yet, ignored so far.*  
 `"Description": "<Human readable name of the app, for simplicity>",` *// A display message of a selected DSP profile when the script is running; does not affect functionality.*  
@@ -23,7 +39,7 @@
 `"ProfileCancelActionHotkey": "F6",` *// Hotkey to cancel the paste action. Used to override a hotkey from global config.*  
 `"KeystrokeSequence": [` *// Array of keystrokes, with delays between them.*  
 `{`  
-`"keys": "FREQ{ENTER}{DOWN}QVALUE{ENTER}{DOWN}GAIN{ENTER}",`*// 3 keywords here FREQ, GAIN and QVALUE will be replaced with actual values for selected band. Keys like ENTER, TAB or DOWN are in curly brackets, full list - [learn.microsoft.com](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=windowsdesktop-9.0)*  
+`"keys": "FREQ{ENTER}{DOWN}QVALUE{ENTER}{DOWN}GAIN{ENTER}",`*// Described above  
 `"delay_ms": 200`  
 `},`  
 `{`  
