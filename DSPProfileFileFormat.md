@@ -12,6 +12,8 @@ To send modifier combinations use SendKeys notation:
 
 For a complete list of SendKeys codes see the Microsoft docs: [learn.microsoft.com](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=windowsdesktop-9.0)*  
 
+`processName` can be set to `Generic` this will allow to run the script without specific DSP app selected. In this case DSP software will not be automatically moved to foreground and you will have to bring it forward manually.  
+
 Sample DSP profile with comments:  
 
 `{`  
