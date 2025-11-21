@@ -63,7 +63,7 @@
             </Grid>
 
         </GroupBox>
-        <TextBox x:Name="FileNameEdit" Height="23" Margin="24,36,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="filename"/>
+        <TextBox x:Name="FileNameEdit" Height="23" Margin="24,36,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="filename" IsEnabled="False"/>
         <Label Content="File Name" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="26" Width="63"/>
         <TextBox x:Name="DescriptionEdit" Height="68" Margin="24,90,15,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto"/>
         <Label Content="Description" HorizontalAlignment="Left" Margin="24,64,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
