@@ -63,11 +63,11 @@
             </Grid>
 
         </GroupBox>
-        <TextBox x:Name="FileNameEdit" Height="23" Margin="24,36,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="filename" IsEnabled="False"/>
+        <TextBox x:Name="FileNameEdit" VerticalScrollBarVisibility="Auto" Height="23" Margin="24,36,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="filename" IsEnabled="False"/>
         <Label Content="File Name" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="26" Width="63"/>
         <TextBox x:Name="DescriptionEdit" Height="68" Margin="24,90,15,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto"/>
         <Label Content="Description" HorizontalAlignment="Left" Margin="24,64,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
-        <TextBox x:Name="ProcessNameEdit" Height="22" Margin="24,189,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="ProcessNameEdit" VerticalScrollBarVisibility="Auto" Height="22" Margin="24,189,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Label Content="DSP Software Process Name" HorizontalAlignment="Left" Margin="24,163,0,0" VerticalAlignment="Top" Height="26" Width="159"/>
         <GroupBox Header="Decimals" Height="147" Margin="24,216,15,0" VerticalAlignment="Top">
             <Grid Margin="10,0">
@@ -84,7 +84,7 @@
                 <TextBox x:Name="QDeviderEdit" HorizontalAlignment="Left" Height="23" Margin="150,80,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="32"/>
             </Grid>
         </GroupBox>
-        <TextBox x:Name="StartingPositionEdit" Height="23" Margin="24,394,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="StartingPositionEdit" VerticalScrollBarVisibility="Auto" Height="23" Margin="24,394,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Label Content="Starting position hint" HorizontalAlignment="Left" Margin="24,368,0,0" VerticalAlignment="Top" Height="26" Width="159"/>
         <Label Content="Hotkey/delay" HorizontalAlignment="Left" Margin="24,422,0,0" VerticalAlignment="Top" Height="26" Width="94"/>
         <RadioButton x:Name="HotkeySelected" Content="Hotkey" HorizontalAlignment="Left" Margin="24,448,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" IsChecked="True" Height="15" Width="57"/>
