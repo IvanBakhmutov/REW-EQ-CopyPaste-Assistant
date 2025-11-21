@@ -6,7 +6,7 @@
     "QDecimals":  1,
     "GainDecimals":  1,
     "FreqDecimals":  0,
-    "DecimalSeparator":  ".",
+    "DecimalSeparator":  ",",
     "StartingPositionHint":  "Please select 1 band Nr box and hit hotkey",
     "HotkeyOrDelayPreference":  "Hotkey",
     "KeystrokeSequence":  [
@@ -19,51 +19,35 @@
                                   "delay_ms":  20
                               },
                               {
-                                  "mouseChangePositionY":  "35",
-                                  "delay_ms":  20
-                              },
-                              {
-                                  "mouseChangePositionX":  "-30",
+                                  "mouseChangePositionY":  "38",
                                   "delay_ms":  20
                               },
                               {
                                   "mouseClick":  "left",
-                                  "delay_ms":  100
+                                  "delay_ms":  20
                               },
                               {
                                   "keys":  "GAIN",
                                   "delay_ms":  20
                               },
                               {
-                                  "mouseChangePositionY":  "50",
-                                  "delay_ms":  20
-                              },
-                              {
-                                  "mouseClick":  "left",
-                                  "delay_ms":  20
+                                  "keys": "{TAB}",
+                                  "delay_ms": 20
                               },
                               {
                                   "keys":  "FREQ",
                                   "delay_ms":  20
                               },
                               {
-                                  "mouseChangePositionY":  "50",
-                                  "delay_ms":  20
-                              },
-                              {
-                                  "mouseClick":  "left",
-                                  "delay_ms":  20
+                                  "keys": "{TAB}",
+                                  "delay_ms": 20
                               },
                               {
                                   "keys":  "QVALUE",
                                   "delay_ms":  20
                               },
                               {
-                                  "mouseChangePositionX":  "30",
-                                  "delay_ms":  20
-                              },
-                              {
-                                  "mouseChangePositionY":  "-135",
+                                  "mouseChangePositionY":  "-38",
                                   "delay_ms":  20
                               }
                           ]

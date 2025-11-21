@@ -5,7 +5,7 @@
     "QDevider": 1,
     "QDecimals": 1,
     "GainDecimals": 1,
-    "DecimalSeparator": ".",
+    "DecimalSeparator": ",",
     "HotkeyOrDelayPreference": "Hotkey",
     "StartingPositionHint": "Attenzione su REW impostare i filtri che hai a disposizione su Armonia. Metti il puntatore del mouse al centro del quadratino del primo filtro e clicca F11",
     "KeystrokeSequence": [
