@@ -54,9 +54,13 @@ Some DSP profiles were already tested and added to `./DSPProfiles`
 
 ## DSP Profile file format
 
-The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP, and the Q divider. The Q divider is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse actions or key actions like`{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](DSPProfileFileFormat.md)
+The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse move and click actions and key actions like `{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](DSPProfileFileFormat.md)
 
 ## Change log
+
+### 20-11-2025:
+
+⭐ NEW! Big update - Profile editor GUI implemented. It can be used for editing existing profiles (instead of manual edits of JSON files), saving existing profiles as templates to new profiles.  
 
 ### 18-11-2025:
 Down 4 Sound profiles added - EZY-DSP68, EZY-DSP612, EZY-DSP68+, EZY-DSP612+  

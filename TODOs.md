@@ -1,8 +1,8 @@
 # Items to do
 
-- GUI for editing profiles
+- ~~GUI for editing profiles~~
 - Transposed output isn't showing all bands, to be fixed
-- Update json file help in readme
+- ~~Update json file help in readme~~
 - Mouse pointer highlight before copypaste
 - Review logic behind hotkey or delay choice global vs dsp config
 - Folders with brand names for DSP profiles?

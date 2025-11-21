@@ -1,53 +1,54 @@
-{
-    "version": "1.0",
-    "Description": "Awave (DSPA6 / DSP12DMAX / DSP16DMAX / DSPA6II / DSP6V5 /  DSPM6 / DSPA8D / DSPA10II / DSP10D / DSP10DMAX / DSPT10 / DSP8.1 / DSPA12 / DSPA12D / DSPA12D PRO / DSP12DMAXII / DSPA16D / DSPA16DMAXII /DSPA24D)",
-    "processName": "Awave*",
-    "QDevider": 1,
-    "QDecimals": 2,
-    "GainDecimals": 1,
-    "DecimalSeparator": ".",
-    "StartingPositionHint": "Please select F/hz edit box",
-    "HotkeyOrDelayPreference": "Hotkey",
-    "KeystrokeSequence": [
-        {
-            "mouseClick": "left",
-            "delay_ms": 50
-        },
-        {
-            "keys": "FREQ",
-            "delay_ms": 200
-        },
-        {
-            "mouseChangePositionY": "+18",
-            "delay_ms": 10
-        },
-        {
-            "mouseClick": "left",
-            "delay_ms": 50
-        },
-        {
-            "keys": "GAIN",
-            "delay_ms": 200
-        },
-        {
-            "mouseChangePositionY": "+117",
-            "delay_ms": 10
-        },
-        {
-            "mouseClick": "left",
-            "delay_ms": 50
-        },
-        {
-            "keys": "QVALUE",
-            "delay_ms": 200
-        },
-        {
-            "mouseChangePositionY": "-135",
-            "delay_ms": 10
-        },
-        {
-            "mouseChangePositionX": "+37",
-            "delay_ms": 10
-        }
-    ]
+﻿{
+    "version":  "1.0",
+    "Description":  "Awave (DSPA6 / DSP12DMAX / DSP16DMAX / DSPA6II / DSP6V5 /  DSPM6 / DSPA8D / DSPA10II / DSP10D / DSP10DMAX / DSPT10 / DSP8.1 / DSPA12 / DSPA12D / DSPA12D PRO / DSP12DMAXII / DSPA16D / DSPA16DMAXII /DSPA24D)",
+    "processName":  "Awave*",
+    "QDevider":  1,
+    "QDecimals":  2,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please hover F/hz edit box and hit hotkey",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "mouseClick":  "left",
+                                  "delay_ms":  50
+                              },
+                              {
+                                  "keys":  "FREQ",
+                                  "delay_ms":  200
+                              },
+                              {
+                                  "mouseChangePositionY":  "+18",
+                                  "delay_ms":  10
+                              },
+                              {
+                                  "mouseClick":  "left",
+                                  "delay_ms":  50
+                              },
+                              {
+                                  "keys":  "GAIN",
+                                  "delay_ms":  200
+                              },
+                              {
+                                  "mouseChangePositionY":  "+117",
+                                  "delay_ms":  10
+                              },
+                              {
+                                  "mouseClick":  "left",
+                                  "delay_ms":  50
+                              },
+                              {
+                                  "keys":  "QVALUE",
+                                  "delay_ms":  200
+                              },
+                              {
+                                  "mouseChangePositionY":  "-135",
+                                  "delay_ms":  10
+                              },
+                              {
+                                  "mouseChangePositionX":  "+37",
+                                  "delay_ms":  10
+                              }
+                          ]
 }

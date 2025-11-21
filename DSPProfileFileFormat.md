@@ -14,6 +14,8 @@ For a complete list of SendKeys codes see the Microsoft docs: [learn.microsoft.c
 
 `processName` can be set to `Generic` this will allow to run the script without specific DSP app selected. In this case DSP software will not be automatically moved to foreground and you will have to bring it forward manually.  
 
+`QDevider` is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Default value is 1, leave it default unless you know what you are doing.
+
 Sample DSP profile with comments:  
 
 `{`  
