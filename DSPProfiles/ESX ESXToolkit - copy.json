@@ -1,0 +1,23 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "ESX Toolkit DSP software (D66SP / QM66SP / D68SP / VE900.7SP / QL810SP / QL812SP / VE1300.11SP / QE812SP)",
+    "processName":  "ESX_Toolkit_*",
+    "QDevider":  1,
+    "QDecimals":  1,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+		    "AdminRightsRequired":  true,
+    "StartingPositionHint":  "Please select 1 band Freq box and hit hotkey",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "keys":  "^aFREQ{ENTER}{DOWN}QVALUE{ENTER}{DOWN}GAIN{ENTER}",
+                                  "delay_ms":  200
+                              },
+                              {
+                                  "keys":  "{RIGHT}{UP}{UP}",
+                                  "delay_ms":  200
+                              }
+                          ]
+}

@@ -884,6 +884,21 @@ Function Show-SelectProfileGui {
         })
     $ProfileEditGUI.FindName("OKBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
+            if($result.AdminRightsRequired -eq "true"){
+               <#if (-not Get-RunningAsAdminFlag) {
+                    try {
+                        Add-Type -AssemblyName PresentationCore,PresentationFramework -ErrorAction SilentlyContinue
+                        $ButtonType   = [System.Windows.MessageBoxButton]::OK
+                        $MessageIcon  = [System.Windows.MessageBoxImage]::Error
+                        $MessageBody  = "Selected DSP profile requires administrative privileges. Please run the script as an administrator."
+                        $MessageTitle = "Administrative Privileges Required"
+                        [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
+                    }
+                    catch {
+                        Write-Host "Selected DSP profile requires administrative privileges. Please run the script as an administrator." -ForegroundColor Red
+                    }
+                }#>
+            }
             if ($null -ne $selectedProfileFileName) {
                 $result.Action = "Open"
                 $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
