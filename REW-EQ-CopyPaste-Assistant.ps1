@@ -2,7 +2,7 @@
 # Script: REW-EQ-CopyPaste-Assistant
 # Description: Provides automated mouse & keyboard input to paste REW EQ settings into DSP software
 # Author: Ivan Bakhmutov
-# Date: 2025-11-12
+# Date: 2025-11-25
 # ============================================
 
 $scriptDir = Split-Path -Parent $PSCommandPath

@@ -1,3 +1,10 @@
+# ============================================
+# Module: AssistantGUI
+# Description: GUI module for REW-EQ-CopyPaste-Assistant
+# Author: Ivan Bakhmutov
+# Date: 2025-11-25
+# ============================================
+
 Function Show-EditProfileGui {
     param (
         [Parameter(Mandatory = $true)][string]$FilePath,
@@ -694,7 +701,6 @@ Function Show-SelectProfileGui {
         $profileListBox.Items.Add($profileFileName.baseName) | Out-Null
     }
 
-
     #Region process checks
     $BGProcessCheck = New-Object Windows.Threading.DispatcherTimer
     $BGProcessCheck.Interval = [TimeSpan]::FromMilliseconds(300)
@@ -757,7 +763,9 @@ Function Show-SelectProfileGui {
 
             if ($null -eq $REWProcess) {
                 $ProfileEditGUI.FindName("REWStatus").foreground = "Red"
-                $ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running"
+                $ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running (click PLAY button to launch REW in API mode)"
+                $result.REWStatus = "Not Running"
+                $ProfileEditGUI.FindName("RunREWBTN").visibility = "Visible"
             }
             else {
                 $rewWMIprocess = Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'"
@@ -766,10 +774,14 @@ Function Show-SelectProfileGui {
                     if ($checkpREWargs.CommandLine -notmatch "-api") {
                         $ProfileEditGUI.FindName("REWStatus").foreground = "Orange"
                         $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is not enabled."
+                        $result.REWStatus = "API Not Enabled"
+                        $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
                     }
                     else {
                         $ProfileEditGUI.FindName("REWStatus").foreground = "Lime"
                         $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is enabled."
+                        $result.REWStatus = "Running"
+                        $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
                     }
                 }
             }
@@ -779,6 +791,49 @@ Function Show-SelectProfileGui {
     $BGProcessCheck.Start()
     #Endregion
     # Assign event handlers
+
+   $ProfileEditGUI.FindName("RunREWBTN").Add_Click({
+            if($result.REWStatus -eq "Not Running") {
+                # Locate the installation directory of Room EQ Wizard from the registry
+                $installPath = $null
+                try {
+                    $registryBasePath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
+                    $registryKeys = Get-ChildItem -Path $registryBasePath
+
+                    foreach ($key in $registryKeys) {
+                        $urlInfoAbout = (Get-ItemProperty -Path $key.PSPath -Name "URLInfoAbout" -ErrorAction SilentlyContinue).URLInfoAbout
+                        if ($urlInfoAbout -eq "https://www.roomeqwizard.com") {
+                            $installPath = (Get-ItemProperty -Path $key.PSPath -Name "InstallLocation" -ErrorAction SilentlyContinue).InstallLocation
+                            break
+                        }
+                    }
+
+                    if (-Not $installPath) {
+                        throw "Room EQ Wizard installation directory not found in the registry."
+                    }
+                }
+                catch {
+                    [System.Windows.MessageBox]::Show("Failed to locate Room EQ Wizard installation directory in the registry: $($_.Exception.Message)", "Error", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
+                    return
+                }
+
+                $rewExecutable = Join-Path -Path $installPath -ChildPath "RoomEQWizard.exe"
+
+                if (-Not (Test-Path -Path $rewExecutable)) {
+                    [System.Windows.MessageBox]::Show("Room EQ Wizard executable not found at $installPath. Please verify the installation path.", "Error", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
+                    return
+                }
+
+                # Start Room EQ Wizard with the -api command-line parameter
+                try {
+                    Start-Process -FilePath $rewExecutable -ArgumentList "-api"
+                }
+                catch {
+                    [System.Windows.MessageBox]::Show("Failed to start Room EQ Wizard: $($_.Exception.Message)", "Error", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
+                }
+            }
+        })
+
     $ProfileEditGUI.FindName("GitHub").Add_Click({
             start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant"
         })

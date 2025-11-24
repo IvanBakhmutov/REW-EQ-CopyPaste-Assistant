@@ -41,6 +41,7 @@
             <StatusBarItem  BorderThickness="0"  BorderBrush="#FFA8A8A8">
                 <TextBlock ToolTipService.InitialShowDelay="200" x:Name="REWStatus" Text="⬤" Width="15" MinWidth="15" Foreground="Gray" ToolTip="REW Status" />
             </StatusBarItem>
+            <Button x:Name="RunREWBTN" ToolTipService.InitialShowDelay="200" ToolTip="Start REW in API mode" Content="▶️" Width="22" Background="{x:Null}" Padding="0" BorderThickness="0" BorderBrush="{x:Null}" Foreground="orange" Visibility="Hidden" />
             <StatusBarItem BorderThickness="0"  BorderBrush="#FFA8A8A8">
                 <TextBlock x:Name ="Hint" Text="Hint: Select a profile to begin" />
             </StatusBarItem>

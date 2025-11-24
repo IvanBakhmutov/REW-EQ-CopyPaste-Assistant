@@ -81,7 +81,7 @@
                 <RadioButton x:Name="DecimalSeparatorDot"  ToolTipService.InitialShowDelay="200" ToolTip="Use dot as decimal separator, example 1.5" Content="Dot &quot;.&quot;" HorizontalAlignment="Left" Margin="0,85,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup" IsChecked="True"/>
                 <RadioButton x:Name="DecimalSeparatorComma"  ToolTipService.InitialShowDelay="200" ToolTip="Use comma as decimal separator, example 1,5" Content="Comma &quot;,&quot;" HorizontalAlignment="Left" Margin="0,105,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup"/>
                 <Label Content="Q Divider" HorizontalAlignment="Left" Margin="150,54,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
-                <TextBox x:Name="QDividerEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Divider for Q values, example 2 means Q values will be divided by 2, or 0.5 means Q values will be multiplied by 2" HorizontalAlignment="Left" Height="23" Margin="150,80,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="32"/>
+                <TextBox x:Name="QDividerEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Divider for Q values, example 2 means Q values will be divided by 2, or 0.5 means Q values will be multiplied by 2. Default is 1" HorizontalAlignment="Left" Height="23" Margin="150,80,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="32"/>
             </Grid>
         </GroupBox>
         <TextBox x:Name="StartingPositionEdit" ToolTipService.InitialShowDelay="200" ToolTip="Display message to help user understand starting position of the paste operation"  VerticalScrollBarVisibility="Auto" Height="23" Margin="24,394,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>

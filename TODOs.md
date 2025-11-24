@@ -8,14 +8,14 @@
 - ~~AdminRightsRequired check for some DSP brands~~
 - ~~Freq decimals in configs~~
 - ~~Generic profile. Script update to handle it~~
+- ~~admin flag in profile edit gui needs to be added~~
+- ~~Transposed output isn't showing all bands, to be fixed - removed~~
+- ~~Mouse pointer highlight before copypaste - not needed~~
+- ~~Review logic behind hotkey or delay choice global vs dsp config~~
+- ~~Review console and popup messages, some popup messages removed~~
 
 ## Immediate plans
-- admin flag in profile edit gui needs to be added
-- Transposed output isn't showing all bands, to be fixed
-- Mouse pointer highlight before copypaste
-- Review logic behind hotkey or delay choice global vs dsp config
 - Folders with brand names for DSP profiles?
-- Review console and popup messages
 - Reported issue with confirmation dialog (in parallels desktop)
 - Configurable PEQ guidelines for each profile in a separate text box
 - Remove "True" word output in console when a mouse pointer operation happens, check why keystroke output is missing
