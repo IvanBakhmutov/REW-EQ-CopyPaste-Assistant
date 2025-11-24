@@ -242,14 +242,14 @@ public class User32 {
 # --- Exported Functions ---
 Export-ModuleMember -Function `
     Invoke-MouseMoveBy,
-    Invoke-MouseClickLeftAt,
-    Invoke-MouseClickRightAt,
-    Invoke-MouseClickRelative,
-    Invoke-MouseLeftClick,
-    Invoke-MouseRightClick,
-    Invoke-MouseScrollUp,
-    Invoke-MouseScrollDown,
-    Move-CursorToPosition,
-    Invoke-KeyStroke,
-    Get-MousePosition,
-    Wait-HotkeyInput
+Invoke-MouseClickLeftAt,
+Invoke-MouseClickRightAt,
+Invoke-MouseClickRelative,
+Invoke-MouseLeftClick,
+Invoke-MouseRightClick,
+Invoke-MouseScrollUp,
+Invoke-MouseScrollDown,
+Move-CursorToPosition,
+Invoke-KeyStroke,
+Get-MousePosition,
+Wait-HotkeyInput

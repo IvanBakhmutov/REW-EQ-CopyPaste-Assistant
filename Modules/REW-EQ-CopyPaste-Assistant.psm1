@@ -391,13 +391,15 @@ function Read-JSONFile {
 
     try {
         $raw = Get-Content -Path $FilePath -Raw -ErrorAction Stop
-    } catch {
+    }
+    catch {
         throw "Read-JSONFile: Failed to read file '$FilePath'. $_"
     }
 
     try {
         $obj = $raw | ConvertFrom-Json -ErrorAction Stop
-    } catch {
+    }
+    catch {
         throw "Read-JSONFile: Invalid JSON in '$FilePath'. $($_.Exception.Message)"
     }
 

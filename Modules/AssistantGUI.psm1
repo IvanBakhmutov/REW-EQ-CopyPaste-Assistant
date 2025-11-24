@@ -201,7 +201,7 @@ Function Show-EditProfileGui {
 
             # Save to file
             try {
-                $jsonContent = $profile | ConvertTo-Json -Depth 10 -Compress
+                $jsonContent = $profile | ConvertTo-Json -Depth 10
                 Set-Content -Path $FilePath -Value $jsonContent -Encoding UTF8 -Force
                 $result.Action = "Saved"
                 $ProfileSelectGUI.Close()
@@ -298,7 +298,7 @@ Function Show-EditProfileGui {
                 $dlgRes = $sfd.ShowDialog()
                 if ($dlgRes -eq $true) {
                     try {
-                        $jsonContent = $profile | ConvertTo-Json -Depth 10 -Compress
+                        $jsonContent = $profile | ConvertTo-Json -Depth 10
                         Set-Content -Path $sfd.FileName -Value $jsonContent -Encoding UTF8 -Force
                         $result.Action = "SavedAs"
                         # expose new filepath to caller so caller can refresh and select it
@@ -679,7 +679,7 @@ Function Show-SelectProfileGui {
         ProcessName                  = $null
         ProcessStatus                = $null
         REWStatus                    = $null
-        AdminRightsRequired         =  "false"
+        AdminRightsRequired          = "false"
     }
 
     # Load the XAML file
@@ -735,19 +735,21 @@ Function Show-SelectProfileGui {
                     $result.ProcessStatus = "Multiple Instances Found"
                 }
                 else {
-                    if($result.AdminRightsRequired -eq "true"){ 
-                        if(Get-RunningAsAdminFlag) {
+                    if ($result.AdminRightsRequired -eq "true") {
+                        if (Get-RunningAsAdminFlag) {
                             $ProfileEditGUI.FindName("ProcessStatus").foreground = "Lime"
                             $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
                             $result.ProcessName = $DSPProcess.ProcessName
                             $result.ProcessStatus = "Running"
-                        } else {
+                        }
+                        else {
                             $ProfileEditGUI.FindName("ProcessStatus").foreground = "Purple"
                             $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Admin rights are required to interact with $($DSPProcess.ProcessName). Please restart the Assistant with elevated privileges."
                             $result.ProcessName = $DSPProcess.ProcessName
                             $result.ProcessStatus = "Admin Rights Required"
                         }
-                    } else {
+                    }
+                    else {
                         $ProfileEditGUI.FindName("ProcessStatus").foreground = "Lime"
                         $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
                         $result.ProcessName = $DSPProcess.ProcessName
@@ -792,8 +794,8 @@ Function Show-SelectProfileGui {
     #Endregion
     # Assign event handlers
 
-   $ProfileEditGUI.FindName("RunREWBTN").Add_Click({
-            if($result.REWStatus -eq "Not Running") {
+    $ProfileEditGUI.FindName("RunREWBTN").Add_Click({
+            if ($result.REWStatus -eq "Not Running") {
                 # Locate the installation directory of Room EQ Wizard from the registry
                 $installPath = $null
                 try {
@@ -846,49 +848,49 @@ Function Show-SelectProfileGui {
             #return
         })
     $ProfileEditGUI.FindName("NewProfileBTN").Add_Click({
-        # Prompt user to save a new profile file
-        $saveFileDialog = New-Object System.Windows.Forms.SaveFileDialog
-        $saveFileDialog.InitialDirectory = $DSPProfilesDir
-        $saveFileDialog.Filter = "JSON files (*.json)|*.json"
-        $saveFileDialog.Title = "Save New Profile"
-        $saveFileDialog.FileName = "NewProfile.json"
+            # Prompt user to save a new profile file
+            $saveFileDialog = New-Object System.Windows.Forms.SaveFileDialog
+            $saveFileDialog.InitialDirectory = $DSPProfilesDir
+            $saveFileDialog.Filter = "JSON files (*.json)|*.json"
+            $saveFileDialog.Title = "Save New Profile"
+            $saveFileDialog.FileName = "NewProfile.json"
 
-        if ($saveFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-            $newProfilePath = $saveFileDialog.FileName
+            if ($saveFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+                $newProfilePath = $saveFileDialog.FileName
 
-            # Populate the new file with default values
-            $defaultProfile = [PSCustomObject]@{
-                version                 = "1.0"
-                Description             = "New Profile"
-                processName             = "<DSP Software Name>"
-                QDivider                = 1
-                QDecimals               = 1
-                GainDecimals            = 1
-                FreqDecimals            = 0
-                DecimalSeparator        = "."
-                TimeoutBeforePasteSecs  = 6
-                StartingPositionHint    = "Please select 1 band Freq box and hit hotkey"
-                HotkeyOrDelayPreference = "Hotkey"
-                KeystrokeSequence       = @()
-            }
-            $defaultProfile | ConvertTo-Json -Depth 10 -Compress | Set-Content -Path $newProfilePath -Encoding UTF8
-
-            # Open the new profile in the editing GUI
-            $editResult = Show-EditProfileGui -FilePath $newProfilePath
-
-            # If the profile was saved, refresh the list and select the new item
-            if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
-                $ProfileEditGUI.FindName('ProfileList').Items.Clear()
-                $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-                foreach ($profileFileName in $DSPProfilesList) {
-                    $ProfileEditGUI.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null
+                # Populate the new file with default values
+                $defaultProfile = [PSCustomObject]@{
+                    version                 = "1.0"
+                    Description             = "New Profile"
+                    processName             = "<DSP Software Name>"
+                    QDivider                = 1
+                    QDecimals               = 1
+                    GainDecimals            = 1
+                    FreqDecimals            = 0
+                    DecimalSeparator        = "."
+                    TimeoutBeforePasteSecs  = 6
+                    StartingPositionHint    = "Please select 1 band Freq box and hit hotkey"
+                    HotkeyOrDelayPreference = "Hotkey"
+                    KeystrokeSequence       = @()
                 }
+                $defaultProfile | ConvertTo-Json -Depth 10 | Set-Content -Path $newProfilePath -Encoding UTF8
 
-                $savedBase = (Get-Item -LiteralPath $newProfilePath).BaseName
-                $ProfileEditGUI.FindName('ProfileList').SelectedItem = $savedBase
+                # Open the new profile in the editing GUI
+                $editResult = Show-EditProfileGui -FilePath $newProfilePath
+
+                # If the profile was saved, refresh the list and select the new item
+                if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
+                    $ProfileEditGUI.FindName('ProfileList').Items.Clear()
+                    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+                    foreach ($profileFileName in $DSPProfilesList) {
+                        $ProfileEditGUI.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null
+                    }
+
+                    $savedBase = (Get-Item -LiteralPath $newProfilePath).BaseName
+                    $ProfileEditGUI.FindName('ProfileList').SelectedItem = $savedBase
+                }
             }
-        }
-    })
+        })
     $ProfileEditGUI.FindName("EditBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             if ($null -ne $selectedProfileFileName) {
@@ -939,16 +941,16 @@ Function Show-SelectProfileGui {
         })
     $ProfileEditGUI.FindName("OKBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
-            if($result.AdminRightsRequired -eq "true"){
-               if (-not (Get-RunningAsAdminFlag)) {
-              
-                        Add-Type -AssemblyName PresentationCore,PresentationFramework -ErrorAction SilentlyContinue
-                        $ButtonType   = [System.Windows.MessageBoxButton]::OK
-                        $MessageIcon  = [System.Windows.MessageBoxImage]::Error
-                        $MessageBody  = "Selected DSP profile requires administrative privileges. Please run the script as an administrator."
-                        $MessageTitle = "Administrative Privileges Required"
-                        [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
-                        return
+            if ($result.AdminRightsRequired -eq "true") {
+                if (-not (Get-RunningAsAdminFlag)) {
+
+                    Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
+                    $ButtonType = [System.Windows.MessageBoxButton]::OK
+                    $MessageIcon = [System.Windows.MessageBoxImage]::Error
+                    $MessageBody = "Selected DSP profile requires administrative privileges. Please run the script as an administrator."
+                    $MessageTitle = "Administrative Privileges Required"
+                    [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
+                    return
                 }
             }
             if ($null -ne $selectedProfileFileName) {
@@ -971,9 +973,10 @@ Function Show-SelectProfileGui {
                     $profileContent = $profileJson | ConvertTo-Json -Depth 10
                     $ProfileEditGUI.FindName("ProfileText").Text = $profileContent
                     $result.processName = $profileJson.processName
-                    if($null -ne $profileJson.AdminRightsRequired) {
+                    if ($null -ne $profileJson.AdminRightsRequired) {
                         $result.AdminRightsRequired = $profileJson.AdminRightsRequired
-                    } else {
+                    }
+                    else {
                         $result.AdminRightsRequired = "false"
                     }
                     $ProfileEditGUI.FindName("OKBTN").IsEnabled = $true
