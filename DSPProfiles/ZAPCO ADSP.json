@@ -2,7 +2,7 @@
     "version":  "1.0",
     "Description":  "ZAPCO (DSP-Z8 IV AT / ADSP-Z8 IV-6AT / ADSP-Z12 IV-10A / ADSP-Z16 IV-12A)",
     "processName":  "ZAPCO*",
-    "QDevider":  1,
+    "QDivider":  1,
     "QDecimals":  2,
     "GainDecimals":  1,
     "FreqDecimals":  0,

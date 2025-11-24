@@ -2,7 +2,7 @@
     "version": "1.0",
     "Description": "Down 4 Sound (EZY-DSP68)",
     "processName": "EZY-DSP68",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 3,
     "GainDecimals": 1,
     "FreqDecimals": 0,

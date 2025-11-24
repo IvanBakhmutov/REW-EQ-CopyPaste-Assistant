@@ -2,7 +2,7 @@
     "version": "1.0",
     "Description": "MUSWAY TUNEST_PC_V1.* (M4 / M4+V3 / M4+V4 / M6V3 / M6V4 / D8V3/ D8V4 / DSP68 / TUNE12 / M6PRO / M12 / M5 / M10 / M8)",
     "processName": "TUNEST_PC_V1.*",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 2,
     "GainDecimals": 1,
     "DecimalSeparator": ".",

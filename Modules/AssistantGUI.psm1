@@ -24,7 +24,7 @@ Function Show-EditProfileGui {
             version                 = "1.0"
             Description             = ""
             processName             = ""
-            QDevider                = 1
+            QDivider                = 1
             QDecimals               = 1
             GainDecimals            = 1
             FreqDecimals            = 0
@@ -49,7 +49,7 @@ Function Show-EditProfileGui {
     if ($null -ne $originalProfile.FreqDecimals) { $ProfileSelectGUI.FindName("FreqDecimalsEdit").Text = $originalProfile.FreqDecimals.ToString() }
     if ($null -ne $originalProfile.QDecimals) { $ProfileSelectGUI.FindName("QDecimalsEdit").Text = $originalProfile.QDecimals.ToString() }
     if ($null -ne $originalProfile.GainDecimals) { $ProfileSelectGUI.FindName("GainDecimalsEdit").Text = $originalProfile.GainDecimals.ToString() }
-    if ($null -ne $originalProfile.QDevider) { $ProfileSelectGUI.FindName("QDeviderEdit").Text = $originalProfile.QDevider.ToString() }
+    if ($null -ne $originalProfile.QDivider) { $ProfileSelectGUI.FindName("QDividerEdit").Text = $originalProfile.QDivider.ToString() }
     if ($null -ne $originalProfile.StartingPositionHint) { $ProfileSelectGUI.FindName("StartingPositionEdit").Text = $originalProfile.StartingPositionHint }
 
     # Decimal separator radio buttons
@@ -129,7 +129,7 @@ Function Show-EditProfileGui {
             }
 
             # Decimals
-            try { $profile.QDevider = [int]$ProfileSelectGUI.FindName("QDeviderEdit").Text } catch { $profile.QDevider = 1 }
+            try { $profile.QDivider = [int]$ProfileSelectGUI.FindName("QDividerEdit").Text } catch { $profile.QDivider = 1 }
             try { $profile.QDecimals = [int]$ProfileSelectGUI.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
             try { $profile.GainDecimals = [int]$ProfileSelectGUI.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
             try { $profile.FreqDecimals = [int]$ProfileSelectGUI.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
@@ -232,7 +232,7 @@ Function Show-EditProfileGui {
                 $profile.processName = $ProfileSelectGUI.FindName("ProcessNameEdit").Text
             }
 
-            try { $profile.QDevider = [int]$ProfileSelectGUI.FindName("QDeviderEdit").Text } catch { $profile.QDevider = 1 }
+            try { $profile.QDivider = [int]$ProfileSelectGUI.FindName("QDividerEdit").Text } catch { $profile.QDivider = 1 }
             try { $profile.QDecimals = [int]$ProfileSelectGUI.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
             try { $profile.GainDecimals = [int]$ProfileSelectGUI.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
             try { $profile.FreqDecimals = [int]$ProfileSelectGUI.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
@@ -325,7 +325,7 @@ Function Show-EditProfileGui {
 
     # Track text changes in TextBox controls
     $textBoxes = @('FileNameEdit', 'DescriptionEdit', 'ProcessNameEdit', 'FreqDecimalsEdit',
-        'QDecimalsEdit', 'GainDecimalsEdit', 'QDeviderEdit', 'StartingPositionEdit', 'DelayEdit')
+        'QDecimalsEdit', 'GainDecimalsEdit', 'QDividerEdit', 'StartingPositionEdit', 'DelayEdit')
     foreach ($name in $textBoxes) {
         $ctrl = $ProfileSelectGUI.FindName($name)
         if ($null -ne $ctrl) {
@@ -806,7 +806,7 @@ Function Show-SelectProfileGui {
                 version                 = "1.0"
                 Description             = "New Profile"
                 processName             = "<DSP Software Name>"
-                QDevider                = 1
+                QDivider                = 1
                 QDecimals               = 1
                 GainDecimals            = 1
                 FreqDecimals            = 0

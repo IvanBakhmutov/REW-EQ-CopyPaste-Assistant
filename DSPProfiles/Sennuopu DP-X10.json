@@ -2,7 +2,7 @@
     "version": "1.0",
 	"Description": "Sennuopu DP-X10",
     "processName": "Sennuopu DP-X10*",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 1,
     "GainDecimals": 1,
     "DecimalSeparator": ".",

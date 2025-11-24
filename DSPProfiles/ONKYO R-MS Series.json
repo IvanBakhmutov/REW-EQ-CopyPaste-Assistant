@@ -2,7 +2,7 @@
     "version": "1.0",
     "Description": "ONKYO R-MS Series (R-MS66 / R-MS55 / R-MS25 / R-MS10)",
     "processName": "ONKYO R-MS*",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 2,
     "GainDecimals": 1,
     "HotkeyOrDelayPreference": "Hotkey",

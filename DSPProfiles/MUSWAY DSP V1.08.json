@@ -2,7 +2,7 @@
     "version": "1.0",
     "Description": "MUSWAY DSP V1.08 (M4+ / M6 / M6v2 / DSP68PRO)",
     "processName": "M6-V1.08",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 3,
     "GainDecimals": 1,
     "DecimalSeparator": ".",

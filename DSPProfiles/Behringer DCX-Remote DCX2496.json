@@ -2,7 +2,7 @@
     "version":  "1.0",
     "Description":  "Behringer DCX2496",
     "processName":  "DCX-Remote*",
-    "QDevider":  1,
+    "QDivider":  1,
     "QDecimals":  1,
     "GainDecimals":  1,
     "FreqDecimals":  0,

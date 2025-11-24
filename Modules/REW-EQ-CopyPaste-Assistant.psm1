@@ -12,11 +12,11 @@
 .DESCRIPTION
    This function processes text data containing EQ settings, extracts relevant information, and returns an array of objects with properties: Frequency, Q, and Gain.
 .EXAMPLE
-   $bands = Read-EQText -Text $clipboardText -QDevider 2.0
-   This example parses the EQ data from the clipboard text with a Q divider of 2.0.
+   $bands = Read-EQText -Text $clipboardText -QDivider 2.0
+   This example parses the EQ data from the clipboard text with a Q Divider of 2.0.
 .INPUTS
    [string] $Text - The EQ text data to parse.
-   [double] $QDevider - The divider value for Q.
+   [double] $QDivider - The Divider value for Q.
 .OUTPUTS
    [array] - An array of objects with Freq, Q, and Gain properties.
 .NOTES
@@ -25,7 +25,7 @@
 function Read-EQText {
     param(
         [Parameter(Mandatory = $true)][string]$Text,
-        [Parameter(Mandatory = $true)][double]$QDevider,
+        [Parameter(Mandatory = $true)][double]$QDivider,
         [Parameter(Mandatory = $true)][int]$FreqDecimals,
         [Parameter(Mandatory = $true)][int]$QDecimals,
         [Parameter(Mandatory = $true)][int]$GainDecimals,
@@ -40,9 +40,9 @@ function Read-EQText {
     $results = @()
     $bandNumber = 1
     $bands | where-Object { $_.Type -eq 'PK' } | ForEach-Object {
-        if ($QDevider -ne 1) {
-            # Adjust Q value based on QDevider and round to specified decimals
-            $adjustedQ = [math]::round($([double]($_.Q -replace ",", ".") / $QDevider), $QDecimals)
+        if ($QDivider -ne 1) {
+            # Adjust Q value based on QDivider and round to specified decimals
+            $adjustedQ = [math]::round($([double]($_.Q -replace ",", ".") / $QDivider), $QDecimals)
         }
         else {
             $adjustedQ = [math]::round([double]($_.Q -replace ",", "."), $QDecimals)
@@ -80,7 +80,7 @@ function Read-EQText {
     }
 }
 # debug start
-# Read-EQText -text $(get-clipboard -raw) -QDevider 1 -QDecimals 1 -GainDecimals 1 -DecimalSeparator "." -FreqDecimals 1 | Format-Table -AutoSize
+# Read-EQText -text $(get-clipboard -raw) -QDivider 1 -QDecimals 1 -GainDecimals 1 -DecimalSeparator "." -FreqDecimals 1 | Format-Table -AutoSize
 # debug end
 
 # Show a confirmation dialog to the user and return their response as a boolean.

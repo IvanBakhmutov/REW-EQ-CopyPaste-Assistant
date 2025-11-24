@@ -2,7 +2,7 @@
     "version": "1.0",
 	"Description": "Phoenix Gold DSP software",
     "processName": "PhoenixGold*",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 1,
     "GainDecimals": 1,
     "DecimalSeparator": ".",

@@ -2,7 +2,7 @@
     "version": "1.0",
     "Description": "Nakamichi-K 31-Band EQ (NDSK4085AU / NDSK4185AU / NDSK4285AU)",
     "processName": "Nakamichi-K",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 3,
     "GainDecimals": 1,
     "DecimalSeparator": ".",

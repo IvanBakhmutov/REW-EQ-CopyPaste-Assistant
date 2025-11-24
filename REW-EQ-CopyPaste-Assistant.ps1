@@ -75,8 +75,8 @@ if($null -ne $DSPConfig.processName){
 } else {
     $ProcessName = "Generic"
 }
-if($null -ne $DSPConfig.QDevider){
-    $QDevider = $DSPConfig.QDevider
+if($null -ne $DSPConfig.QDivider){
+    $QDivider = $DSPConfig.QDivider
 }
 if($null -ne $DSPConfig.DecimalSeparator){
     $DecimalSeparator = $DSPConfig.DecimalSeparator
@@ -151,7 +151,7 @@ do {
     if ($bufferHeader -in "Configurable_PEQ", "Generic", "Extended") {
         [array]$bands = Read-EQText `
             -Text ($buffer | Out-String) `
-            -QDevider $QDevider `
+            -QDivider $QDivider `
             -FreqDecimals $FreqDecimals `
             -QDecimals $QDecimals `
             -GainDecimals $GainDecimals `

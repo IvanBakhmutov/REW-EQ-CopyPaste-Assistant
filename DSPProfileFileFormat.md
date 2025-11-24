@@ -14,7 +14,7 @@ For a complete list of SendKeys codes see the Microsoft docs: [learn.microsoft.c
 
 `processName` can be set to `Generic` this will allow to run the script without specific DSP app selected. In this case DSP software will not be automatically moved to foreground and you will have to bring it forward manually.  
 
-`QDevider` is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Default value is 1, leave it default unless you know what you are doing.
+`QDivider` is used to adjust Q values when the predefined generic EQ profiles with Q/WB format in the REW app do not match the Q format used in the DSP. Default value is 1, leave it default unless you know what you are doing.
 
 Sample DSP profile with comments:  
 
@@ -23,7 +23,7 @@ Sample DSP profile with comments:
 | `{` | |
 | `"Description": "<Human readable name of the app and DSPs it can work with>",` | *Display message of a selected DSP profile when the script is running; does not affect functionality.*  |
 | `"processName": "<Windows process name, wildcards accepted>",` | *Once you run your DSP software, open Task Manager → Details and find its process name.<br>Even though you launch SomeDSPApp.exe, the actual process name may differ<br>(for instance, you might see SomeDSPConfigV4 in the list of tasks).<br>This happens because the executable you run may act as a wrapper or archive<br>that extracts and launches another binary internally.<br>So, what will work is just SomeDSP* *  |
-| `"QDevider": 1,` | *A divider of a Q value: 1 if Q should remain the same;<br>>1 will divide REW Q and paste smaller values in the DSP;<br><1 pastes greater values.* |
+| `"QDivider": 1,` | *A Divider of a Q value: 1 if Q should remain the same;<br>>1 will divide REW Q and paste smaller values in the DSP;<br><1 pastes greater values.* |
 | `"FreqDecimals": 1,` | *Number of decimal places for Frequency values.*  |
 | `"QDecimals": 1,` | *Number of decimal places for Q values.*  |
 | `"GainDecimals": 1,` | *Number of decimal places for Gain values.* |

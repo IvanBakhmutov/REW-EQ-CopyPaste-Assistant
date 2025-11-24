@@ -2,7 +2,7 @@
     "version":  "1.0",
     "Description":  "ESX Toolkit DSP software (D66SP / QM66SP / D68SP / VE900.7SP / QL810SP / QL812SP / VE1300.11SP / QE812SP)",
     "processName":  "ESX_Toolkit_*",
-    "QDevider":  1,
+    "QDivider":  1,
     "QDecimals":  1,
     "GainDecimals":  1,
     "FreqDecimals":  0,

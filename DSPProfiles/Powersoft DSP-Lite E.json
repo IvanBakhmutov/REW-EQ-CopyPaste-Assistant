@@ -2,7 +2,7 @@
     "version": "1.0",
 	"Description": "Powersoft DSP-Lite E",
     "processName": "ArmoniaPlus",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 1,
     "GainDecimals": 1,
     "DecimalSeparator": ",",

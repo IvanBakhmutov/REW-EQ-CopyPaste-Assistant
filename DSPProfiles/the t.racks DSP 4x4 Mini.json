@@ -2,7 +2,7 @@
     "version":  "1.0",
     "Description":  "the t.racks DSP 4x4 Mini Editor",
     "processName":  "the t.racks DSP 4x4 Mini Editor V1.05",
-    "QDevider":  1,
+    "QDivider":  1,
     "QDecimals":  2,
     "GainDecimals":  1,
     "FreqDecimals":  0,

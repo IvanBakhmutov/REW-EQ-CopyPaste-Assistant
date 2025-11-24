@@ -145,7 +145,7 @@ There are, however, some questions regarding certain DSP software (**Awave**, **
 Another thing worth mentioning: in some DSPs, when you place the cursor in a field (for example, Freq), the text inside isn’t automatically selected. As a result, typing or pasting will append characters to the existing text instead of replacing it. To avoid this, you can send the `^a` keystroke (which corresponds to Ctrl+A) to select all text in the field before typing or pasting.
 
 ### 06-11-2025:
-Changed the QDevider value in the ESXToolkit.json profile to 1, as tests in the car showed that the actual Q format is RBJ Q (Half Gain). The visual EQ graph in ESX Toolkit may be misleading. It seems the GUI developers might not have consulted the hardware team regarding the algorithm used to generate the graph.
+Changed the QDivider value in the ESXToolkit.json profile to 1, as tests in the car showed that the actual Q format is RBJ Q (Half Gain). The visual EQ graph in ESX Toolkit may be misleading. It seems the GUI developers might not have consulted the hardware team regarding the algorithm used to generate the graph.
 
 For proper AutoEQ in REW that works correctly with your DSP, you need to determine the minimum and maximum values for Frequency, Q, and Gain, and then create a configurable EQ in REW.
 

@@ -2,7 +2,7 @@
     "version": "1.0",
     "Description": "Hellion DSP software (HAM 8.10DSP, 4.6pinDSP,  4.8pinDSP,  DHL-6 , DHL-10)",
     "processName": "HAM8.10DSP*",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 2,
     "GainDecimals": 1,
     "HotkeyOrDelayPreference": "Hotkey",

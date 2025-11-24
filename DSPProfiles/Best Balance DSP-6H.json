@@ -2,7 +2,7 @@
     "version": "1.0",
     "Description": "Best Balance (DSP-6H)",
     "processName": "BestBalance V2*",
-    "QDevider": 1,
+    "QDivider": 1,
     "FreqDecimals": 0,
     "QDecimals": 1,
     "GainDecimals": 1,

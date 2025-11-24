@@ -2,7 +2,7 @@
     "version": "1.0",
 	"Description": "Sennuopu DP-X680 PC Software EN",
     "processName": "Sennuopu DP-X680 PC Software EN*",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 1,
     "GainDecimals": 1,
     "DecimalSeparator": ".",

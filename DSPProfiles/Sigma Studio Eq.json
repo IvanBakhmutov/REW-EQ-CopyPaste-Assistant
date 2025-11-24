@@ -2,7 +2,7 @@
     "version": "1.0",
     "Description": "Sigma Studio Eq module (adau1701 processors)",
     "processName": "SStudio",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 2,
     "GainDecimals": 1,
     "DecimalSeparator": ".",

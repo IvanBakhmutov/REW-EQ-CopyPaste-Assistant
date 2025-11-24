@@ -2,7 +2,7 @@
     "version": "1.0",
     "Description": "Hellion DSP software (HAM 6.80DSP, HAM 8.80DSP, HAM 8.100DSP)",
     "processName": "HAM8.80DSP*",
-    "QDevider": 1,
+    "QDivider": 1,
     "QDecimals": 2,
     "GainDecimals": 1,
     "HotkeyOrDelayPreference": "Hotkey",
