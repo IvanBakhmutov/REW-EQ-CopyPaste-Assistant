@@ -38,39 +38,39 @@ Function Show-EditProfileGui {
     # Parse the XAML to create the GUI
     Add-Type -AssemblyName PresentationFramework
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
-    $window = [Windows.Markup.XamlReader]::Load($reader)
+    $ProfileSelectGUI = [Windows.Markup.XamlReader]::Load($reader)
 
-    $window.FindName("FileNameEdit").Text = (get-item $FilePath).BaseName
+    $ProfileSelectGUI.FindName("FileNameEdit").Text = (get-item $FilePath).BaseName
 
     # Populate form fields from the loaded JSON profile
-    if ($null -ne $originalProfile.Description) { $window.FindName("DescriptionEdit").Text = $originalProfile.Description }
-    if ($null -ne $originalProfile.processName) { $window.FindName("ProcessNameEdit").Text = $originalProfile.processName }
-    if ($null -ne $originalProfile.FreqDecimals) { $window.FindName("FreqDecimalsEdit").Text = $originalProfile.FreqDecimals.ToString() }
-    if ($null -ne $originalProfile.QDecimals) { $window.FindName("QDecimalsEdit").Text = $originalProfile.QDecimals.ToString() }
-    if ($null -ne $originalProfile.GainDecimals) { $window.FindName("GainDecimalsEdit").Text = $originalProfile.GainDecimals.ToString() }
-    if ($null -ne $originalProfile.QDevider) { $window.FindName("QDeviderEdit").Text = $originalProfile.QDevider.ToString() }
-    if ($null -ne $originalProfile.StartingPositionHint) { $window.FindName("StartingPositionEdit").Text = $originalProfile.StartingPositionHint }
+    if ($null -ne $originalProfile.Description) { $ProfileSelectGUI.FindName("DescriptionEdit").Text = $originalProfile.Description }
+    if ($null -ne $originalProfile.processName) { $ProfileSelectGUI.FindName("ProcessNameEdit").Text = $originalProfile.processName }
+    if ($null -ne $originalProfile.FreqDecimals) { $ProfileSelectGUI.FindName("FreqDecimalsEdit").Text = $originalProfile.FreqDecimals.ToString() }
+    if ($null -ne $originalProfile.QDecimals) { $ProfileSelectGUI.FindName("QDecimalsEdit").Text = $originalProfile.QDecimals.ToString() }
+    if ($null -ne $originalProfile.GainDecimals) { $ProfileSelectGUI.FindName("GainDecimalsEdit").Text = $originalProfile.GainDecimals.ToString() }
+    if ($null -ne $originalProfile.QDevider) { $ProfileSelectGUI.FindName("QDeviderEdit").Text = $originalProfile.QDevider.ToString() }
+    if ($null -ne $originalProfile.StartingPositionHint) { $ProfileSelectGUI.FindName("StartingPositionEdit").Text = $originalProfile.StartingPositionHint }
 
     # Decimal separator radio buttons
     if ($originalProfile.DecimalSeparator -eq ",") {
-        $window.FindName("DecimalSeparatorComma").IsChecked = $true
+        $ProfileSelectGUI.FindName("DecimalSeparatorComma").IsChecked = $true
     }
     else {
-        $window.FindName("DecimalSeparatorDot").IsChecked = $true
+        $ProfileSelectGUI.FindName("DecimalSeparatorDot").IsChecked = $true
     }
 
     # Hotkey or Delay radio buttons
     if ($originalProfile.HotkeyOrDelayPreference -eq "Delay") {
-        $window.FindName("DelaySelected").IsChecked = $true
+        $ProfileSelectGUI.FindName("DelaySelected").IsChecked = $true
         if ($null -ne $originalProfile.TimeoutBeforePasteSecs) {
-            $window.FindName("DelayEdit").Text = $originalProfile.TimeoutBeforePasteSecs.ToString()
+            $ProfileSelectGUI.FindName("DelayEdit").Text = $originalProfile.TimeoutBeforePasteSecs.ToString()
         }
     }
     else {
-        $window.FindName("HotkeySelected").IsChecked = $true
+        $ProfileSelectGUI.FindName("HotkeySelected").IsChecked = $true
         # Check if hotkey override is present
         if (($null -ne $originalProfile.ProfilePerformActionHotkey) -or ($null -ne $originalProfile.ProfileCancelActionHotkey)) {
-            $window.FindName("HotkeyOverride").IsChecked = $true
+            $ProfileSelectGUI.FindName("HotkeyOverride").IsChecked = $true
             # Set combo boxes if available
             if ($null -ne $originalProfile.ProfilePerformActionHotkey) {
                 $performHotkey = $originalProfile.ProfilePerformActionHotkey
@@ -78,7 +78,7 @@ Function Show-EditProfileGui {
                 if ($performHotkey -match '^F(\d+)$') {
                     $performIndex = [int]$matches[1] - 1
                     if (($performIndex -ge 0) -and ($performIndex -lt 12)) {
-                        $window.FindName("ActionHotkeyCombo").SelectedIndex = $performIndex
+                        $ProfileSelectGUI.FindName("ActionHotkeyCombo").SelectedIndex = $performIndex
                     }
                 }
             }
@@ -88,19 +88,19 @@ Function Show-EditProfileGui {
                 if ($cancelHotkey -match '^F(\d+)$') {
                     $cancelIndex = [int]$matches[1] - 1
                     if (($cancelIndex -ge 0) -and ($cancelIndex -lt 12)) {
-                        $window.FindName("CancelHotkeyCombo").SelectedIndex = $cancelIndex
+                        $ProfileSelectGUI.FindName("CancelHotkeyCombo").SelectedIndex = $cancelIndex
                     }
                 }
             }
         }
         else {
-            $window.FindName("HotkeyDefault").IsChecked = $true
+            $ProfileSelectGUI.FindName("HotkeyDefault").IsChecked = $true
         }
     }
-    $window.FindName("Help").Add_Click({
+    $ProfileSelectGUI.FindName("Help").Add_Click({
             start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/blob/main/DSPProfileFileFormat.md"
         })
-    $window.findname("SaveBTN").Add_Click({
+    $ProfileSelectGUI.findname("SaveBTN").Add_Click({
             # Validate keystroke rows: if Action is mouseClick ensure Value is Left/Right
             try {
                 if ($null -ne $keystrokeCollection) {
@@ -120,21 +120,21 @@ Function Show-EditProfileGui {
             }
 
             # Basic fields
-            if ($window.FindName("DescriptionEdit").Text) {
-                $profile.Description = $window.FindName("DescriptionEdit").Text
+            if ($ProfileSelectGUI.FindName("DescriptionEdit").Text) {
+                $profile.Description = $ProfileSelectGUI.FindName("DescriptionEdit").Text
             }
-            if ($window.FindName("ProcessNameEdit").Text) {
-                $profile.processName = $window.FindName("ProcessNameEdit").Text
+            if ($ProfileSelectGUI.FindName("ProcessNameEdit").Text) {
+                $profile.processName = $ProfileSelectGUI.FindName("ProcessNameEdit").Text
             }
 
             # Decimals
-            try { $profile.QDevider = [int]$window.FindName("QDeviderEdit").Text } catch { $profile.QDevider = 1 }
-            try { $profile.QDecimals = [int]$window.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
-            try { $profile.GainDecimals = [int]$window.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
-            try { $profile.FreqDecimals = [int]$window.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
+            try { $profile.QDevider = [int]$ProfileSelectGUI.FindName("QDeviderEdit").Text } catch { $profile.QDevider = 1 }
+            try { $profile.QDecimals = [int]$ProfileSelectGUI.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
+            try { $profile.GainDecimals = [int]$ProfileSelectGUI.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
+            try { $profile.FreqDecimals = [int]$ProfileSelectGUI.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
 
             # Decimal separator
-            if ($window.FindName("DecimalSeparatorComma").IsChecked) {
+            if ($ProfileSelectGUI.FindName("DecimalSeparatorComma").IsChecked) {
                 $profile.DecimalSeparator = ","
             }
             else {
@@ -142,21 +142,21 @@ Function Show-EditProfileGui {
             }
 
             # Starting position hint
-            if ($window.FindName("StartingPositionEdit").Text) {
-                $profile.StartingPositionHint = $window.FindName("StartingPositionEdit").Text
+            if ($ProfileSelectGUI.FindName("StartingPositionEdit").Text) {
+                $profile.StartingPositionHint = $ProfileSelectGUI.FindName("StartingPositionEdit").Text
             }
 
             # Hotkey or Delay preference
-            if ($window.FindName("DelaySelected").IsChecked) {
+            if ($ProfileSelectGUI.FindName("DelaySelected").IsChecked) {
                 $profile.HotkeyOrDelayPreference = "Delay"
-                try { $profile.TimeoutBeforePasteSecs = [int]$window.FindName("DelayEdit").Text } catch { $profile.TimeoutBeforePasteSecs = 6 }
+                try { $profile.TimeoutBeforePasteSecs = [int]$ProfileSelectGUI.FindName("DelayEdit").Text } catch { $profile.TimeoutBeforePasteSecs = 6 }
             }
             else {
                 $profile.HotkeyOrDelayPreference = "Hotkey"
                 # Only include hotkey overrides if Override radio is checked
-                if ($window.FindName("HotkeyOverride").IsChecked) {
-                    $actionIdx = $window.FindName("ActionHotkeyCombo").SelectedIndex
-                    $cancelIdx = $window.FindName("CancelHotkeyCombo").SelectedIndex
+                if ($ProfileSelectGUI.FindName("HotkeyOverride").IsChecked) {
+                    $actionIdx = $ProfileSelectGUI.FindName("ActionHotkeyCombo").SelectedIndex
+                    $cancelIdx = $ProfileSelectGUI.FindName("CancelHotkeyCombo").SelectedIndex
                     if (($actionIdx -ge 0) -and ($actionIdx -lt 12)) {
                         $profile.ProfilePerformActionHotkey = "F$($actionIdx + 1)"
                     }
@@ -196,7 +196,7 @@ Function Show-EditProfileGui {
                 $jsonContent = $profile | ConvertTo-Json -Depth 10
                 Set-Content -Path $FilePath -Value $jsonContent -Encoding UTF8 -Force
                 $result.Action = "Saved"
-                $window.Close()
+                $ProfileSelectGUI.Close()
             }
             catch {
                 [System.Windows.MessageBox]::Show("Error saving profile: $($_.Exception.Message)", "Save Error",
@@ -205,7 +205,7 @@ Function Show-EditProfileGui {
         })
 
     # Save As - open SaveFileDialog in the profiles folder, require user confirmation
-    $window.FindName('SaveAsBTN').Add_Click({
+    $ProfileSelectGUI.FindName('SaveAsBTN').Add_Click({
             # Validate keystroke rows: if Action is mouseClick ensure Value is Left/Right
             try {
                 if ($null -ne $keystrokeCollection) {
@@ -224,38 +224,38 @@ Function Show-EditProfileGui {
                 version = "1.0"
             }
 
-            if ($window.FindName("DescriptionEdit").Text) {
-                $profile.Description = $window.FindName("DescriptionEdit").Text
+            if ($ProfileSelectGUI.FindName("DescriptionEdit").Text) {
+                $profile.Description = $ProfileSelectGUI.FindName("DescriptionEdit").Text
             }
-            if ($window.FindName("ProcessNameEdit").Text) {
-                $profile.processName = $window.FindName("ProcessNameEdit").Text
+            if ($ProfileSelectGUI.FindName("ProcessNameEdit").Text) {
+                $profile.processName = $ProfileSelectGUI.FindName("ProcessNameEdit").Text
             }
 
-            try { $profile.QDevider = [int]$window.FindName("QDeviderEdit").Text } catch { $profile.QDevider = 1 }
-            try { $profile.QDecimals = [int]$window.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
-            try { $profile.GainDecimals = [int]$window.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
-            try { $profile.FreqDecimals = [int]$window.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
+            try { $profile.QDevider = [int]$ProfileSelectGUI.FindName("QDeviderEdit").Text } catch { $profile.QDevider = 1 }
+            try { $profile.QDecimals = [int]$ProfileSelectGUI.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
+            try { $profile.GainDecimals = [int]$ProfileSelectGUI.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
+            try { $profile.FreqDecimals = [int]$ProfileSelectGUI.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
 
-            if ($window.FindName("DecimalSeparatorComma").IsChecked) {
+            if ($ProfileSelectGUI.FindName("DecimalSeparatorComma").IsChecked) {
                 $profile.DecimalSeparator = ","
             }
             else {
                 $profile.DecimalSeparator = "."
             }
 
-            if ($window.FindName("StartingPositionEdit").Text) {
-                $profile.StartingPositionHint = $window.FindName("StartingPositionEdit").Text
+            if ($ProfileSelectGUI.FindName("StartingPositionEdit").Text) {
+                $profile.StartingPositionHint = $ProfileSelectGUI.FindName("StartingPositionEdit").Text
             }
 
-            if ($window.FindName("DelaySelected").IsChecked) {
+            if ($ProfileSelectGUI.FindName("DelaySelected").IsChecked) {
                 $profile.HotkeyOrDelayPreference = "Delay"
-                try { $profile.TimeoutBeforePasteSecs = [int]$window.FindName("DelayEdit").Text } catch { $profile.TimeoutBeforePasteSecs = 6 }
+                try { $profile.TimeoutBeforePasteSecs = [int]$ProfileSelectGUI.FindName("DelayEdit").Text } catch { $profile.TimeoutBeforePasteSecs = 6 }
             }
             else {
                 $profile.HotkeyOrDelayPreference = "Hotkey"
-                if ($window.FindName("HotkeyOverride").IsChecked) {
-                    $actionIdx = $window.FindName("ActionHotkeyCombo").SelectedIndex
-                    $cancelIdx = $window.FindName("CancelHotkeyCombo").SelectedIndex
+                if ($ProfileSelectGUI.FindName("HotkeyOverride").IsChecked) {
+                    $actionIdx = $ProfileSelectGUI.FindName("ActionHotkeyCombo").SelectedIndex
+                    $cancelIdx = $ProfileSelectGUI.FindName("CancelHotkeyCombo").SelectedIndex
                     if (($actionIdx -ge 0) -and ($actionIdx -lt 12)) {
                         $profile.ProfilePerformActionHotkey = "F$($actionIdx + 1)"
                     }
@@ -295,7 +295,7 @@ Function Show-EditProfileGui {
                         $result.Action = "SavedAs"
                         # expose new filepath to caller so caller can refresh and select it
                         $result.FilePath = $sfd.FileName
-                        $window.Close()
+                        $ProfileSelectGUI.Close()
                     }
                     catch {
                         [System.Windows.MessageBox]::Show("Error saving profile: $($_.Exception.Message)", "Save As Error",
@@ -311,22 +311,22 @@ Function Show-EditProfileGui {
                     [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
             }
         })
-    $window.FindName("CancelBTN").Add_Click({
+    $ProfileSelectGUI.FindName("CancelBTN").Add_Click({
             $result.Action = "Cancel"
-            $window.Close()
+            $ProfileSelectGUI.Close()
             #  exit
         })
 
     # Change tracking - enable Save button when any field is modified
     $enableSaveButton = {
-        $window.FindName('SaveBTN').IsEnabled = $true
+        $ProfileSelectGUI.FindName('SaveBTN').IsEnabled = $true
     }
 
     # Track text changes in TextBox controls
     $textBoxes = @('FileNameEdit', 'DescriptionEdit', 'ProcessNameEdit', 'FreqDecimalsEdit',
         'QDecimalsEdit', 'GainDecimalsEdit', 'QDeviderEdit', 'StartingPositionEdit', 'DelayEdit')
     foreach ($name in $textBoxes) {
-        $ctrl = $window.FindName($name)
+        $ctrl = $ProfileSelectGUI.FindName($name)
         if ($null -ne $ctrl) {
             $ctrl.Add_TextChanged($enableSaveButton)
         }
@@ -336,7 +336,7 @@ Function Show-EditProfileGui {
     $radioButtons = @('DecimalSeparatorDot', 'DecimalSeparatorComma', 'HotkeySelected',
         'DelaySelected', 'HotkeyDefault', 'HotkeyOverride')
     foreach ($name in $radioButtons) {
-        $ctrl = $window.FindName($name)
+        $ctrl = $ProfileSelectGUI.FindName($name)
         if ($null -ne $ctrl) {
             $ctrl.Add_Checked($enableSaveButton)
         }
@@ -345,7 +345,7 @@ Function Show-EditProfileGui {
     # Track combo box changes
     $comboBoxes = @('ActionHotkeyCombo', 'CancelHotkeyCombo')
     foreach ($name in $comboBoxes) {
-        $ctrl = $window.FindName($name)
+        $ctrl = $ProfileSelectGUI.FindName($name)
         if ($null -ne $ctrl) {
             $ctrl.Add_SelectionChanged($enableSaveButton)
         }
@@ -354,32 +354,32 @@ Function Show-EditProfileGui {
     # Radio buttons share the same logical group. Attach the same Checked handler to both
     $updateHotkeyDelayVisibility = {
         param($sender, $args)
-        $selectedRadioButton = $window.FindName("HotkeySelected").IsChecked
+        $selectedRadioButton = $ProfileSelectGUI.FindName("HotkeySelected").IsChecked
         if ($selectedRadioButton) {
-            $window.FindName("HotkeyLabel").Visibility = "Visible"
-            $window.FindName("HotkeyDefault").Visibility = "Visible"
-            $window.FindName("HotkeyOverride").Visibility = "Visible"
-            $window.FindName("DelayLabel").Visibility = "Hidden"
-            $window.FindName("DelayEdit").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("HotkeyLabel").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("HotkeyDefault").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("HotkeyOverride").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("DelayLabel").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("DelayEdit").Visibility = "Hidden"
         }
         else {
-            $window.FindName("HotkeyLabel").Visibility = "Hidden"
-            $window.FindName("HotkeyDefault").Visibility = "Hidden"
-            $window.FindName("HotkeyOverride").Visibility = "Hidden"
-            $window.FindName("DelayLabel").Visibility = "Visible"
-            $window.FindName("DelayEdit").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("HotkeyLabel").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("HotkeyDefault").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("HotkeyOverride").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("DelayLabel").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("DelayEdit").Visibility = "Visible"
             # Also hide hotkey override controls when Delay is selected
             $hotkeyOverrideControls = @('ActionHotkeyCombo', 'CancelHotkeyCombo', 'ActionLabel', 'CancelLabel')
             foreach ($name in $hotkeyOverrideControls) {
-                $ctrl = $window.FindName($name)
+                $ctrl = $ProfileSelectGUI.FindName($name)
                 if ($null -ne $ctrl) { $ctrl.Visibility = 'Hidden' }
             }
         }
     }
 
     # Attach handler to both radio buttons in the group
-    $window.FindName("HotkeySelected").Add_Checked($updateHotkeyDelayVisibility)
-    $window.FindName("DelaySelected").Add_Checked($updateHotkeyDelayVisibility)
+    $ProfileSelectGUI.FindName("HotkeySelected").Add_Checked($updateHotkeyDelayVisibility)
+    $ProfileSelectGUI.FindName("DelaySelected").Add_Checked($updateHotkeyDelayVisibility)
 
     # Initialize visibility according to current selection
     & $updateHotkeyDelayVisibility $null $null
@@ -388,7 +388,7 @@ Function Show-EditProfileGui {
     $updateHotkeyOverrideVisibility = {
         param($rbSender, $rbArgs)
         $isOverride = $false
-        $hotkeyOverrideCtrl = $window.FindName("HotkeyOverride")
+        $hotkeyOverrideCtrl = $ProfileSelectGUI.FindName("HotkeyOverride")
         if ($hotkeyOverrideCtrl -ne $null) { $isOverride = $hotkeyOverrideCtrl.IsChecked }
 
         $controlsToToggle = @(
@@ -398,7 +398,7 @@ Function Show-EditProfileGui {
         )
 
         foreach ($name in $controlsToToggle) {
-            $ctrl = $window.FindName($name)
+            $ctrl = $ProfileSelectGUI.FindName($name)
             if ($null -ne $ctrl) {
                 $ctrl.Visibility = if ($isOverride) { 'Visible' } else { 'Hidden' }
             }
@@ -408,44 +408,44 @@ Function Show-EditProfileGui {
     # Update the Hotkey/Delay visibility handler to restore override controls when switching back to Hotkey
     $updateHotkeyDelayVisibility = {
         param($sender, $args)
-        $selectedRadioButton = $window.FindName("HotkeySelected").IsChecked
+        $selectedRadioButton = $ProfileSelectGUI.FindName("HotkeySelected").IsChecked
         if ($selectedRadioButton) {
-            $window.FindName("HotkeyLabel").Visibility = "Visible"
-            $window.FindName("HotkeyDefault").Visibility = "Visible"
-            $window.FindName("HotkeyOverride").Visibility = "Visible"
-            $window.FindName("DelayLabel").Visibility = "Hidden"
-            $window.FindName("DelayEdit").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("HotkeyLabel").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("HotkeyDefault").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("HotkeyOverride").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("DelayLabel").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("DelayEdit").Visibility = "Hidden"
             # Restore hotkey override controls visibility based on current selection
             & $updateHotkeyOverrideVisibility $null $null
         }
         else {
-            $window.FindName("HotkeyLabel").Visibility = "Hidden"
-            $window.FindName("HotkeyDefault").Visibility = "Hidden"
-            $window.FindName("HotkeyOverride").Visibility = "Hidden"
-            $window.FindName("DelayLabel").Visibility = "Visible"
-            $window.FindName("DelayEdit").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("HotkeyLabel").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("HotkeyDefault").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("HotkeyOverride").Visibility = "Hidden"
+            $ProfileSelectGUI.FindName("DelayLabel").Visibility = "Visible"
+            $ProfileSelectGUI.FindName("DelayEdit").Visibility = "Visible"
             # Also hide hotkey override controls when Delay is selected
             $hotkeyOverrideControls = @('ActionHotkeyCombo', 'CancelHotkeyCombo', 'ActionLabel', 'CancelLabel')
             foreach ($name in $hotkeyOverrideControls) {
-                $ctrl = $window.FindName($name)
+                $ctrl = $ProfileSelectGUI.FindName($name)
                 if ($null -ne $ctrl) { $ctrl.Visibility = 'Hidden' }
             }
         }
     }
 
     # Re-attach handlers after updating the function
-    $window.FindName("HotkeySelected").Add_Checked($updateHotkeyDelayVisibility)
-    $window.FindName("DelaySelected").Add_Checked($updateHotkeyDelayVisibility)
+    $ProfileSelectGUI.FindName("HotkeySelected").Add_Checked($updateHotkeyDelayVisibility)
+    $ProfileSelectGUI.FindName("DelaySelected").Add_Checked($updateHotkeyDelayVisibility)
 
     # Attach handler to both radio buttons (Default and Override)
-    if ($window.FindName('HotkeyDefault')) { $window.FindName('HotkeyDefault').Add_Checked($updateHotkeyOverrideVisibility) }
-    if ($window.FindName('HotkeyOverride')) { $window.FindName('HotkeyOverride').Add_Checked($updateHotkeyOverrideVisibility) }
+    if ($ProfileSelectGUI.FindName('HotkeyDefault')) { $ProfileSelectGUI.FindName('HotkeyDefault').Add_Checked($updateHotkeyOverrideVisibility) }
+    if ($ProfileSelectGUI.FindName('HotkeyOverride')) { $ProfileSelectGUI.FindName('HotkeyOverride').Add_Checked($updateHotkeyOverrideVisibility) }
 
     # Initialize hotkey override visibility
     & $updateHotkeyOverrideVisibility $null $null
 
     # Prepare an ObservableCollection as the DataGrid's ItemsSource so editing is supported
-    $keystrokesDG = $window.FindName('KeystrokesList')
+    $keystrokesDG = $ProfileSelectGUI.FindName('KeystrokesList')
     $keystrokeCollection = $null
     if ($null -ne $keystrokesDG) {
         if ($keystrokesDG.ItemsSource -eq $null) {
@@ -553,7 +553,7 @@ Function Show-EditProfileGui {
     }
 
     # Add/Remove action row handlers for KeystrokesList DataGrid (use ItemsSource collection)
-    $window.FindName('AddActionBTN').Add_Click({
+    $ProfileSelectGUI.FindName('AddActionBTN').Add_Click({
             if ($null -eq $keystrokeCollection) { return }
             $new = [pscustomobject]@{
                 Action  = 'keys'
@@ -563,8 +563,8 @@ Function Show-EditProfileGui {
             $keystrokeCollection.Add($new) | Out-Null
             try { $keystrokesDG.ScrollIntoView($new) } catch { }
             $keystrokesDG.SelectedItem = $new
-            $window.FindName('RemoveActionBTN').IsEnabled = $true
-            $window.FindName('SaveBTN').IsEnabled = $true
+            $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = $true
+            $ProfileSelectGUI.FindName('SaveBTN').IsEnabled = $true
 
             # Put the new row into edit mode immediately
             try {
@@ -579,17 +579,17 @@ Function Show-EditProfileGui {
             }
         })
 
-    $window.FindName('RemoveActionBTN').Add_Click({
+    $ProfileSelectGUI.FindName('RemoveActionBTN').Add_Click({
             if ($null -eq $keystrokeCollection) { return }
             $sel = $keystrokesDG.SelectedItem
             if ($null -ne $sel) {
                 $keystrokeCollection.Remove($sel) | Out-Null
-                $window.FindName('SaveBTN').IsEnabled = $true
+                $ProfileSelectGUI.FindName('SaveBTN').IsEnabled = $true
             }
         })
 
     # Move selected action up by 1 position
-    $window.FindName('MoveActionUpBTN').Add_Click({
+    $ProfileSelectGUI.FindName('MoveActionUpBTN').Add_Click({
             if ($null -eq $keystrokeCollection) { return }
             $sel = $keystrokesDG.SelectedItem
             if ($null -eq $sel) { return }
@@ -597,12 +597,12 @@ Function Show-EditProfileGui {
             if ($idx -gt 0) {
                 $keystrokeCollection.Move($idx, $idx - 1)
                 $keystrokesDG.SelectedItem = $sel
-                $window.FindName('SaveBTN').IsEnabled = $true
+                $ProfileSelectGUI.FindName('SaveBTN').IsEnabled = $true
             }
         })
 
     # Move selected action down by 1 position
-    $window.FindName('MoveActionDownBTN').Add_Click({
+    $ProfileSelectGUI.FindName('MoveActionDownBTN').Add_Click({
             if ($null -eq $keystrokeCollection) { return }
             $sel = $keystrokesDG.SelectedItem
             if ($null -eq $sel) { return }
@@ -610,12 +610,12 @@ Function Show-EditProfileGui {
             if ($idx -lt ($keystrokeCollection.Count - 1)) {
                 $keystrokeCollection.Move($idx, $idx + 1)
                 $keystrokesDG.SelectedItem = $sel
-                $window.FindName('SaveBTN').IsEnabled = $true
+                $ProfileSelectGUI.FindName('SaveBTN').IsEnabled = $true
             }
         })
 
     # Move selected action to the top of the list
-    $window.FindName('MoveActionToTopBTN').Add_Click({
+    $ProfileSelectGUI.FindName('MoveActionToTopBTN').Add_Click({
             if ($null -eq $keystrokeCollection) { return }
             $sel = $keystrokesDG.SelectedItem
             if ($null -eq $sel) { return }
@@ -623,12 +623,12 @@ Function Show-EditProfileGui {
             if ($idx -gt 0) {
                 $keystrokeCollection.Move($idx, 0)
                 $keystrokesDG.SelectedItem = $sel
-                $window.FindName('SaveBTN').IsEnabled = $true
+                $ProfileSelectGUI.FindName('SaveBTN').IsEnabled = $true
             }
         })
 
     # Move selected action to the end of the list
-    $window.FindName('MoveActionToEndBTN').Add_Click({
+    $ProfileSelectGUI.FindName('MoveActionToEndBTN').Add_Click({
             if ($null -eq $keystrokeCollection) { return }
             $sel = $keystrokesDG.SelectedItem
             if ($null -eq $sel) { return }
@@ -636,21 +636,21 @@ Function Show-EditProfileGui {
             if ($idx -lt ($keystrokeCollection.Count - 1)) {
                 $keystrokeCollection.Move($idx, $keystrokeCollection.Count - 1)
                 $keystrokesDG.SelectedItem = $sel
-                $window.FindName('SaveBTN').IsEnabled = $true
+                $ProfileSelectGUI.FindName('SaveBTN').IsEnabled = $true
             }
         })
 
     # Enable/disable Remove button depending on selection
     if ($null -ne $keystrokesDG) {
         $keystrokesDG.Add_SelectionChanged({
-                $window.FindName('RemoveActionBTN').IsEnabled = ($keystrokesDG.SelectedItem -ne $null)
+                $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($keystrokesDG.SelectedItem -ne $null)
             })
         # initialize state
-        $window.FindName('RemoveActionBTN').IsEnabled = ($keystrokesDG.SelectedItem -ne $null)
+        $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($keystrokesDG.SelectedItem -ne $null)
     }
 
     # Show the GUI
-    $window.ShowDialog() | Out-Null
+    $ProfileSelectGUI.ShowDialog() | Out-Null
     return $result
 }
 
@@ -677,14 +677,14 @@ Function Show-SelectProfileGui {
     # Parse the XAML to create the GUI
     Add-Type -AssemblyName PresentationFramework
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
-    $window = [Windows.Markup.XamlReader]::Load($reader)
+    $ProfileEditGUI = [Windows.Markup.XamlReader]::Load($reader)
 
     # Set hotkey hint label
-    $hotkeyHintLabel = $window.FindName("HotkeyHint")
+    $hotkeyHintLabel = $ProfileEditGUI.FindName("HotkeyHint")
     $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
 
     # Populate the profiles list in the GUI
-    $profileListBox = $window.FindName("ProfileList")
+    $profileListBox = $ProfileEditGUI.FindName("ProfileList")
     $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
     foreach ($profileFileName in $DSPProfilesList) {
         $profileListBox.Items.Add($profileFileName.baseName) | Out-Null
@@ -696,11 +696,11 @@ Function Show-SelectProfileGui {
     $BGProcessCheck.Interval = [TimeSpan]::FromMilliseconds(300)
     $BGProcessCheck.Add_Tick({
             if ($null -eq $result.ProcessName) {
-                $window.FindName("ProcessStatus").foreground = "gray"
+                $ProfileEditGUI.FindName("ProcessStatus").foreground = "gray"
             }
             elseif ($result.ProcessName -eq "Generic") {
-                $window.FindName("ProcessStatus").foreground = "Blue"
-                $window.FindName("ProcessStatus").tooltip = "Generic profile selected, no process check performed. Bring the DSP software to the foreground manually."
+                $ProfileEditGUI.FindName("ProcessStatus").foreground = "Blue"
+                $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Generic profile selected, no process check performed. Bring the DSP software to the foreground manually."
             }
             else {
                 # find DSP Software processes with window
@@ -709,16 +709,16 @@ Function Show-SelectProfileGui {
                 }
 
                 if ($null -eq $DSPProcess) {
-                    $window.FindName("ProcessStatus").foreground = "Red"
-                    $window.FindName("ProcessStatus").tooltip = "No matching processes found for $($result.ProcessName)"
+                    $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
+                    $ProfileEditGUI.FindName("ProcessStatus").tooltip = "No matching processes found for $($result.ProcessName)"
                 }
                 elseif ($DSPProcess.Count -gt 1) {
-                    $window.FindName("ProcessStatus").foreground = "Red"
-                    $window.FindName("ProcessStatus").tooltip = "Expected 1 process, found: $($DSPProcess.Count)"
+                    $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
+                    $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Expected 1 process, found: $($DSPProcess.Count)"
                 }
                 else {
-                    $window.FindName("ProcessStatus").foreground = "Lime"
-                    $window.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
+                    $ProfileEditGUI.FindName("ProcessStatus").foreground = "Lime"
+                    $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
                 }
             }
 
@@ -728,20 +728,20 @@ Function Show-SelectProfileGui {
             }
 
             if ($null -eq $REWProcess) {
-                $window.FindName("REWStatus").foreground = "Red"
-                $window.FindName("REWStatus").tooltip = "REW is not running"
+                $ProfileEditGUI.FindName("REWStatus").foreground = "Red"
+                $ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running"
             }
             else {
                 $rewWMIprocess = Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'"
                 if ($null -ne $rewWMIprocess) {
                     $checkpREWargs = $rewWMIprocess | Select-Object CommandLine
                     if ($checkpREWargs.CommandLine -notmatch "-api") {
-                        $window.FindName("REWStatus").foreground = "Orange"
-                        $window.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is not enabled."
+                        $ProfileEditGUI.FindName("REWStatus").foreground = "Orange"
+                        $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is not enabled."
                     }
                     else {
-                        $window.FindName("REWStatus").foreground = "Lime"
-                        $window.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is enabled."
+                        $ProfileEditGUI.FindName("REWStatus").foreground = "Lime"
+                        $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is enabled."
                     }
                 }
             }
@@ -751,18 +751,62 @@ Function Show-SelectProfileGui {
     $BGProcessCheck.Start()
     #Endregion
     # Assign event handlers
-    $window.FindName("GitHub").Add_Click({
+    $ProfileEditGUI.FindName("GitHub").Add_Click({
             start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant"
         })
-    $window.FindName("Donate").Add_Click({
+    $ProfileEditGUI.FindName("Donate").Add_Click({
             start-process "https://paypal.me/IvanBakhmutovDonate"
         })
-    $window.FindName("CloseBTN").Add_Click({
-            $window.Close()
+    $ProfileEditGUI.FindName("CloseBTN").Add_Click({
+            $ProfileEditGUI.Close()
             #return
         })
-    $window.FindName("EditBTN").Add_Click({
-            $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem
+    $ProfileEditGUI.FindName("NewProfileBTN").Add_Click({
+        # Prompt user to save a new profile file
+        $saveFileDialog = New-Object System.Windows.Forms.SaveFileDialog
+        $saveFileDialog.InitialDirectory = $DSPProfilesDir
+        $saveFileDialog.Filter = "JSON files (*.json)|*.json"
+        $saveFileDialog.Title = "Save New Profile"
+        $saveFileDialog.FileName = "NewProfile.json"
+
+        if ($saveFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+            $newProfilePath = $saveFileDialog.FileName
+
+            # Populate the new file with default values
+            $defaultProfile = [PSCustomObject]@{
+                version                 = "1.0"
+                Description             = "New Profile"
+                processName             = "<DSP Software Name>"
+                QDevider                = 1
+                QDecimals               = 1
+                GainDecimals            = 1
+                FreqDecimals            = 0
+                DecimalSeparator        = "."
+                TimeoutBeforePasteSecs  = 6
+                StartingPositionHint    = "Please select 1 band Freq box and hit hotkey"
+                HotkeyOrDelayPreference = "Hotkey"
+                KeystrokeSequence       = @()
+            }
+            $defaultProfile | ConvertTo-Json -Depth 10 | Set-Content -Path $newProfilePath -Encoding UTF8
+
+            # Open the new profile in the editing GUI
+            $editResult = Show-EditProfileGui -FilePath $newProfilePath
+
+            # If the profile was saved, refresh the list and select the new item
+            if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
+                $ProfileEditGUI.FindName('ProfileList').Items.Clear()
+                $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+                foreach ($profileFileName in $DSPProfilesList) {
+                    $ProfileEditGUI.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null
+                }
+
+                $savedBase = (Get-Item -LiteralPath $newProfilePath).BaseName
+                $ProfileEditGUI.FindName('ProfileList').SelectedItem = $savedBase
+            }
+        }
+    })
+    $ProfileEditGUI.FindName("EditBTN").Add_Click({
+            $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             if ($null -ne $selectedProfileFileName) {
                 $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
             }
@@ -770,21 +814,21 @@ Function Show-SelectProfileGui {
             # If the profile was saved (overwritten or saved as new), refresh the list and select the saved item
             if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                 # reload available profiles
-                $window.FindName('ProfileList').Items.Clear()
+                $ProfileEditGUI.FindName('ProfileList').Items.Clear()
                 $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-                foreach ($profileFileName in $DSPProfilesList) { $window.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null }
+                foreach ($profileFileName in $DSPProfilesList) { $ProfileEditGUI.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null }
 
                 # determine the base name of saved file and select it
                 try {
                     $savedPath = $editResult.FilePath
                     if ($null -eq $savedPath) { $savedPath = $result.SelectedProfile }
                     $savedBase = (Get-Item -LiteralPath $savedPath).BaseName
-                    $window.FindName('ProfileList').SelectedItem = $savedBase
+                    $ProfileEditGUI.FindName('ProfileList').SelectedItem = $savedBase
 
                     # update profile preview and hotkey hint using the same logic as SelectionChanged
                     $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($savedBase).json"
                     $profileJson = Read-JSONFile -FilePath $profilePath -ErrorAction Stop
-                    $window.FindName('ProfileText').Text = ($profileJson | ConvertTo-Json -Depth 10)
+                    $ProfileEditGUI.FindName('ProfileText').Text = ($profileJson | ConvertTo-Json -Depth 10)
 
                     # Update effective hotkeys and hint label
                     if (($profileJson.ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and ($null -ne $profileJson.ProfilePerformActionHotkey)) {
@@ -799,25 +843,25 @@ Function Show-SelectProfileGui {
                     if (($GlobalPerformActionHotkey -ne $result.EffectivePerformActionHotkey) -or ($GlobalCancelActionHotkey -ne $result.EffectiveCancelActionHotkey)) { $hotkeyHintLabel.Content += " (override)" }
 
                     # enable buttons
-                    $window.FindName('OKBTN').IsEnabled = $true
-                    $window.FindName('EditBTN').IsEnabled = $true
+                    $ProfileEditGUI.FindName('OKBTN').IsEnabled = $true
+                    $ProfileEditGUI.FindName('EditBTN').IsEnabled = $true
                 }
                 catch {
                     # ignore selection refresh errors
                 }
             }
         })
-    $window.FindName("OKBTN").Add_Click({
-            $selectedProfileFileName = $window.FindName("ProfileList").SelectedItem
+    $ProfileEditGUI.FindName("OKBTN").Add_Click({
+            $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             if ($null -ne $selectedProfileFileName) {
                 $result.Action = "Open"
                 $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
-                $window.Close()
+                $ProfileEditGUI.Close()
             }
         })
 
-    $window.FindName("ProfileList").Add_SelectionChanged({
-            $selectedItem = $window.FindName("ProfileList").SelectedItem
+    $ProfileEditGUI.FindName("ProfileList").Add_SelectionChanged({
+            $selectedItem = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             if ($null -ne $selectedItem) {
                 $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedItem).json"
                 try {
@@ -826,10 +870,10 @@ Function Show-SelectProfileGui {
 
                     # Show nicely formatted JSON in the text box
                     $profileContent = $profileJson | ConvertTo-Json -Depth 10
-                    $window.FindName("ProfileText").Text = $profileContent
+                    $ProfileEditGUI.FindName("ProfileText").Text = $profileContent
                     $result.processName = $profileJson.processName
-                    $window.FindName("OKBTN").IsEnabled = $true
-                    $window.FindName("EditBTN").IsEnabled = $true
+                    $ProfileEditGUI.FindName("OKBTN").IsEnabled = $true
+                    $ProfileEditGUI.FindName("EditBTN").IsEnabled = $true
 
                     # Use $profileJson directly for hotkey decisions
                     if (($profileJson.ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and
@@ -861,34 +905,33 @@ Function Show-SelectProfileGui {
                     }
                 }
                 catch {
-                    $window.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file."
-                    $window.FindName("OKBTN").IsEnabled = $false
-                    $window.FindName("EditBTN").IsEnabled = $false
+                    $ProfileEditGUI.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file."
+                    $ProfileEditGUI.FindName("OKBTN").IsEnabled = $false
+                    $ProfileEditGUI.FindName("EditBTN").IsEnabled = $false
                 }
             }
             else {
-                $window.FindName("ProfileText").Text = "Please select a profile"
-                $window.FindName("OKBTN").IsEnabled = $false
-                $window.FindName("EditBTN").IsEnabled = $false
+                $ProfileEditGUI.FindName("ProfileText").Text = "Please select a profile"
+                $ProfileEditGUI.FindName("OKBTN").IsEnabled = $false
+                $ProfileEditGUI.FindName("EditBTN").IsEnabled = $false
             }
         })
     # List doubleclick
-    $window.FindName("ProfileList").Add_mouseDoubleClick({
-            $window.FindName("ProfileList").SelectedItem = $window.FindName("ProfileList").SelectedItem
+    $ProfileEditGUI.FindName("ProfileList").Add_mouseDoubleClick({
+            $ProfileEditGUI.FindName("ProfileList").SelectedItem = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             Start-Sleep -Milliseconds 100
-            if ($window.FindName("OKBTN").IsEnabled -eq $true) {
+            if ($ProfileEditGUI.FindName("OKBTN").IsEnabled -eq $true) {
                 $RoutedEventArgs = New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)
-                $window.FindName("OKBTN").RaiseEvent($RoutedEventArgs)
+                $ProfileEditGUI.FindName("OKBTN").RaiseEvent($RoutedEventArgs)
             }
         })
 
-    $window.Add_Closed({
+    $ProfileEditGUI.Add_Closed({
             return
         })
 
     # Show the GUI
-    $window.ShowDialog() | Out-Null
-    $BGProcessCheck.Stop()
+    $ProfileEditGUI.ShowDialog() | Out-Null
     return $result
 }
 

@@ -22,7 +22,7 @@
         </GroupBox>
 
         <Button x:Name="OKBTN" Content="OK" Width="80" IsEnabled="False" IsDefault="True" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,280,10" Grid.Column="1" Grid.Row="1"/>
-        <Button x:Name="NewProfileBTN" Content="*New Profile" Width="80" IsEnabled="False" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,190,10" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="NewProfileBTN" Content="New Profile" Width="80" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,190,10" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="EditBTN" Content="Edit" Width="80" IsEnabled="False" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,10" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="CloseBTN" Content="Close" Width="80" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="GitHub" Content="GitHub project page" Width="130"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1"/>
