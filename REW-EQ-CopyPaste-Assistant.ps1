@@ -257,7 +257,7 @@ do {
             }
 
             # Show transposed table of pasted bands
-            Show-TransposedTable -bands $bands | Format-Table -AutoSize
+            # Show-TransposedTable -bands $bands | Format-Table -AutoSize
             Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
             Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste finished" -Message "Waiting for new data in clipboard"
         }

@@ -761,6 +761,7 @@ Function Show-SelectProfileGui {
             start-process "https://paypal.me/IvanBakhmutovDonate"
         })
     $ProfileEditGUI.FindName("CloseBTN").Add_Click({
+            $BGProcessCheck.Stop()
             $ProfileEditGUI.Close()
             #return
         })
@@ -859,6 +860,7 @@ Function Show-SelectProfileGui {
             if ($null -ne $selectedProfileFileName) {
                 $result.Action = "Open"
                 $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
+                $BGProcessCheck.Stop()
                 $ProfileEditGUI.Close()
             }
         })

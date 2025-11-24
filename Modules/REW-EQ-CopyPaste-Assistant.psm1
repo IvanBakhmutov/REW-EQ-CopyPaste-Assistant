@@ -283,7 +283,7 @@ Show-TransposedTable -Bands $bands | Format-Table -AutoSize
    [array] - An array of transposed objects for display.
 
 #>
-function Show-TransposedTable {
+<#function Show-TransposedTable {
     param(
         [Parameter(Mandatory = $true)][array]$Bands
     )
@@ -305,7 +305,7 @@ function Show-TransposedTable {
         $transposed += [pscustomobject]$row
     }
     return $transposed
-}
+}#>
 
 # Show a desktop notification with specified title and message.
 <#
