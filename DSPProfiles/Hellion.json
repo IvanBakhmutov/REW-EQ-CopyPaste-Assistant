@@ -1,18 +1,18 @@
 ﻿{
-    "version":  "1.0",
-    "Description":  "Hellion DSP software (model list to be verified)",
-    "processName":  "HAM*",
-    "QDivider":  1,
-    "QDecimals":  1,
-    "GainDecimals":  1,
-    "FreqDecimals":  0,
-    "DecimalSeparator":  ".",
-    "StartingPositionHint":  "Please select 1 band Freq box and hit hotkey",
-    "HotkeyOrDelayPreference":  "Hotkey",
-    "KeystrokeSequence":  [
-                              {
-                                  "keys":  "^aFREQ{ENTER}^aQVALUE{ENTER}^aGAIN{ENTER}",
-                                  "delay_ms":  200
-                              }
-                          ]
+    "version": "1.0",
+    "Description": "Hellion DSP software (model list to be verified)",
+    "processName": "HAM*",
+    "QDivider": 1,
+    "QDecimals": 1,
+    "GainDecimals": 1,
+    "FreqDecimals": 0,
+    "DecimalSeparator": ".",
+    "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "KeystrokeSequence": [
+        {
+            "keys": "^aFREQ{ENTER}^aQVALUE{ENTER}^aGAIN{ENTER}",
+            "delay_ms": 200
+        }
+    ]
 }

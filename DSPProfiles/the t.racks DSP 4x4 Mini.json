@@ -1,18 +1,18 @@
 ﻿{
-    "version":  "1.0",
-    "Description":  "the t.racks DSP 4x4 Mini Editor",
-    "processName":  "the t.racks DSP 4x4 Mini Editor V1.05",
-    "QDivider":  1,
-    "QDecimals":  2,
-    "GainDecimals":  1,
-    "FreqDecimals":  0,
-    "DecimalSeparator":  ".",
-    "StartingPositionHint":  "Please select 1 band Freq box and hit hotkey",
-    "HotkeyOrDelayPreference":  "Hotkey",
-    "KeystrokeSequence":  [
-                              {
-                                  "keys":  "^aFREQ{TAB}QVALUE{TAB}GAIN{TAB}{TAB}{TAB}",
-                                  "delay_ms":  500
-                              }
-                          ]
+    "version": "1.0",
+    "Description": "the t.racks DSP 4x4 Mini Editor",
+    "processName": "the t.racks DSP 4x4 Mini Editor V1.05",
+    "QDivider": 1,
+    "QDecimals": 2,
+    "GainDecimals": 1,
+    "FreqDecimals": 0,
+    "DecimalSeparator": ".",
+    "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "KeystrokeSequence": [
+        {
+            "keys": "^aFREQ{TAB}QVALUE{TAB}GAIN{TAB}{TAB}{TAB}",
+            "delay_ms": 500
+        }
+    ]
 }

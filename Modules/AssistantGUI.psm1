@@ -201,7 +201,7 @@ Function Show-EditProfileGui {
 
             # Save to file
             try {
-                $jsonContent = $profile | ConvertTo-Json -Depth 10
+                $jsonContent = $profile | ConvertTo-Json -Depth 10 -Compress
                 Set-Content -Path $FilePath -Value $jsonContent -Encoding UTF8 -Force
                 $result.Action = "Saved"
                 $ProfileSelectGUI.Close()
@@ -298,7 +298,7 @@ Function Show-EditProfileGui {
                 $dlgRes = $sfd.ShowDialog()
                 if ($dlgRes -eq $true) {
                     try {
-                        $jsonContent = $profile | ConvertTo-Json -Depth 10
+                        $jsonContent = $profile | ConvertTo-Json -Depth 10 -Compress
                         Set-Content -Path $sfd.FileName -Value $jsonContent -Encoding UTF8 -Force
                         $result.Action = "SavedAs"
                         # expose new filepath to caller so caller can refresh and select it
@@ -871,7 +871,7 @@ Function Show-SelectProfileGui {
                 HotkeyOrDelayPreference = "Hotkey"
                 KeystrokeSequence       = @()
             }
-            $defaultProfile | ConvertTo-Json -Depth 10 | Set-Content -Path $newProfilePath -Encoding UTF8
+            $defaultProfile | ConvertTo-Json -Depth 10 -Compress | Set-Content -Path $newProfilePath -Encoding UTF8
 
             # Open the new profile in the editing GUI
             $editResult = Show-EditProfileGui -FilePath $newProfilePath

@@ -1,30 +1,30 @@
 ﻿{
-    "version":  "1.0",
-    "Description":  "ZAPCO (DSP-Z8 IV AT / ADSP-Z8 IV-6AT / ADSP-Z12 IV-10A / ADSP-Z16 IV-12A)",
-    "processName":  "ZAPCO*",
-    "QDivider":  1,
-    "QDecimals":  2,
-    "GainDecimals":  1,
-    "FreqDecimals":  0,
-    "DecimalSeparator":  ".",
-    "StartingPositionHint":  "Please select EQ: edit box and hit hotkey",
-    "HotkeyOrDelayPreference":  "Hotkey",
-    "KeystrokeSequence":  [
-                              {
-                                  "keys":  "^aBANDNUMBER{ENTER}{RIGHT}",
-                                  "delay_ms":  50
-                              },
-                              {
-                                  "keys":  "^aFREQ{ENTER}{RIGHT}",
-                                  "delay_ms":  50
-                              },
-                              {
-                                  "keys":  "^aGAIN{ENTER}{RIGHT}",
-                                  "delay_ms":  50
-                              },
-                              {
-                                  "keys":  "^aQVALUE{ENTER}{LEFT}{LEFT}{LEFT}",
-                                  "delay_ms":  50
-                              }
-                          ]
+    "version": "1.0",
+    "Description": "ZAPCO (DSP-Z8 IV AT / ADSP-Z8 IV-6AT / ADSP-Z12 IV-10A / ADSP-Z16 IV-12A)",
+    "processName": "ZAPCO*",
+    "QDivider": 1,
+    "QDecimals": 2,
+    "GainDecimals": 1,
+    "FreqDecimals": 0,
+    "DecimalSeparator": ".",
+    "StartingPositionHint": "Please select EQ: edit box and hit hotkey",
+    "HotkeyOrDelayPreference": "Hotkey",
+    "KeystrokeSequence": [
+        {
+            "keys": "^aBANDNUMBER{ENTER}{RIGHT}",
+            "delay_ms": 50
+        },
+        {
+            "keys": "^aFREQ{ENTER}{RIGHT}",
+            "delay_ms": 50
+        },
+        {
+            "keys": "^aGAIN{ENTER}{RIGHT}",
+            "delay_ms": 50
+        },
+        {
+            "keys": "^aQVALUE{ENTER}{LEFT}{LEFT}{LEFT}",
+            "delay_ms": 50
+        }
+    ]
 }
