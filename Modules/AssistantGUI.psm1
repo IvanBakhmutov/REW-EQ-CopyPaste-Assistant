@@ -1,6 +1,7 @@
 Function Show-EditProfileGui {
     param (
-        [Parameter(Mandatory = $true)][string]$FilePath
+        [Parameter(Mandatory = $true)][string]$FilePath,
+        [Parameter(Mandatory = $true)][string]$ResourcesDir
     )
 
     $result = [PSCustomObject]@{
@@ -8,7 +9,7 @@ Function Show-EditProfileGui {
         Action   = "none"
     }
 
-    $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
+    #$ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
     [xml]$xaml = (Get-Content -Path "$ResourcesDir\ProfileEditorGUI.xml" -Raw -Encoding UTF8)
     $profilesFolderPath = Split-Path -Path $FilePath -Parent
 
@@ -658,7 +659,9 @@ Function Show-SelectProfileGui {
     param (
         [Parameter(Mandatory = $true)][string]$ResourcesDir,
         [Parameter(Mandatory = $true)][string]$GlobalPerformActionHotkey,
-        [Parameter(Mandatory = $true)][string]$GlobalCancelActionHotkey
+        [Parameter(Mandatory = $true)][string]$GlobalCancelActionHotkey,
+        [Parameter(Mandatory = $true)][string]$DSPProfilesDir,
+        [Parameter(Mandatory = $true)][string]$ModulesDir
     )
 
     $result = [PSCustomObject]@{
@@ -810,7 +813,7 @@ Function Show-SelectProfileGui {
             if ($null -ne $selectedProfileFileName) {
                 $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
             }
-            $editResult = Show-EditProfileGui -FilePath $result.SelectedProfile
+            $editResult = Show-EditProfileGui -FilePath $result.SelectedProfile -ResourcesDir $ResourcesDir
             # If the profile was saved (overwritten or saved as new), refresh the list and select the saved item
             if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                 # reload available profiles

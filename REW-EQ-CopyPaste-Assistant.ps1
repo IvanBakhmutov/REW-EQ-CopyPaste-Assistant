@@ -31,7 +31,9 @@ $selectedProfile = $null
 $ProfileSelectionResult = Show-SelectProfileGui `
                                 -ResourcesDir $ResourcesDir `
                                 -GlobalPerformActionHotkey $GlobalConfig.GlobalPerformActionHotkey `
-                                -GlobalCancelActionHotkey $GlobalConfig.GlobalCancelActionHotkey
+                                -GlobalCancelActionHotkey $GlobalConfig.GlobalCancelActionHotkey `
+                                -DSPProfilesDir $DSPProfilesDir `
+                                -ModulesDir $ModulesDir
 
 
 if ($ProfileSelectionResult.Action -eq "Cancel" -or $null -eq $ProfileSelectionResult.SelectedProfile) {
