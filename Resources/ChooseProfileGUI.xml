@@ -7,7 +7,6 @@
             <RowDefinition/>
             <RowDefinition Height="37"/>
             <RowDefinition Height="25"/>
-            <!-- Added for the status bar -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="159*"/>
@@ -21,13 +20,13 @@
             <TextBox x:Name="ProfileText" TextWrapping="Wrap" Text="Please select a profile" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
         </GroupBox>
 
-        <Button x:Name="OKBTN" Content="OK" Width="80" IsEnabled="False" IsDefault="True" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,280,10" Grid.Column="1" Grid.Row="1"/>
-        <Button x:Name="NewProfileBTN" Content="New Profile" Width="80" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,190,10" Grid.Column="1" Grid.Row="1"/>
-        <Button x:Name="EditBTN" Content="Edit" Width="80" IsEnabled="False" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,10" Grid.Column="1" Grid.Row="1"/>
-        <Button x:Name="CloseBTN" Content="Close" Width="80" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Grid.Column="1" Grid.Row="1"/>
-        <Button x:Name="GitHub" Content="GitHub project page" Width="130"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1"/>
+        <Button x:Name="OKBTN" ToolTipService.InitialShowDelay="200" ToolTip="Start with selected profile" Content="OK" Width="80" IsEnabled="False" IsDefault="True" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,280,10" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="NewProfileBTN"  ToolTipService.InitialShowDelay="200" ToolTip="Create a new profile" Content="New Profile" Width="80" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,190,10" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="EditBTN"  ToolTipService.InitialShowDelay="200" ToolTip="Edit or save a copy of selected profile" Content="Edit" Width="80" IsEnabled="False" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,10" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="CloseBTN"  ToolTipService.InitialShowDelay="200" ToolTip="Close the tool" Content="Close" Width="80" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="GitHub"  ToolTipService.InitialShowDelay="200" ToolTip="Open GitHub project page in web browser" Content="GitHub project page" Width="130"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1"/>
         <Label x:Name="HotkeyHint" Content="HotkeyHint" HorizontalAlignment="Left" Margin="175,0,0,10" VerticalAlignment="Bottom" Height="26" Width="241" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Button x:Name="Donate"  FontFamily="Segoe UI Emoji" ToolTipService.InitialShowDelay="200" Content="❤️" Width="29"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="145,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1" ToolTip="Support the project (PayPal)"/>
+        <Button x:Name="Donate"  FontFamily="Segoe UI Emoji" ToolTipService.InitialShowDelay="200" Content="😀" Width="29"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="145,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1" ToolTip="Support the project (PayPal)"/>
         <!-- Status Bar -->
         <StatusBar Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0">
             <StatusBarItem  BorderThickness="0"  BorderBrush="#FFA8A8A8">
@@ -46,7 +45,7 @@
                 <TextBlock x:Name ="Hint" Text="Hint: Select a profile to begin" />
             </StatusBarItem>
             <StatusBarItem  BorderThickness="0" BorderBrush="#FFA8A8A8" HorizontalAlignment="Right" >
-                <TextBlock Text="Version: 2025-11-23" />
+                <TextBlock Text="Version: 2025-11-25" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

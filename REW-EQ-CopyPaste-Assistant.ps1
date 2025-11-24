@@ -199,13 +199,13 @@ do {
              }
             if($null -ne $hasMouseAction) {
                 Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
-                Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" `
-                     -Message "Make sure the DSP window is visible and not covered by other windows."
+                #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" `
+                #     -Message "Make sure the DSP window is visible and not covered by other windows."
                 $MouseX, $MouseY = Get-MousePosition
                 Write-Host "Current mouse position: X=$MouseX, Y=$MouseY" -foregroundColor blue
             } else {
                 Write-Host "No mouse actions detected in profile. Proceeding with keyboard input only." -ForegroundColor Yellow
-                Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started." -Timeout 1000
+                #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started." -Timeout 1000
             }
 
             # Start pasting EQ bands with configured keystrokes and mouse actions
