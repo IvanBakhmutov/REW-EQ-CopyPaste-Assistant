@@ -672,6 +672,7 @@ Function Show-SelectProfileGui {
         ProcessName                  = $null
         ProcessStatus                = $null
         REWStatus                    = $null
+        AdminRightsRequired         =  "false"
     }
 
     # Load the XAML file
@@ -700,10 +701,14 @@ Function Show-SelectProfileGui {
     $BGProcessCheck.Add_Tick({
             if ($null -eq $result.ProcessName) {
                 $ProfileEditGUI.FindName("ProcessStatus").foreground = "gray"
+                $result.ProcessName = "n/a"
+                $result.ProcessStatus = "Not Running"
             }
             elseif ($result.ProcessName -eq "Generic") {
                 $ProfileEditGUI.FindName("ProcessStatus").foreground = "Blue"
                 $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Generic profile selected, no process check performed. Bring the DSP software to the foreground manually."
+                $result.ProcessName = "Generic"
+                $result.ProcessStatus = "Running"
             }
             else {
                 # find DSP Software processes with window
@@ -714,14 +719,34 @@ Function Show-SelectProfileGui {
                 if ($null -eq $DSPProcess) {
                     $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
                     $ProfileEditGUI.FindName("ProcessStatus").tooltip = "No matching processes found for $($result.ProcessName)"
+                    $result.ProcessName = "n/a"
+                    $result.ProcessStatus = "Not Running"
                 }
                 elseif ($DSPProcess.Count -gt 1) {
                     $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
                     $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Expected 1 process, found: $($DSPProcess.Count)"
+                    $result.ProcessName = "n/a"
+                    $result.ProcessStatus = "Multiple Instances Found"
                 }
                 else {
-                    $ProfileEditGUI.FindName("ProcessStatus").foreground = "Lime"
-                    $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
+                    if($result.AdminRightsRequired -eq "true"){ 
+                        if(Get-RunningAsAdminFlag) {
+                            $ProfileEditGUI.FindName("ProcessStatus").foreground = "Lime"
+                            $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
+                            $result.ProcessName = $DSPProcess.ProcessName
+                            $result.ProcessStatus = "Running"
+                        } else {
+                            $ProfileEditGUI.FindName("ProcessStatus").foreground = "Purple"
+                            $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Admin rights are required to interact with $($DSPProcess.ProcessName). Please restart the Assistant with elevated privileges."
+                            $result.ProcessName = $DSPProcess.ProcessName
+                            $result.ProcessStatus = "Admin Rights Required"
+                        }
+                    } else {
+                        $ProfileEditGUI.FindName("ProcessStatus").foreground = "Lime"
+                        $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
+                        $result.ProcessName = $DSPProcess.ProcessName
+                        $result.ProcessStatus = "Running"
+                    }
                 }
             }
 
@@ -814,7 +839,9 @@ Function Show-SelectProfileGui {
             if ($null -ne $selectedProfileFileName) {
                 $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
             }
+            $BGProcessCheck.Stop()
             $editResult = Show-EditProfileGui -FilePath $result.SelectedProfile -ResourcesDir $ResourcesDir
+            $BGProcessCheck.Start()
             # If the profile was saved (overwritten or saved as new), refresh the list and select the saved item
             if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                 # reload available profiles
@@ -877,6 +904,11 @@ Function Show-SelectProfileGui {
                     $profileContent = $profileJson | ConvertTo-Json -Depth 10
                     $ProfileEditGUI.FindName("ProfileText").Text = $profileContent
                     $result.processName = $profileJson.processName
+                    if($null -ne $profileJson.AdminRightsRequired) {
+                        $result.AdminRightsRequired = $profileJson.AdminRightsRequired
+                    } else {
+                        $result.AdminRightsRequired = "false"
+                    }
                     $ProfileEditGUI.FindName("OKBTN").IsEnabled = $true
                     $ProfileEditGUI.FindName("EditBTN").IsEnabled = $true
 

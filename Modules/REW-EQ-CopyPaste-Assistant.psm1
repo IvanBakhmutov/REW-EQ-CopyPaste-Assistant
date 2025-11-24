@@ -362,7 +362,7 @@ function Get-RunningAsAdminFlag {
 
     $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-    if (-not $isAdmin) {
+    <#if (-not $isAdmin) {
         try {
             Add-Type -AssemblyName PresentationCore,PresentationFramework -ErrorAction SilentlyContinue
             $ButtonType   = [System.Windows.MessageBoxButton]::OK
@@ -374,7 +374,7 @@ function Get-RunningAsAdminFlag {
         catch {
             Write-Host "Selected DSP profile requires administrative privileges. Please run the script as an administrator." -ForegroundColor Red
         }
-    }
+    }#>
 
     return $isAdmin
 }
