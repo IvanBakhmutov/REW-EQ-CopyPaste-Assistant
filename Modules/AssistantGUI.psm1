@@ -747,13 +747,13 @@ Function Show-SelectProfileGui {
                 if ($null -eq $DSPProcess) {
                     $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
                     $ProfileEditGUI.FindName("ProcessStatus").tooltip = "No matching processes found for $($result.ProcessName)"
-                    $result.ProcessName = "n/a"
+                    #$result.ProcessName = "n/a"
                     $result.ProcessStatus = "Not Running"
                 }
                 elseif ($DSPProcess.Count -gt 1) {
                     $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
                     $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Expected 1 process, found: $($DSPProcess.Count)"
-                    $result.ProcessName = "n/a"
+                    #$result.ProcessName = "n/a"
                     $result.ProcessStatus = "Multiple Instances Found"
                 }
                 else {
