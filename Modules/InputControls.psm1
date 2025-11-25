@@ -89,8 +89,8 @@ function Invoke-MouseClickLeftAt {
         [int]$X,
         [int]$Y
     )
-    Move-CursorToPosition -X $X -Y $S # Move cursor to the specified position
-    [MouseControl]::ClickAt($X, $Y)     # Perform the left click
+    Move-CursorToPosition -X $X -Y $Y # Move cursor to the specified position
+    [MouseControl]::ClickAt($X, $Y)   # Perform the left click
 }
 
 function Invoke-MouseClickRightAt {
@@ -99,7 +99,7 @@ function Invoke-MouseClickRightAt {
         [int]$X,
         [int]$Y
     )
-    Move-CursorToPosition -X $X -Y $S # Move cursor to the specified position
+    Move-CursorToPosition -X $X -Y $Y # Move cursor to the specified position
     [MouseControl]::RightClick()         # Perform the right click
 }
 
