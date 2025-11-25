@@ -61,6 +61,16 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Change log
 
+### 25-11-2025:
+
+Added statuses for DSP software and REW reflecting if they are running or not  
+
+Added tooltips for GUI elements  
+
+Added AdminRightsRequired flag in profile edit GUI  
+
+Transposed output removed from console output  
+
 ### 20-11-2025:
 
 ⭐ NEW! Big update - Profile editor GUI implemented. It can be used for editing existing profiles (instead of manual edits of JSON files), saving existing profiles as templates to new profiles.  
