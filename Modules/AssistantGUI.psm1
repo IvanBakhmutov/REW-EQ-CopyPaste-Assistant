@@ -963,6 +963,39 @@ Function Show-SelectProfileGui {
         })
     $ProfileEditGUI.FindName("OKBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
+            
+
+            
+            # check if REW is running with API enabled
+            if ($result.REWStatus -eq "Not Running") {
+                Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
+                $ButtonType = [System.Windows.MessageBoxButton]::OK
+                $MessageIcon = [System.Windows.MessageBoxImage]::Error
+                $MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'Run REW' button to launch REW in API mode automatically."
+                $MessageTitle = "REW Not Running or API Not Enabled"
+                [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
+                return
+            } elseif ($result.REWStatus -eq "API Not Enabled") {
+                Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
+                $ButtonType = [System.Windows.MessageBoxButton]::OK
+                $MessageIcon = [System.Windows.MessageBoxImage]::Warning
+                $MessageBody = "Room EQ Wizard (REW) is running but API mode is not enabled. You will have to click 'Copy the filter settings to the clipboard' button or press Alt-C and proceed with paste procedure in your DSP software."
+                $MessageTitle = "REW API Not Enabled"
+                [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
+            }
+
+            # Check if process is running
+            if ($result.ProcessStatus -ne "Running") {
+                Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
+                $ButtonType = [System.Windows.MessageBoxButton]::OK
+                $MessageIcon = [System.Windows.MessageBoxImage]::Error
+                $MessageBody = "The target DSP software process is not running. Please start the software and try again."
+                $MessageTitle = "DSP Software Not Running"
+                [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
+                return
+            }
+
+            # Check for admin rights if required by the selected profile
             if ($result.AdminRightsRequired -eq "true") {
                 if (-not (Get-RunningAsAdminFlag)) {
 
