@@ -13,12 +13,12 @@
 - ~~Mouse pointer highlight before copypaste - not needed~~
 - ~~Review logic behind hotkey or delay choice global vs dsp config~~
 - ~~Review console and popup messages, some popup messages removed~~
+- ~~Remove "True" word output in console when a mouse pointer operation happens, check why keystroke output is missing~~
 
 ## Immediate plans
 - Folders with brand names for DSP profiles?
 - Reported issue with confirmation dialog (in parallels desktop)
 - Configurable PEQ guidelines for each profile in a separate text box
-- Remove "True" word output in console when a mouse pointer operation happens, check why keystroke output is missing
 
 ## Future plans
 - Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/REW-API-Experimental.ps1)  

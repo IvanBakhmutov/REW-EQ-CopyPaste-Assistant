@@ -40,6 +40,7 @@ Function Show-EditProfileGui {
             StartingPositionHint    = ""
             HotkeyOrDelayPreference = "Hotkey"
             KeystrokeSequence       = @()
+            AdminRightsRequired     = "false"
         }
     }
 
@@ -105,6 +106,13 @@ Function Show-EditProfileGui {
             $ProfileSelectGUI.FindName("HotkeyDefault").IsChecked = $true
         }
     }
+    # Load AdminRightsRequired value from JSON and set checkbox
+    if ($null -ne $originalProfile.AdminRightsRequired -and $originalProfile.AdminRightsRequired -eq "true") {
+        $ProfileSelectGUI.FindName("AdminRightsRequiredCHBX").IsChecked = $true
+    } else {
+        $ProfileSelectGUI.FindName("AdminRightsRequiredCHBX").IsChecked = $false
+    }
+
     $ProfileSelectGUI.FindName("Help").Add_Click({
             start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/blob/main/DSPProfileFileFormat.md"
         })
@@ -153,7 +161,11 @@ Function Show-EditProfileGui {
             if ($ProfileSelectGUI.FindName("StartingPositionEdit").Text) {
                 $profile.StartingPositionHint = $ProfileSelectGUI.FindName("StartingPositionEdit").Text
             }
-
+            if ($ProfileSelectGUI.FindName("AdminRightsRequiredCHBX").IsChecked) {
+                $profile.AdminRightsRequired = "true"
+            } else {
+                $profile.AdminRightsRequired = "false"
+            }
             # Hotkey or Delay preference
             if ($ProfileSelectGUI.FindName("DelaySelected").IsChecked) {
                 $profile.HotkeyOrDelayPreference = "Delay"
@@ -337,6 +349,16 @@ Function Show-EditProfileGui {
         $ctrl = $ProfileSelectGUI.FindName($name)
         if ($null -ne $ctrl) {
             $ctrl.Add_TextChanged($enableSaveButton)
+        }
+    }
+
+    # track checkbox changes
+    $checkBoxes = @('AdminRightsRequiredCHBX')
+    foreach ($name in $checkBoxes) {
+        $ctrl = $ProfileSelectGUI.FindName($name)
+        if ($null -ne $ctrl) {
+            $ctrl.Add_Checked($enableSaveButton)
+            $ctrl.Add_Unchecked($enableSaveButton)
         }
     }
 

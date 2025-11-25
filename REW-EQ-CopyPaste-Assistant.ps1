@@ -240,12 +240,12 @@ do {
                         "mouseClick" {
                             switch ($KeySet.mouseClick.ToLower()) {
                                 "left" {
-                                    Invoke-MouseClickLeftAt -X $MouseX -Y $MouseY
+                                    Invoke-MouseClickLeftAt -X $MouseX -Y $MouseY | Out-Null
                                     Start-Sleep -Milliseconds $KeySet.delay_ms
                                     Write-Host -ForegroundColor Blue "Left click at X:$MouseX Y:$MouseY"
                                 }
                                 "right" {
-                                    Invoke-MouseClickRightAt -X $MouseX -Y $MouseY
+                                    Invoke-MouseClickRightAt -X $MouseX -Y $MouseY | Out-Null
                                     Start-Sleep -Milliseconds $KeySet.delay_ms
                                     Write-Host -ForegroundColor Blue "Right click at X:$MouseX Y:$MouseY"
                                 }
