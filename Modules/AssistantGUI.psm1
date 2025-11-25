@@ -131,63 +131,63 @@ Function Show-EditProfileGui {
             }
 
             # Build the profile object from form data
-            $profile = [ordered]@{
+            $profileObject= [ordered]@{
                 version = "1.0"
             }
 
             # Basic fields
             if ($ProfileSelectGUI.FindName("DescriptionEdit").Text) {
-                $profile.Description = $ProfileSelectGUI.FindName("DescriptionEdit").Text
+                $profileObject.Description = $ProfileSelectGUI.FindName("DescriptionEdit").Text
             }
             if ($ProfileSelectGUI.FindName("ProcessNameEdit").Text) {
-                $profile.processName = $ProfileSelectGUI.FindName("ProcessNameEdit").Text
+                $profileObject.processName = $ProfileSelectGUI.FindName("ProcessNameEdit").Text
             }
 
             # Decimals
-            try { $profile.QDivider = [int]$ProfileSelectGUI.FindName("QDividerEdit").Text } catch { $profile.QDivider = 1 }
-            try { $profile.QDecimals = [int]$ProfileSelectGUI.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
-            try { $profile.GainDecimals = [int]$ProfileSelectGUI.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
-            try { $profile.FreqDecimals = [int]$ProfileSelectGUI.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
+            try { $profileObject.QDivider = [int]$ProfileSelectGUI.FindName("QDividerEdit").Text } catch { $profileObject.QDivider = 1 }
+            try { $profileObject.QDecimals = [int]$ProfileSelectGUI.FindName("QDecimalsEdit").Text } catch { $profileObject.QDecimals = 1 }
+            try { $profileObject.GainDecimals = [int]$ProfileSelectGUI.FindName("GainDecimalsEdit").Text } catch { $profileObject.GainDecimals = 1 }
+            try { $profileObject.FreqDecimals = [int]$ProfileSelectGUI.FindName("FreqDecimalsEdit").Text } catch { $profileObject.FreqDecimals = 0 }
 
             # Decimal separator
             if ($ProfileSelectGUI.FindName("DecimalSeparatorComma").IsChecked) {
-                $profile.DecimalSeparator = ","
+                $profileObject.DecimalSeparator = ","
             }
             else {
-                $profile.DecimalSeparator = "."
+                $profileObject.DecimalSeparator = "."
             }
 
             # Starting position hint
             if ($ProfileSelectGUI.FindName("StartingPositionEdit").Text) {
-                $profile.StartingPositionHint = $ProfileSelectGUI.FindName("StartingPositionEdit").Text
+                $profileObject.StartingPositionHint = $ProfileSelectGUI.FindName("StartingPositionEdit").Text
             }
             if ($ProfileSelectGUI.FindName("AdminRightsRequiredCHBX").IsChecked) {
-                $profile.AdminRightsRequired = "true"
+                $profileObject.AdminRightsRequired = "true"
             } else {
-                $profile.AdminRightsRequired = "false"
+                $profileObject.AdminRightsRequired = "false"
             }
             # Hotkey or Delay preference
             if ($ProfileSelectGUI.FindName("DelaySelected").IsChecked) {
-                $profile.HotkeyOrDelayPreference = "Delay"
-                try { $profile.TimeoutBeforePasteSecs = [int]$ProfileSelectGUI.FindName("DelayEdit").Text } catch { $profile.TimeoutBeforePasteSecs = 6 }
+                $profileObject.HotkeyOrDelayPreference = "Delay"
+                try { $profileObject.TimeoutBeforePasteSecs = [int]$ProfileSelectGUI.FindName("DelayEdit").Text } catch { $profileObject.TimeoutBeforePasteSecs = 6 }
             }
             else {
-                $profile.HotkeyOrDelayPreference = "Hotkey"
+                $profileObject.HotkeyOrDelayPreference = "Hotkey"
                 # Only include hotkey overrides if Override radio is checked
                 if ($ProfileSelectGUI.FindName("HotkeyOverride").IsChecked) {
                     $actionIdx = $ProfileSelectGUI.FindName("ActionHotkeyCombo").SelectedIndex
                     $cancelIdx = $ProfileSelectGUI.FindName("CancelHotkeyCombo").SelectedIndex
                     if (($actionIdx -ge 0) -and ($actionIdx -lt 12)) {
-                        $profile.ProfilePerformActionHotkey = "F$($actionIdx + 1)"
+                        $profileObject.ProfilePerformActionHotkey = "F$($actionIdx + 1)"
                     }
                     if (($cancelIdx -ge 0) -and ($cancelIdx -lt 12)) {
-                        $profile.ProfileCancelActionHotkey = "F$($cancelIdx + 1)"
+                        $profileObject.ProfileCancelActionHotkey = "F$($cancelIdx + 1)"
                     }
                 }
             }
 
             # Build KeystrokeSequence from DataGrid
-            $profile.KeystrokeSequence = @()
+            $profileObject.KeystrokeSequence = @()
             if ($null -ne $keystrokeCollection) {
                 foreach ($row in $keystrokeCollection) {
                     $ksItem = [ordered]@{}
@@ -207,13 +207,13 @@ Function Show-EditProfileGui {
                         }
                     }
                     try { $ksItem.delay_ms = [int]$row.DelayMs } catch { $ksItem.delay_ms = 100 }
-                    $profile.KeystrokeSequence += $ksItem
+                    $profileObject.KeystrokeSequence += $ksItem
                 }
             }
 
             # Save to file
             try {
-                $jsonContent = $profile | ConvertTo-Json -Depth 10
+                $jsonContent = $profileObject| ConvertTo-Json -Depth 10
                 Set-Content -Path $FilePath -Value $jsonContent -Encoding UTF8 -Force
                 $result.Action = "Saved"
                 $ProfileSelectGUI.Close()
@@ -240,52 +240,52 @@ Function Show-EditProfileGui {
             }
 
             # Build the profile object from form data (same as Save)
-            $profile = [ordered]@{
+            $profileObject= [ordered]@{
                 version = "1.0"
             }
 
             if ($ProfileSelectGUI.FindName("DescriptionEdit").Text) {
-                $profile.Description = $ProfileSelectGUI.FindName("DescriptionEdit").Text
+                $profileObject.Description = $ProfileSelectGUI.FindName("DescriptionEdit").Text
             }
             if ($ProfileSelectGUI.FindName("ProcessNameEdit").Text) {
-                $profile.processName = $ProfileSelectGUI.FindName("ProcessNameEdit").Text
+                $profileObject.processName = $ProfileSelectGUI.FindName("ProcessNameEdit").Text
             }
 
-            try { $profile.QDivider = [int]$ProfileSelectGUI.FindName("QDividerEdit").Text } catch { $profile.QDivider = 1 }
-            try { $profile.QDecimals = [int]$ProfileSelectGUI.FindName("QDecimalsEdit").Text } catch { $profile.QDecimals = 1 }
-            try { $profile.GainDecimals = [int]$ProfileSelectGUI.FindName("GainDecimalsEdit").Text } catch { $profile.GainDecimals = 1 }
-            try { $profile.FreqDecimals = [int]$ProfileSelectGUI.FindName("FreqDecimalsEdit").Text } catch { $profile.FreqDecimals = 0 }
+            try { $profileObject.QDivider = [int]$ProfileSelectGUI.FindName("QDividerEdit").Text } catch { $profileObject.QDivider = 1 }
+            try { $profileObject.QDecimals = [int]$ProfileSelectGUI.FindName("QDecimalsEdit").Text } catch { $profileObject.QDecimals = 1 }
+            try { $profileObject.GainDecimals = [int]$ProfileSelectGUI.FindName("GainDecimalsEdit").Text } catch { $profileObject.GainDecimals = 1 }
+            try { $profileObject.FreqDecimals = [int]$ProfileSelectGUI.FindName("FreqDecimalsEdit").Text } catch { $profileObject.FreqDecimals = 0 }
 
             if ($ProfileSelectGUI.FindName("DecimalSeparatorComma").IsChecked) {
-                $profile.DecimalSeparator = ","
+                $profileObject.DecimalSeparator = ","
             }
             else {
-                $profile.DecimalSeparator = "."
+                $profileObject.DecimalSeparator = "."
             }
 
             if ($ProfileSelectGUI.FindName("StartingPositionEdit").Text) {
-                $profile.StartingPositionHint = $ProfileSelectGUI.FindName("StartingPositionEdit").Text
+                $profileObject.StartingPositionHint = $ProfileSelectGUI.FindName("StartingPositionEdit").Text
             }
 
             if ($ProfileSelectGUI.FindName("DelaySelected").IsChecked) {
-                $profile.HotkeyOrDelayPreference = "Delay"
-                try { $profile.TimeoutBeforePasteSecs = [int]$ProfileSelectGUI.FindName("DelayEdit").Text } catch { $profile.TimeoutBeforePasteSecs = 6 }
+                $profileObject.HotkeyOrDelayPreference = "Delay"
+                try { $profileObject.TimeoutBeforePasteSecs = [int]$ProfileSelectGUI.FindName("DelayEdit").Text } catch { $profileObject.TimeoutBeforePasteSecs = 6 }
             }
             else {
-                $profile.HotkeyOrDelayPreference = "Hotkey"
+                $profileObject.HotkeyOrDelayPreference = "Hotkey"
                 if ($ProfileSelectGUI.FindName("HotkeyOverride").IsChecked) {
                     $actionIdx = $ProfileSelectGUI.FindName("ActionHotkeyCombo").SelectedIndex
                     $cancelIdx = $ProfileSelectGUI.FindName("CancelHotkeyCombo").SelectedIndex
                     if (($actionIdx -ge 0) -and ($actionIdx -lt 12)) {
-                        $profile.ProfilePerformActionHotkey = "F$($actionIdx + 1)"
+                        $profileObject.ProfilePerformActionHotkey = "F$($actionIdx + 1)"
                     }
                     if (($cancelIdx -ge 0) -and ($cancelIdx -lt 12)) {
-                        $profile.ProfileCancelActionHotkey = "F$($cancelIdx + 1)"
+                        $profileObject.ProfileCancelActionHotkey = "F$($cancelIdx + 1)"
                     }
                 }
             }
 
-            $profile.KeystrokeSequence = @()
+            $profileObject.KeystrokeSequence = @()
             if ($null -ne $keystrokeCollection) {
                 foreach ($row in $keystrokeCollection) {
                     $ksItem = [ordered]@{}
@@ -296,7 +296,7 @@ Function Show-EditProfileGui {
                         'mouseChangePositionY' { $ksItem.mouseChangePositionY = [string]$row.Value }
                     }
                     try { $ksItem.delay_ms = [int]$row.DelayMs } catch { $ksItem.delay_ms = 100 }
-                    $profile.KeystrokeSequence += $ksItem
+                    $profileObject.KeystrokeSequence += $ksItem
                 }
             }
 
@@ -310,7 +310,7 @@ Function Show-EditProfileGui {
                 $dlgRes = $sfd.ShowDialog()
                 if ($dlgRes -eq $true) {
                     try {
-                        $jsonContent = $profile | ConvertTo-Json -Depth 10
+                        $jsonContent = $profileObject| ConvertTo-Json -Depth 10
                         Set-Content -Path $sfd.FileName -Value $jsonContent -Encoding UTF8 -Force
                         $result.Action = "SavedAs"
                         # expose new filepath to caller so caller can refresh and select it
@@ -419,7 +419,7 @@ Function Show-EditProfileGui {
         param($rbSender, $rbArgs)
         $isOverride = $false
         $hotkeyOverrideCtrl = $ProfileSelectGUI.FindName("HotkeyOverride")
-        if ($hotkeyOverrideCtrl -ne $null) { $isOverride = $hotkeyOverrideCtrl.IsChecked }
+        if ($null -ne $hotkeyOverrideCtrl) { $isOverride = $hotkeyOverrideCtrl.IsChecked }
 
         $controlsToToggle = @(
             'ActionHotkeyCombo', 'CancelHotkeyCombo',
@@ -478,7 +478,7 @@ Function Show-EditProfileGui {
     $keystrokesDG = $ProfileSelectGUI.FindName('KeystrokesList')
     $keystrokeCollection = $null
     if ($null -ne $keystrokesDG) {
-        if ($keystrokesDG.ItemsSource -eq $null) {
+        if ($null -eq $keystrokesDG.ItemsSource) {
             $keystrokeCollection = New-Object 'System.Collections.ObjectModel.ObservableCollection[object]'
 
             # Populate from loaded profile's KeystrokeSequence if available
@@ -673,10 +673,10 @@ Function Show-EditProfileGui {
     # Enable/disable Remove button depending on selection
     if ($null -ne $keystrokesDG) {
         $keystrokesDG.Add_SelectionChanged({
-                $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($keystrokesDG.SelectedItem -ne $null)
+                $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
             })
         # initialize state
-        $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($keystrokesDG.SelectedItem -ne $null)
+        $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
     }
 
     # Show the GUI
