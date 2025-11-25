@@ -130,7 +130,7 @@ if ($ProcessName -eq "Generic") {
     Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Using Generic profile.`nWaiting for EQ data from REW in clipboard"
 }
 else {
-    Write-Host "Found $($DSPConfig.Description) process: $($ProfileSelectionResult.ProcessName)" -ForegroundColor Green
+    Write-Host "Found DSP process: $($ProfileSelectionResult.ProcessName)" -ForegroundColor Green
     Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($ProfileSelectionResult.ProcessName)`nWaiting for EQ data from REW in clipboard"
 }
 
