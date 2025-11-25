@@ -19,6 +19,10 @@
 - Folders with brand names for DSP profiles?
 - Reported issue with confirmation dialog (in parallels desktop)
 - Configurable PEQ guidelines for each profile in a separate text box
+- Profile search by brand or model. Store search history
+- Last used profile will be selected automatically
+- Right pane with 2 tabs - Overview, and profile plain text
+- Mouse/KB action names with capital letters
 
 ## Future plans
 - Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/REW-API-Experimental.ps1)  
