@@ -20,6 +20,20 @@ Import-Module "$ModulesDir\AssistantGUI.psm1"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Write-Host "Script started" -ForegroundColor Yellow
 
+Start-Sleep -Milliseconds 200
+
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class Win {
+    [DllImport("user32.dll")]
+    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+}
+"@
+
+$hwnd = (Get-Process -Id $PID).MainWindowHandle
+[Win]::ShowWindow($hwnd, 2)
+
 # Load global config
 $ConfigPath = Join-Path -Path $ResourcesDir -ChildPath "Config.json"
 $GlobalConfig = Get-Content $ConfigPath -Raw | ConvertFrom-Json
