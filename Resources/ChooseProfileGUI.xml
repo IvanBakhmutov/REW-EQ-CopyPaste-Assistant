@@ -58,7 +58,7 @@
                 <TextBlock x:Name ="Hint" Text="Hint: Select a profile to begin" />
             </StatusBarItem>
             <StatusBarItem  BorderThickness="0" BorderBrush="#FFA8A8A8" HorizontalAlignment="Right" >
-                <TextBlock Text="Version: 0.2.1" />
+                <TextBlock Text="Version: 0.2.2" />
             </StatusBarItem>
         </StatusBar>
     </Grid>
