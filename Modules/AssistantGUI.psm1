@@ -917,11 +917,15 @@ Function Show-SelectProfileGui {
                 # If the profile was saved, refresh the list and select the new item
                 if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                     $ProfileEditGUI.FindName('ProfileList').Items.Clear()
-                    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-                    foreach ($profileFileName in $DSPProfilesList) {
-                        $ProfileEditGUI.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null
-                    }
 
+                    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+                    $searchText = $ProfileEditGUI.FindName('SearchEDIT').Text.ToLower()
+                    foreach ($profileFile in $DSPProfilesList) {
+                        if ($profileFile.BaseName.ToLower().Contains($searchText)) {
+                            $filteredProfiles += $profileFile.BaseName
+                        }
+                    }
+                    $profileListBox.ItemsSource = $filteredProfiles
                     $savedBase = (Get-Item -LiteralPath $newProfilePath).BaseName
                     $ProfileEditGUI.FindName('ProfileList').SelectedItem = $savedBase
                 }
@@ -938,10 +942,16 @@ Function Show-SelectProfileGui {
             # If the profile was saved (overwritten or saved as new), refresh the list and select the saved item
             if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                 # reload available profiles
-                $ProfileEditGUI.FindName('ProfileList').Items.Clear()
-                $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-                foreach ($profileFileName in $DSPProfilesList) { $ProfileEditGUI.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null }
 
+                $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+                $searchText = $ProfileEditGUI.FindName('SearchEDIT').Text.ToLower()
+                [array]$filteredProfiles = @()
+                    foreach ($profileFile in $DSPProfilesList) {
+                        if ($profileFile.BaseName.ToLower().Contains($searchText)) {
+                            $filteredProfiles += $profileFile.BaseName
+                        }
+                    }
+                    $profileListBox.ItemsSource = $filteredProfiles
                 # determine the base name of saved file and select it
                 try {
                     $savedPath = $editResult.FilePath
