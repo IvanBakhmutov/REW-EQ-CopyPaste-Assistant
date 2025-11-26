@@ -719,9 +719,23 @@ Function Show-SelectProfileGui {
     # Populate the profiles list in the GUI
     $profileListBox = $ProfileEditGUI.FindName("ProfileList")
     $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-    foreach ($profileFileName in $DSPProfilesList) {
+    <#foreach ($profileFileName in $DSPProfilesList) {
         $profileListBox.Items.Add($profileFileName.baseName) | Out-Null
-    }
+    }#>
+    $profileListBox.ItemsSource = $DSPProfilesList.BaseName
+
+    # Search box text changed handler to filter the profiles list
+    $ProfileEditGUI.FindName("SearchEDIT").Add_TextChanged({
+        param($searchSender, $searchArgs)
+        $searchText = $searchSender.Text.ToLower()
+        $filteredProfiles = @()
+        foreach ($profileFile in $DSPProfilesList) {
+            if ($profileFile.BaseName.ToLower().Contains($searchText)) {
+                $filteredProfiles += $profileFile.BaseName
+            }
+        }
+        $profileListBox.ItemsSource = $filteredProfiles
+    })
 
     #Region process checks
     $BGProcessCheck = New-Object Windows.Threading.DispatcherTimer
