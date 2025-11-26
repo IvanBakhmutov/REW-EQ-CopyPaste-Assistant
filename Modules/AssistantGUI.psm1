@@ -977,9 +977,7 @@ Function Show-SelectProfileGui {
         })
     $ProfileEditGUI.FindName("OKBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
-            
 
-            
             # check if REW is running with API enabled
             if ($result.REWStatus -eq "Not Running") {
                 Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
@@ -1026,6 +1024,15 @@ Function Show-SelectProfileGui {
                 $result.Action = "Open"
                 $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
                 $BGProcessCheck.Stop()
+
+                # Save last selected profile to Resources\UserConfig.json
+               <# $UserConfig = [PSCustomObject]@{
+                        LastSelectedProfile = $selectedProfileFileName
+                        ClipboardOrAPIPreference = $null
+                    }
+                if(Test-Path "$ResourcesDir\UserConfig.json"){
+                    
+                }#>
                 $ProfileEditGUI.Close()
             }
         })
