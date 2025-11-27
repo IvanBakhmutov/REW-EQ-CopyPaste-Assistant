@@ -16,14 +16,12 @@
 - ~~Remove "True" word output in console when a mouse pointer operation happens, check why keystroke output is missing~~
 - ~~Configurable PEQ guidelines for each profile in a separate text box~~
 - ~~Mouse/KB action names with capital letters~~
-- ~~Profile search filter.~~ 
-
+- ~~Profile search filter.~~
+- ~~ Right pane with 2 tabs: 1. Welcome when started and Overview when profile selected, 2. profile plain text~~
 ## Immediate plans
 
 - Reported issue with confirmation dialog (in parallels desktop)
 - Store the last selected profile and select it on the next startup.
-- Last used profile will be selected automatically
-- Right pane with 2 tabs: 1. Welcome when started and Overview when profile selected, 2. profile plain text
 
 ## Future plans
 - Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/REW-API-Experimental.ps1)  

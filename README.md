@@ -20,6 +20,14 @@ Special thanks to Denis GS for the ideas and collaboration!
 
 Support this project **[<img src="Img/PayPal_Logo.png" alt="PayPal icon" height=12/> PayPal](https://paypal.me/IvanBakhmutovDonate)**
 
+## REW EQ Config Guide
+
+Before applying EQ filters to your measurements in REW make sure that EQ settings are correct. [Guide](Documentation/REW%20EQ%20Config%20Guide.md)
+
+## DSP Profile file format
+
+The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse move and click actions and key actions like `{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](Documentation/DSPProfileFileFormat.md)
+
 ### Tested profiles
 
 | Brand | DSP Software | Requires admin rights | DSP devices |
@@ -35,7 +43,7 @@ Support this project **[<img src="Img/PayPal_Logo.png" alt="PayPal icon" height=
 | Phoenix | Phoenix Gold DSP software | ❎ | (to be verified) |
 | Sennuopu | Sennuopu DP-X680 PC Software EN | ❎ | DP-X680 |
 | Zapco | PC Program (Windows) for ADSP series | ❎ | ADSP-Z8 IV AT, ADSP-Z8 IV-6AT, ADSP-Z12 IV-10A, ADSP-Z16 IV-12A |
-| Awave | DSP PC Tool | ❎ | DSPA6, DSP12DMAX, DSP16DMAX, DSPA6II, DSP6V5,  DSPM6, DSPA8D, DSPA10II, DSP10D, DSP10DMAX, DSPT10, DSP8.1, DSPA12, DSPA12D, DSPA12D PRO, DSP12DMAXII, DSPA16D, DSPA16DMAXII,DSPA24D |
+| Awave | DSP PC Tool | ❎ | DSPA6, DSP12DMAX, DSP16DMAX, DSPA6II, DSP6V5, DSPM6, DSPA8D, DSPA10II, DSP10D, DSP10DMAX, DSPT10, DSP8.1, DSPA12, DSPA12D, DSPA12D PRO, DSP12DMAXII, DSPA16D, DSPA16DMAXII,DSPA24D |
 | ONKYO | R-MS Series | 🚩 | R-MS66, R-MS55, R-MS25, R-MS10: Important - DSP software runs with admin rights, so CopyPaste tool should be running with admin rights as well |
 | the t.racks | DSP 4x4 Mini Editor V1.05 | ❎ | DSP 4×4 Mini |
 | Sigma | Sigma Studio | ❎ | adau1701 processors |
@@ -45,31 +53,29 @@ Support this project **[<img src="Img/PayPal_Logo.png" alt="PayPal icon" height=
 | Down 4 Sound | EZY-DSP6* | ❎ | EZY-DSP612, EZY-DSP68+, EZY-DSP612+ |
 | Sennuopu | Sennuopu DP-X10 | ❎ | DP-X10 |
 | Hellion | HAM8.80DSP | ❎ | HAM 6.80DSP, HAM 8.80DSP, HAM 8.100DSP |
-| Hellion | HAM8.10DSP | ❎ | HAM 8.10DSP, 4.6pinDSP,  4.8pinDSP,  DHL-6 , DHL-10 |
+| Hellion | HAM8.10DSP | ❎ | HAM 8.10DSP, 4.6pinDSP, 4.8pinDSP, DHL-6, DHL-10 |
 | Hellion | HAM16.150DSP | ❎ | HAM 16.150DSP, HAM 12.80DSP |
-
-## REW EQ Config Guide
-
-Before applying EQ filters to your measurements in REW make sure that EQ settings are correct. [Guide](Documentation/REW%20EQ%20Config%20Guide.md)
-
-## DSP Profile file format
-
-The script uses its own profiles (in JSON format), which store the DSP software application name (wildcards `*` are accepted), the keystroke sequence for inputting the data into the DSP. Check the examples in the `./DSPProfiles` folder. Keystroke sequences can contain mouse move and click actions and key actions like `{ENTER}`, `{RIGHT}`, `{LEFT}`, `{UP}`, `{DOWN}`, `{TAB}`, etc., depending on how navigation through EQ bands is implemented in your DSP software. [More details](Documentation/DSPProfileFileFormat.md)
+| Behringer | DCX-Remote | ❎ | DCX2496 |
+| DBX | pa2ui | ❎ | DriveRack Pa2 |
+| Powersoft | ArmoniaPlus | ❎ | DSP-Lite E |
 
 ## Project plans
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
 
-27.11.2025 ver 0.2.2:<br>
+### 27.11.2025
+ver 0.3.0:<br>
+Added tabs with Profile Overview and Details<br>
+ver 0.2.2:<br>
 Added filter for searching profile in the profile selection window.<br>
-Added a guide for REW EQ config.<br>
+Added a [guide for REW EQ config](Documentation/REW%20EQ%20Config%20Guide.md).<br>
 Changed tool's versioning format<br>
 DBX DriveRack Pa2 profile added<br>
 <br>
 [Full change log...](Documentation/Changelog.md)
 
-## Questions
+## Q&A
 
 Isn't it better to do manipulations with imported DSP filters file directly? The answer is - no. You shouldn’t mess with an imported DSP settings file — it’s safer that way and helps avoid file corruption. Just watch what’s being passed to the filters. Some DSP files aren’t plain text; for example, ESX settings files are password-protected and look binary inside.<br><br>
 Why it is written in PowerShell? - It is lightweight, open-source, no need in binaries, works on old computers (starting from Windows 7) and why not?

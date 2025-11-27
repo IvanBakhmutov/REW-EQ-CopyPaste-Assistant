@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="REW EQ CopyPaste Assistant - Choose DSP profile" Height="602" Width="800" MinWidth="800" MinHeight="450">
- <Grid>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="37"/>
@@ -33,6 +33,7 @@
 
                     <TextBox x:Name="SearchEDIT"
                              Margin="0,3,3,7"
+                             ToolTip="Search filter" ToolTipService.InitialShowDelay="200"
                              VerticalAlignment="Center" Height="18" Grid.Column="1" />
 
                     <Button x:Name="ClearSearchBTN"
@@ -40,7 +41,7 @@
                             Grid.Column="2"
                             Height="22"
                             Margin="2,1,2,0"
-                            ToolTip="Clear search filter" VerticalAlignment="Top" />
+                            ToolTip="Clear search filter" ToolTipService.InitialShowDelay="200" VerticalAlignment="Top" />
                 </Grid>
                 <ListBox x:Name="ProfileList"
                  Grid.Row="1"
@@ -52,7 +53,16 @@
         </GroupBox>
 
         <GroupBox Header="Profile settings" Margin="7,0,0,3" Grid.Column="1">
-            <TextBox x:Name="ProfileText" TextWrapping="Wrap" Text="Please select a profile" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+            <TabControl Margin="0">
+                <TabItem Header="Overview">
+
+                    <TextBlock x:Name="ProfileOverview" TextWrapping="Wrap" Text="Please select a profile"  Margin="0"/>
+
+                </TabItem>
+                <TabItem Header="Profile details">
+                    <TextBox x:Name="ProfileText" TextWrapping="Wrap" Text="Please select a profile" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0"/>
+                </TabItem>
+            </TabControl>
         </GroupBox>
 
         <Button x:Name="OKBTN" ToolTipService.InitialShowDelay="200" ToolTip="Start with selected profile" Content="OK" Width="80" IsEnabled="False" IsDefault="True" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,280,10" Grid.Column="1" Grid.Row="1"/>
@@ -71,7 +81,7 @@
                 <TextBlock ToolTipService.InitialShowDelay="200" x:Name="ProcessStatus" Text="⬤" Width="15" MinWidth="15" Foreground="Gray" ToolTip="DSP Software Status" />
             </StatusBarItem>
             <StatusBarItem  BorderThickness="0"  BorderBrush="#FFA8A8A8">
-                <TextBlock Text="REW API:" FontFamily="Segoe UI Symbol" />
+                <TextBlock Text="REW:" FontFamily="Segoe UI Symbol" />
             </StatusBarItem>
             <StatusBarItem  BorderThickness="0"  BorderBrush="#FFA8A8A8">
                 <TextBlock ToolTipService.InitialShowDelay="200" x:Name="REWStatus" Text="⬤" Width="15" MinWidth="15" Foreground="Gray" ToolTip="REW Status" />
@@ -81,7 +91,7 @@
                 <TextBlock x:Name ="Hint" Text="Hint: Select a profile to begin" />
             </StatusBarItem>
             <StatusBarItem  BorderThickness="0" BorderBrush="#FFA8A8A8" HorizontalAlignment="Right" >
-                <TextBlock Text="Version: 0.2.2" />
+                <TextBlock Text="Version: 0.3.0" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

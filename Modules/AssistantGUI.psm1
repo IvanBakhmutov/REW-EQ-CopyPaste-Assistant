@@ -693,6 +693,16 @@ Function Show-SelectProfileGui {
         [Parameter(Mandatory = $true)][string]$ModulesDir
     )
 
+    function Get-OverviewText {
+        param(
+            [Parameter(Mandatory = $true)]$profileContent
+        )
+        $result = "Description: $($profileContent.description)`n`n" + `
+         "DSP Software Process Name: $($profileContent.processName)`n`n" + `
+         "Starting Position Hint: $($profileContent.StartingPositionHint)`n"
+        return $result
+    }
+
     $result = [PSCustomObject]@{
         Action                       = "Cancel"
         SelectedProfile              = $null
@@ -968,6 +978,7 @@ Function Show-SelectProfileGui {
                     $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($savedBase).json"
                     $profileJson = Read-JSONFile -FilePath $profilePath -ErrorAction Stop
                     $ProfileEditGUI.FindName('ProfileText').Text = ($profileJson | ConvertTo-Json -Depth 10)
+                    $ProfileEditGUI.FindName('ProfileOverview').Text = Get-OverviewText -profileContent $profileJson
 
                     # Update effective hotkeys and hint label
                     if (($profileJson.ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and ($null -ne $profileJson.ProfilePerformActionHotkey)) {
@@ -1063,6 +1074,7 @@ Function Show-SelectProfileGui {
                     # Show nicely formatted JSON in the text box
                     $profileContent = $profileJson | ConvertTo-Json -Depth 10
                     $ProfileEditGUI.FindName("ProfileText").Text = $profileContent
+                    $ProfileEditGUI.FindName('ProfileOverview').Text = Get-OverviewText -profileContent $profileJson
                     $result.processName = $profileJson.processName
                     if ($null -ne $profileJson.AdminRightsRequired) {
                         $result.AdminRightsRequired = $profileJson.AdminRightsRequired
@@ -1103,13 +1115,15 @@ Function Show-SelectProfileGui {
                     }
                 }
                 catch {
-                    $ProfileEditGUI.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file."
+                    $ProfileEditGUI.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file"
+                    $ProfileEditGUI.FindName("ProfileOverview").Text = "Error parsing JSON profile. Please check the file"
                     $ProfileEditGUI.FindName("OKBTN").IsEnabled = $false
                     $ProfileEditGUI.FindName("EditBTN").IsEnabled = $false
                 }
             }
             else {
                 $ProfileEditGUI.FindName("ProfileText").Text = "Please select a profile"
+                $ProfileEditGUI.FindName("ProfileOverview").Text = "Please select a profile"
                 $ProfileEditGUI.FindName("OKBTN").IsEnabled = $false
                 $ProfileEditGUI.FindName("EditBTN").IsEnabled = $false
             }
