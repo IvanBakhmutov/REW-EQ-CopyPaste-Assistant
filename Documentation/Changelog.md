@@ -101,8 +101,8 @@ Let’s take ESX Toolkit as an example:
     <img src="../Img/ESXToolkit-EQ-ranges.png" alt="ESXToolkit EQ ranges" width=300 />
     <img src="../Img/Configurable_PEQ-for-ESXToolkit.png" alt="Configurable_PEQ for ESXToolkit" width=481 />
 </p>
-In a such case REW will calculate EQ using correct EQ settings which suit for ESX Toolkit.
+In a such case REW will calculate EQ using correct EQ filters which suit for ESX Toolkit.
 
 Side note: ESX Toolkit won’t allow you to enter values outside the supported range. For example, if you’re adjusting the Gain of a selected band and try to input -13, it will accept -1 and then stop—you won’t be able to type the 3, and the value will remain -1 (since the minimum allowed value is -12).
 
-This is why a configurable EQ in REW is necessary; otherwise, the tool would paste incorrect settings into the DSP.
+This is why a configurable EQ in REW is necessary; otherwise, the tool would paste incorrect filters into the DSP.

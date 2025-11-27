@@ -8,7 +8,7 @@
 
 This tool allows you to transfer EQ filters for Room EQ Wizard (REW) to your DSP software EQ filters with ease.<br>
 <br>
-It assists with the EQ copy-paste procedure from REW software into your DSP app's EQ settings. You just need to run it in the background while applying EQ settings to your measurements in REW. When you are ready with EQ filters, hit the "Copy" button in the EQ filters section of REW. This tool will then prompt you to confirm if you want to paste the copied data into your DSP app. After your confirmation, it will bring the DSP process to the foreground, and you will need to click on the first band where the keystroke sequence will start to paste the data.
+It assists with the EQ copy-paste procedure from REW software into your DSP app's EQ filters. You just need to run it in the background while applying EQ filters to your measurements in REW. When you are ready with EQ filters, hit the "Copy" button in the EQ filters section of REW. This tool will then prompt you to confirm if you want to paste the copied data into your DSP app. After your confirmation, it will bring the DSP process to the foreground, and you will need to click on the first band where the keystroke sequence will start to paste the data.
 <br>
 This is just an initial version of the tool. Experiment with it, create your own DSP profiles, and have fun!
 Strong suggestion, when you create profile for a DSP which doesn't fully support keyboard navigation and you are dealing with mouse moves and clicks and you would like to share your profile with others - leave the DSP app in its native resolution, don't make it maximized to a full screen (on different devices screen resolution may vary).
@@ -70,5 +70,5 @@ Changed tool's versioning format<br>
 
 ## Questions
 
-Isn't it better to do manipulations with imported DSP settings file directly? The answer is - no. You shouldn’t mess with an imported DSP settings file — it’s safer that way and helps avoid file corruption. Just watch what’s being passed to the settings. Some DSP files aren’t plain text; for example, ESX settings files are password-protected and look binary inside.<br><br>
+Isn't it better to do manipulations with imported DSP filters file directly? The answer is - no. You shouldn’t mess with an imported DSP settings file — it’s safer that way and helps avoid file corruption. Just watch what’s being passed to the filters. Some DSP files aren’t plain text; for example, ESX settings files are password-protected and look binary inside.<br><br>
 Why it is written in PowerShell? - It is lightweight, open-source, no need in binaries, works on old computers (starting from Windows 7) and why not?
