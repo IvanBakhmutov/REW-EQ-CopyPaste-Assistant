@@ -20,19 +20,21 @@ Import-Module "$ModulesDir\AssistantGUI.psm1"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Write-Host "Script started" -ForegroundColor Yellow
 
-Start-Sleep -Milliseconds 200
-
+# Minimize parent cmd.exe window
 Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 public class Win {
+    [DllImport("kernel32.dll")]
+    public static extern IntPtr GetConsoleWindow();
+
     [DllImport("user32.dll")]
     public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 }
 "@
 
-$hwnd = (Get-Process -Id $PID).MainWindowHandle
-[Win]::ShowWindow($hwnd, 2)
+$hwnd = [Win]::GetConsoleWindow()
+[Win]::ShowWindow($hwnd, 2) | Out-Null  # 2 = SW_MINIMIZE
 
 # Load global config
 $ConfigPath = Join-Path -Path $ResourcesDir -ChildPath "Config.json"
