@@ -18,13 +18,36 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Height="28">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="27"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto" MinWidth="26"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="SearchEDIT" Margin="0,5" Grid.Row="0"/>
+                    <Label x:Name="SearchLabel"
+                           Content="🔎︎"
+                           Grid.Column="0"
+                           VerticalAlignment="Top"
+                           Margin="0,-1,0,0" Height="26" HorizontalAlignment="Left" />
+
+                    <TextBox x:Name="SearchEDIT"
+                             Margin="0,3,3,7"
+                             VerticalAlignment="Center" Height="18" Grid.Column="1" />
+
+                    <Button x:Name="ClearSearchBTN"
+                            Content="❎"
+                            Grid.Column="2"
+                            Height="22"
+                            Margin="2,1,2,0"
+                            ToolTip="Clear search filter" VerticalAlignment="Top" />
+                </Grid>
                 <ListBox x:Name="ProfileList"
                  Grid.Row="1"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  VerticalAlignment="Stretch"/>
+
             </Grid>
         </GroupBox>
 

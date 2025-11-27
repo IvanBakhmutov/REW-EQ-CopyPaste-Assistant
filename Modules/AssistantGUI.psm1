@@ -718,23 +718,28 @@ Function Show-SelectProfileGui {
 
     # Populate the profiles list in the GUI
     $profileListBox = $ProfileEditGUI.FindName("ProfileList")
-    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+    if (-not ($script:DSPProfilesList -is [System.Array])) { $script:DSPProfilesList = @() }
+    $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
     <#foreach ($profileFileName in $DSPProfilesList) {
         $profileListBox.Items.Add($profileFileName.baseName) | Out-Null
     }#>
-    $profileListBox.ItemsSource = $DSPProfilesList.BaseName
+    $profileListBox.ItemsSource = $script:DSPProfilesList.BaseName
 
     # Search box text changed handler to filter the profiles list
     $ProfileEditGUI.FindName("SearchEDIT").Add_TextChanged({
         param($searchSender, $searchArgs)
         $searchText = $searchSender.Text.ToLower()
         $filteredProfiles = @()
-        foreach ($profileFile in $DSPProfilesList) {
+        foreach ($profileFile in $script:DSPProfilesList) {
             if ($profileFile.BaseName.ToLower().Contains($searchText)) {
                 $filteredProfiles += $profileFile.BaseName
             }
         }
         $profileListBox.ItemsSource = $filteredProfiles
+    })
+
+    $ProfileEditGUI.FindName("ClearSearchBTN").Add_Click({
+        $ProfileEditGUI.FindName("SearchEDIT").Text = ""
     })
 
     #Region process checks
@@ -918,9 +923,9 @@ Function Show-SelectProfileGui {
                 if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                     $ProfileEditGUI.FindName('ProfileList').Items.Clear()
 
-                    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+                    $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
                     $searchText = $ProfileEditGUI.FindName('SearchEDIT').Text.ToLower()
-                    foreach ($profileFile in $DSPProfilesList) {
+                    foreach ($profileFile in $script:DSPProfilesList) {
                         if ($profileFile.BaseName.ToLower().Contains($searchText)) {
                             $filteredProfiles += $profileFile.BaseName
                         }
@@ -943,10 +948,10 @@ Function Show-SelectProfileGui {
             if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                 # reload available profiles
 
-                $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+                $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
                 $searchText = $ProfileEditGUI.FindName('SearchEDIT').Text.ToLower()
                 [array]$filteredProfiles = @()
-                    foreach ($profileFile in $DSPProfilesList) {
+                    foreach ($profileFile in $script:DSPProfilesList) {
                         if ($profileFile.BaseName.ToLower().Contains($searchText)) {
                             $filteredProfiles += $profileFile.BaseName
                         }
