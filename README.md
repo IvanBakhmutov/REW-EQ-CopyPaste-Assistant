@@ -65,6 +65,7 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 Added filter for searching profile in the profile selection window.<br>
 Added a guide for REW EQ config.<br>
 Changed tool's versioning format<br>
+DBX DriveRack Pa2 profile added<br>
 <br>
 [Full change log...](Documentation/Changelog.md)
 
