@@ -11,20 +11,20 @@
     "HotkeyOrDelayPreference": "Hotkey",
     "KeystrokeSequence": [
         {
-            "keys": "^aBANDNUMBER{ENTER}{RIGHT}",
-            "delay_ms": 50
+            "Keys": "^aBANDNUMBER{ENTER}{RIGHT}",
+            "Delay_ms": 50
         },
         {
-            "keys": "^aFREQ{ENTER}{RIGHT}",
-            "delay_ms": 50
+            "Keys": "^aFREQ{ENTER}{RIGHT}",
+            "Delay_ms": 50
         },
         {
-            "keys": "^aGAIN{ENTER}{RIGHT}",
-            "delay_ms": 50
+            "Keys": "^aGAIN{ENTER}{RIGHT}",
+            "Delay_ms": 50
         },
         {
-            "keys": "^aQVALUE{ENTER}{LEFT}{LEFT}{LEFT}",
-            "delay_ms": 50
+            "Keys": "^aQVALUE{ENTER}{LEFT}{LEFT}{LEFT}",
+            "Delay_ms": 50
         }
     ]
 }

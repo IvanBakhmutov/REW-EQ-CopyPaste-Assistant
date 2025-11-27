@@ -10,44 +10,44 @@
     "StartingPositionHint": "Please hover mouse over 1 band Freq box and press hotkey",
     "KeystrokeSequence": [
         {
-            "mouseClick": "left",
-            "delay_ms": 50
+            "MouseClick": "left",
+            "Delay_ms": 50
         },
         {
-            "keys": "FREQ",
-            "delay_ms": 200
+            "Keys": "FREQ",
+            "Delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+20",
-            "delay_ms": 10
+            "MouseChangePositionY": "+20",
+            "Delay_ms": 10
         },
         {
-            "mouseClick": "left",
-            "delay_ms": 50
+            "MouseClick": "left",
+            "Delay_ms": 50
         },
         {
-            "keys": "QVALUE",
-            "delay_ms": 200
+            "Keys": "QVALUE",
+            "Delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+20",
-            "delay_ms": 10
+            "MouseChangePositionY": "+20",
+            "Delay_ms": 10
         },
         {
-            "mouseClick": "left",
-            "delay_ms": 50
+            "MouseClick": "left",
+            "Delay_ms": 50
         },
         {
-            "keys": "GAIN",
-            "delay_ms": 200
+            "Keys": "GAIN",
+            "Delay_ms": 200
         },
         {
-            "mouseChangePositionY": "-40",
-            "delay_ms": 10
+            "MouseChangePositionY": "-40",
+            "Delay_ms": 10
         },
         {
-            "mouseChangePositionX": "+34",
-            "delay_ms": 10
+            "MouseChangePositionX": "+34",
+            "Delay_ms": 10
         }
     ]
 }

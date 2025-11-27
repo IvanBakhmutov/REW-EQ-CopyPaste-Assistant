@@ -11,8 +11,8 @@
     "HotkeyOrDelayPreference": "Hotkey",
     "KeystrokeSequence": [
         {
-            "keys": "FREQ{TAB}QVALUE{TAB}GAIN{TAB}",
-            "delay_ms": 200
+            "Keys": "FREQ{TAB}QVALUE{TAB}GAIN{TAB}",
+            "Delay_ms": 200
         }
     ]
 }

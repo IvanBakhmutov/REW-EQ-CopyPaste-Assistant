@@ -11,12 +11,12 @@
     "HotkeyOrDelayPreference": "Hotkey",
     "KeystrokeSequence": [
         {
-            "keys": "^aFREQ{ENTER}{DOWN}QVALUE{ENTER}{DOWN}GAIN{ENTER}",
-            "delay_ms": 200
+            "Keys": "^aFREQ{ENTER}{DOWN}QVALUE{ENTER}{DOWN}GAIN{ENTER}",
+            "Delay_ms": 200
         },
         {
-            "keys": "{RIGHT}{UP}{UP}",
-            "delay_ms": 200
+            "Keys": "{RIGHT}{UP}{UP}",
+            "Delay_ms": 200
         }
     ]
 }

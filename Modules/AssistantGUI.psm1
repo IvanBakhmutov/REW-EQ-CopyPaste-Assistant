@@ -117,11 +117,11 @@ Function Show-EditProfileGui {
             start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/blob/main/DSPProfileFileFormat.md"
         })
     $ProfileSelectGUI.findname("SaveBTN").Add_Click({
-            # Validate keystroke rows: if Action is mouseClick ensure Value is Left/Right
+            # Validate keystroke rows: if Action is MouseClick ensure Value is Left/Right
             try {
                 if ($null -ne $keystrokeCollection) {
                     foreach ($it in $keystrokeCollection) {
-                        if ($it.Action -eq 'mouseClick') {
+                        if ($it.Action -eq 'MouseClick') {
                             if (($it.Value -ne 'Left') -and ($it.Value -ne 'Right')) { $it.Value = 'Left' }
                         }
                     }
@@ -192,21 +192,21 @@ Function Show-EditProfileGui {
                 foreach ($row in $keystrokeCollection) {
                     $ksItem = [ordered]@{}
                     switch ($row.Action) {
-                        'keys' {
-                            # Use the JSON property 'keys' (keystroke SendKeys string)
-                            $ksItem.keys = [string]$row.Value
+                        'Keys' {
+                            # Use the JSON property 'Keys' (keystroke SendKeys string)
+                            $ksItem.Keys = [string]$row.Value
                         }
-                        'mouseClick' {
-                            $ksItem.mouseClick = [string]$row.Value
+                        'MouseClick' {
+                            $ksItem.MouseClick = [string]$row.Value
                         }
-                        'mouseChangePositionX' {
-                            $ksItem.mouseChangePositionX = [string]$row.Value
+                        'MouseChangePositionX' {
+                            $ksItem.MouseChangePositionX = [string]$row.Value
                         }
-                        'mouseChangePositionY' {
-                            $ksItem.mouseChangePositionY = [string]$row.Value
+                        'MouseChangePositionY' {
+                            $ksItem.MouseChangePositionY = [string]$row.Value
                         }
                     }
-                    try { $ksItem.delay_ms = [int]$row.DelayMs } catch { $ksItem.delay_ms = 100 }
+                    try { $ksItem.Delay_ms = [int]$row.DelayMs } catch { $ksItem.Delay_ms = 100 }
                     $profileObject.KeystrokeSequence += $ksItem
                 }
             }
@@ -226,11 +226,11 @@ Function Show-EditProfileGui {
 
     # Save As - open SaveFileDialog in the profiles folder, require user confirmation
     $ProfileSelectGUI.FindName('SaveAsBTN').Add_Click({
-            # Validate keystroke rows: if Action is mouseClick ensure Value is Left/Right
+            # Validate keystroke rows: if Action is MouseClick ensure Value is Left/Right
             try {
                 if ($null -ne $keystrokeCollection) {
                     foreach ($it in $keystrokeCollection) {
-                        if ($it.Action -eq 'mouseClick') {
+                        if ($it.Action -eq 'MouseClick') {
                             if (($it.Value -ne 'Left') -and ($it.Value -ne 'Right')) { $it.Value = 'Left' }
                         }
                     }
@@ -290,12 +290,12 @@ Function Show-EditProfileGui {
                 foreach ($row in $keystrokeCollection) {
                     $ksItem = [ordered]@{}
                     switch ($row.Action) {
-                        'keys' { $ksItem.keys = [string]$row.Value }
-                        'mouseClick' { $ksItem.mouseClick = [string]$row.Value }
-                        'mouseChangePositionX' { $ksItem.mouseChangePositionX = [string]$row.Value }
-                        'mouseChangePositionY' { $ksItem.mouseChangePositionY = [string]$row.Value }
+                        'Keys' { $ksItem.Keys = [string]$row.Value }
+                        'MouseClick' { $ksItem.MouseClick = [string]$row.Value }
+                        'MouseChangePositionX' { $ksItem.MouseChangePositionX = [string]$row.Value }
+                        'MouseChangePositionY' { $ksItem.MouseChangePositionY = [string]$row.Value }
                     }
-                    try { $ksItem.delay_ms = [int]$row.DelayMs } catch { $ksItem.delay_ms = 100 }
+                    try { $ksItem.Delay_ms = [int]$row.DelayMs } catch { $ksItem.Delay_ms = 100 }
                     $profileObject.KeystrokeSequence += $ksItem
                 }
             }
@@ -486,29 +486,29 @@ Function Show-EditProfileGui {
                 #Write-Host "Loading KeystrokeSequence with $($originalProfile.KeystrokeSequence.Count) items" -ForegroundColor Cyan
                 foreach ($ks in $originalProfile.KeystrokeSequence) {
                     # Determine the action type based on properties present
-                    $action = 'keys'
+                    $action = 'Keys'
                     $value = ''
                     $delayMs = 100
 
-                    if ($null -ne $ks.keys) {
-                        $action = 'keys'
-                        $value = [string]$ks.keys  # Read as-is, these are SendKeys strings like ^a, {ENTER}, +{TAB}
+                    if ($null -ne $ks.Keys) {
+                        $action = 'Keys'
+                        $value = [string]$ks.Keys  # Read as-is, these are SendKeys strings like ^a, {ENTER}, +{TAB}
                     }
-                    elseif ($null -ne $ks.mouseClick) {
-                        $action = 'mouseClick'
-                        $value = [string]$ks.mouseClick
+                    elseif ($null -ne $ks.MouseClick) {
+                        $action = 'MouseClick'
+                        $value = [string]$ks.MouseClick
                     }
-                    elseif ($null -ne $ks.mouseChangePositionX) {
-                        $action = 'mouseChangePositionX'
-                        $value = [string]$ks.mouseChangePositionX
+                    elseif ($null -ne $ks.MouseChangePositionX) {
+                        $action = 'MouseChangePositionX'
+                        $value = [string]$ks.MouseChangePositionX
                     }
-                    elseif ($null -ne $ks.mouseChangePositionY) {
-                        $action = 'mouseChangePositionY'
-                        $value = [string]$ks.mouseChangePositionY
+                    elseif ($null -ne $ks.MouseChangePositionY) {
+                        $action = 'MouseChangePositionY'
+                        $value = [string]$ks.MouseChangePositionY
                     }
 
-                    if ($null -ne $ks.delay_ms) {
-                        $delayMs = $ks.delay_ms
+                    if ($null -ne $ks.Delay_ms) {
+                        $delayMs = $ks.Delay_ms
                     }
 
                     $rowItem = [pscustomobject]@{
@@ -556,19 +556,19 @@ Function Show-EditProfileGui {
                         if ($null -ne $newAction) {
                             $null = $keystrokesDG.Dispatcher.BeginInvoke([System.Action] {
                                     switch ($newAction) {
-                                        'mouseClick' {
+                                        'MouseClick' {
                                             # Default to Left for mouse click
                                             $rowItem.Value = 'Left'
                                         }
-                                        'mouseChangePositionX' {
+                                        'MouseChangePositionX' {
                                             # Default to 0 for mouse move
                                             $rowItem.Value = '0'
                                         }
-                                        'mouseChangePositionY' {
+                                        'MouseChangePositionY' {
                                             # Default to 0 for mouse move
                                             $rowItem.Value = '0'
                                         }
-                                        'keys' {
+                                        'Keys' {
                                             # Reset to empty for key action
                                             $rowItem.Value = ''
                                         }
@@ -586,7 +586,7 @@ Function Show-EditProfileGui {
     $ProfileSelectGUI.FindName('AddActionBTN').Add_Click({
             if ($null -eq $keystrokeCollection) { return }
             $new = [pscustomobject]@{
-                Action  = 'keys'
+                Action  = 'Keys'
                 Value   = ''
                 DelayMs = 100
             }

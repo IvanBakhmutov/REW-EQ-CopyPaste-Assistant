@@ -11,8 +11,8 @@
     "HotkeyOrDelayPreference": "Hotkey",
     "KeystrokeSequence": [
         {
-            "keys": "^aFREQ{TAB}QVALUE{TAB}GAIN{TAB}{TAB}{TAB}",
-            "delay_ms": 20
+            "Keys": "^aFREQ{TAB}QVALUE{TAB}GAIN{TAB}{TAB}{TAB}",
+            "Delay_ms": 20
         }
     ]
 }

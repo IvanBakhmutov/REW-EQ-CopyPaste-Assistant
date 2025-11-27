@@ -233,44 +233,44 @@ do {
             foreach ($band in $bands) {
                 foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
                     switch ($KeySet.PSObject.Properties.Name) {
-                        "mouseChangePositionY" {
-                            $MouseY += [int]$KeySet.mouseChangePositionY
-                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                        "MouseChangePositionY" {
+                            $MouseY += [int]$KeySet.MouseChangePositionY
+                            Start-Sleep -Milliseconds $KeySet.Delay_ms
                             Write-Host -ForegroundColor Blue "New MouseY: $MouseY"
                         }
-                        "mouseChangePositionX" {
-                            $MouseX += [int]$KeySet.mouseChangePositionX
-                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                        "MouseChangePositionX" {
+                            $MouseX += [int]$KeySet.MouseChangePositionX
+                            Start-Sleep -Milliseconds $KeySet.Delay_ms
                             Write-Host -ForegroundColor Blue "New MouseX: $MouseX"
                         }
-                        "mouseClick" {
-                            switch ($KeySet.mouseClick.ToLower()) {
+                        "MouseClick" {
+                            switch ($KeySet.MouseClick.ToLower()) {
                                 "left" {
                                     Invoke-MouseClickLeftAt -X $MouseX -Y $MouseY | Out-Null
-                                    Start-Sleep -Milliseconds $KeySet.delay_ms
+                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
                                     Write-Host -ForegroundColor Blue "Left click at X:$MouseX Y:$MouseY"
                                 }
                                 "right" {
                                     Invoke-MouseClickRightAt -X $MouseX -Y $MouseY | Out-Null
-                                    Start-Sleep -Milliseconds $KeySet.delay_ms
+                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
                                     Write-Host -ForegroundColor Blue "Right click at X:$MouseX Y:$MouseY"
                                 }
                             }
                         }
                         "MouseScrollUp" {
                             Invoke-MouseScrollUp -Amount $KeySet.MouseScrollUp
-                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                            Start-Sleep -Milliseconds $KeySet.Delay_ms
                             Write-Host -ForegroundColor Blue "Mouse scroll up by $($KeySet.MouseScrollUp)"
                         }
                         "Invoke-MouseScrollDown" {
                             Invoke-MouseScrollDown -Amount $KeySet.MouseScrollDown
-                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                            Start-Sleep -Milliseconds $KeySet.Delay_ms
                             Write-Host -ForegroundColor Blue "Mouse scroll down by $($KeySet.MouseScrollDown)"
                         }
-                        "keys" {
-                            $keyToSend = $KeySet.keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber)
+                        "Keys" {
+                            $keyToSend = $KeySet.Keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber)
                             Invoke-KeyStroke -Keys $keyToSend
-                            Start-Sleep -Milliseconds $KeySet.delay_ms
+                            Start-Sleep -Milliseconds $KeySet.Delay_ms
                             Write-Host -ForegroundColor Blue "Sent keystrokes: $keyToSend"
                         }
                     }

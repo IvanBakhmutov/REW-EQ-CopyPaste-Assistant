@@ -12,16 +12,16 @@
     "HotkeyOrDelayPreference": "Hotkey",
     "KeystrokeSequence": [
         {
-            "keys": "^a{BACKSPACE}FREQ{TAB}",
-            "delay_ms": 200
+            "Keys": "^a{BACKSPACE}FREQ{TAB}",
+            "Delay_ms": 200
         },
         {
-            "keys": "^a{BACKSPACE}QVALUE{TAB}",
-            "delay_ms": 200
+            "Keys": "^a{BACKSPACE}QVALUE{TAB}",
+            "Delay_ms": 200
         },
         {
-            "keys": "^a{BACKSPACE}GAIN{TAB}",
-            "delay_ms": 200
+            "Keys": "^a{BACKSPACE}GAIN{TAB}",
+            "Delay_ms": 200
         }
     ]
 }

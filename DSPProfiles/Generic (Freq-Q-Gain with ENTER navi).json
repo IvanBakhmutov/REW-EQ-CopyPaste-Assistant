@@ -11,8 +11,8 @@
     "HotkeyOrDelayPreference": "Hotkey",
     "KeystrokeSequence": [
         {
-            "keys": "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
-            "delay_ms": 200
+            "Keys": "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
+            "Delay_ms": 200
         }
     ]
 }
