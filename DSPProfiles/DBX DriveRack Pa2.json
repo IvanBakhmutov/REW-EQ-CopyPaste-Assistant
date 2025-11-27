@@ -1,17 +1,19 @@
-{
-    "version": "1.0",
-    "Description": "DBX DriveRack Pa2 ",
-    "processName": "pa2ui",
-    "QDevider": 1,
-    "QDecimals": 2,
-    "GainDecimals": 1,
-    "DecimalSeparator": ".",
-    "StartingPositionHint": "!!! Attenzione !!! non funziona con la sua App originale. Utilizzare con app Pa2Ui. App scaricabile gratuitamente su https://github.com/Kattjakt/pa2ui",
-    "HotkeyOrDelayPreference": "Hotkey",
-    "KeystrokeSequence": [
-        {
-            "keys": "^aFREQ{TAB}GAIN{TAB}QVALUE{TAB}{TAB}",
-            "delay_ms": 500
-        }
-    ]
+﻿{
+    "version":  "1.0",
+    "Description":  "DBX DriveRack Pa2 ",
+    "processName":  "pa2ui",
+    "QDivider":  1,
+    "QDecimals":  2,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "!!! Attenzione !!! non funziona con la sua App originale. Utilizzare con app Pa2Ui. App scaricabile gratuitamente su https://github.com/Kattjakt/pa2ui",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "Keys":  "^aFREQ{TAB}GAIN{TAB}QVALUE{TAB}{TAB}",
+                                  "Delay_ms":  500
+                              }
+                          ]
 }
