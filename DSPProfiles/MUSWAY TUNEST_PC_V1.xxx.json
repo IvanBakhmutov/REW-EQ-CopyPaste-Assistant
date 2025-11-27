@@ -10,8 +10,8 @@
     "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
     "KeystrokeSequence": [
         {
-            "keys": "FREQ{TAB}QVALUE{TAB}GAIN{TAB}",
-            "delay_ms": 100
+            "Keys": "FREQ{TAB}QVALUE{TAB}GAIN{TAB}",
+            "Delay_ms": 100
         }
     ]
 }

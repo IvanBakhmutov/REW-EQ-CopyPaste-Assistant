@@ -11,44 +11,44 @@
     "HotkeyOrDelayPreference": "Hotkey",
     "KeystrokeSequence": [
         {
-            "mouseClick": "left",
-            "delay_ms": 20
+            "MouseClick": "left",
+            "Delay_ms": 20
         },
         {
-            "keys": "BANDNUMBER",
-            "delay_ms": 20
+            "Keys": "BANDNUMBER",
+            "Delay_ms": 20
         },
         {
-            "mouseChangePositionY": "38",
-            "delay_ms": 20
+            "MouseChangePositionY": "38",
+            "Delay_ms": 20
         },
         {
-            "mouseClick": "left",
-            "delay_ms": 20
+            "MouseClick": "left",
+            "Delay_ms": 20
         },
         {
-            "keys": "GAIN",
-            "delay_ms": 20
+            "Keys": "GAIN",
+            "Delay_ms": 20
         },
         {
-            "keys": "{TAB}",
-            "delay_ms": 20
+            "Keys": "{TAB}",
+            "Delay_ms": 20
         },
         {
-            "keys": "FREQ",
-            "delay_ms": 20
+            "Keys": "FREQ",
+            "Delay_ms": 20
         },
         {
-            "keys": "{TAB}",
-            "delay_ms": 20
+            "Keys": "{TAB}",
+            "Delay_ms": 20
         },
         {
-            "keys": "QVALUE",
-            "delay_ms": 20
+            "Keys": "QVALUE",
+            "Delay_ms": 20
         },
         {
-            "mouseChangePositionY": "-38",
-            "delay_ms": 20
+            "MouseChangePositionY": "-38",
+            "Delay_ms": 20
         }
     ]
 }

@@ -11,44 +11,44 @@
     "HotkeyOrDelayPreference": "Hotkey",
     "KeystrokeSequence": [
         {
-            "mouseClick": "left",
-            "delay_ms": 50
+            "MouseClick": "left",
+            "Delay_ms": 50
         },
         {
-            "keys": "FREQ",
-            "delay_ms": 200
+            "Keys": "FREQ",
+            "Delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+18",
-            "delay_ms": 10
+            "MouseChangePositionY": "+18",
+            "Delay_ms": 10
         },
         {
-            "mouseClick": "left",
-            "delay_ms": 50
+            "MouseClick": "left",
+            "Delay_ms": 50
         },
         {
-            "keys": "GAIN",
-            "delay_ms": 200
+            "Keys": "GAIN",
+            "Delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+117",
-            "delay_ms": 10
+            "MouseChangePositionY": "+117",
+            "Delay_ms": 10
         },
         {
-            "mouseClick": "left",
-            "delay_ms": 50
+            "MouseClick": "left",
+            "Delay_ms": 50
         },
         {
-            "keys": "QVALUE",
-            "delay_ms": 200
+            "Keys": "QVALUE",
+            "Delay_ms": 200
         },
         {
-            "mouseChangePositionY": "-135",
-            "delay_ms": 10
+            "MouseChangePositionY": "-135",
+            "Delay_ms": 10
         },
         {
-            "mouseChangePositionX": "+37",
-            "delay_ms": 10
+            "MouseChangePositionX": "+37",
+            "Delay_ms": 10
         }
     ]
 }

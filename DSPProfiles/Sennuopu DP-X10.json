@@ -10,44 +10,44 @@
     "StartingPositionHint": "Please hover mouse over 1 band Q box and press hotkey",
    "KeystrokeSequence": [
         {
-            "mouseClick": "left",
-            "delay_ms": 50
+            "MouseClick": "left",
+            "Delay_ms": 50
         },
         {
-            "keys": "^aFREQ{ENTER}",
-            "delay_ms": 200
+            "Keys": "^aFREQ{ENTER}",
+            "Delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+19",
-            "delay_ms": 10
+            "MouseChangePositionY": "+19",
+            "Delay_ms": 10
         },
         {
-            "mouseClick": "left",
-            "delay_ms": 50
+            "MouseClick": "left",
+            "Delay_ms": 50
         },
         {
-            "keys": "^aQVALUE{ENTER}",
-            "delay_ms": 200
+            "Keys": "^aQVALUE{ENTER}",
+            "Delay_ms": 200
         },
         {
-            "mouseChangePositionY": "+19",
-            "delay_ms": 10
+            "MouseChangePositionY": "+19",
+            "Delay_ms": 10
         },
         {
-            "mouseClick": "left",
-            "delay_ms": 50
+            "MouseClick": "left",
+            "Delay_ms": 50
         },
         {
-            "keys": "^aGAIN{ENTER}",
-            "delay_ms": 200
+            "Keys": "^aGAIN{ENTER}",
+            "Delay_ms": 200
         },
         {
-            "mouseChangePositionY": "-38",
-            "delay_ms": 10
+            "MouseChangePositionY": "-38",
+            "Delay_ms": 10
         },
         {
-            "mouseChangePositionX": "+31",
-            "delay_ms": 10
+            "MouseChangePositionX": "+31",
+            "Delay_ms": 10
         }
     ]
 }
