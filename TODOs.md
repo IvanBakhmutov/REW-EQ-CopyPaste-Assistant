@@ -16,10 +16,10 @@
 - ~~Remove "True" word output in console when a mouse pointer operation happens, check why keystroke output is missing~~
 
 ## Immediate plans
-- Folders with brand names for DSP profiles?
+
 - Reported issue with confirmation dialog (in parallels desktop)
 - Configurable PEQ guidelines for each profile in a separate text box
-- Profile search by brand or model. Store search history
+- ~~Profile search filter.~~ Store the last selected profile and select it on the next startup.
 - Last used profile will be selected automatically
 - Right pane with 2 tabs - Overview, and profile plain text
 - Mouse/KB action names with capital letters
@@ -36,6 +36,9 @@
 Otherwise - backward compatibility with manual hit copy button on EQ window and then proceeding with hotkeys/delays.
 - Experimental: Try to make this script to connect to REW API to set default Configurable PEQ with DSP model specific options http://127.0.0.1:4735/eq/default-equaliser
   
+## Ideas to be reviewed
+- Folders with brand names for DSP profiles?
+
 ## DSP profiles list to check
  ~~ESX~~,  
  ~~Musway~~,  

@@ -718,10 +718,29 @@ Function Show-SelectProfileGui {
 
     # Populate the profiles list in the GUI
     $profileListBox = $ProfileEditGUI.FindName("ProfileList")
-    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-    foreach ($profileFileName in $DSPProfilesList) {
+    if (-not ($script:DSPProfilesList -is [System.Array])) { $script:DSPProfilesList = @() }
+    $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+    <#foreach ($profileFileName in $DSPProfilesList) {
         $profileListBox.Items.Add($profileFileName.baseName) | Out-Null
-    }
+    }#>
+    $profileListBox.ItemsSource = $script:DSPProfilesList.BaseName
+
+    # Search box text changed handler to filter the profiles list
+    $ProfileEditGUI.FindName("SearchEDIT").Add_TextChanged({
+        param($searchSender, $searchArgs)
+        $searchText = $searchSender.Text.ToLower()
+        $filteredProfiles = @()
+        foreach ($profileFile in $script:DSPProfilesList) {
+            if ($profileFile.BaseName.ToLower().Contains($searchText)) {
+                $filteredProfiles += $profileFile.BaseName
+            }
+        }
+        $profileListBox.ItemsSource = $filteredProfiles
+    })
+
+    $ProfileEditGUI.FindName("ClearSearchBTN").Add_Click({
+        $ProfileEditGUI.FindName("SearchEDIT").Text = ""
+    })
 
     #Region process checks
     $BGProcessCheck = New-Object Windows.Threading.DispatcherTimer
@@ -903,11 +922,15 @@ Function Show-SelectProfileGui {
                 # If the profile was saved, refresh the list and select the new item
                 if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                     $ProfileEditGUI.FindName('ProfileList').Items.Clear()
-                    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-                    foreach ($profileFileName in $DSPProfilesList) {
-                        $ProfileEditGUI.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null
-                    }
 
+                    $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+                    $searchText = $ProfileEditGUI.FindName('SearchEDIT').Text.ToLower()
+                    foreach ($profileFile in $script:DSPProfilesList) {
+                        if ($profileFile.BaseName.ToLower().Contains($searchText)) {
+                            $filteredProfiles += $profileFile.BaseName
+                        }
+                    }
+                    $profileListBox.ItemsSource = $filteredProfiles
                     $savedBase = (Get-Item -LiteralPath $newProfilePath).BaseName
                     $ProfileEditGUI.FindName('ProfileList').SelectedItem = $savedBase
                 }
@@ -924,10 +947,16 @@ Function Show-SelectProfileGui {
             # If the profile was saved (overwritten or saved as new), refresh the list and select the saved item
             if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                 # reload available profiles
-                $ProfileEditGUI.FindName('ProfileList').Items.Clear()
-                $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-                foreach ($profileFileName in $DSPProfilesList) { $ProfileEditGUI.FindName('ProfileList').Items.Add($profileFileName.BaseName) | Out-Null }
 
+                $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+                $searchText = $ProfileEditGUI.FindName('SearchEDIT').Text.ToLower()
+                [array]$filteredProfiles = @()
+                    foreach ($profileFile in $script:DSPProfilesList) {
+                        if ($profileFile.BaseName.ToLower().Contains($searchText)) {
+                            $filteredProfiles += $profileFile.BaseName
+                        }
+                    }
+                    $profileListBox.ItemsSource = $filteredProfiles
                 # determine the base name of saved file and select it
                 try {
                     $savedPath = $editResult.FilePath
@@ -963,9 +992,7 @@ Function Show-SelectProfileGui {
         })
     $ProfileEditGUI.FindName("OKBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
-            
 
-            
             # check if REW is running with API enabled
             if ($result.REWStatus -eq "Not Running") {
                 Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
@@ -1012,6 +1039,15 @@ Function Show-SelectProfileGui {
                 $result.Action = "Open"
                 $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
                 $BGProcessCheck.Stop()
+
+                # Save last selected profile to Resources\UserConfig.json
+               <# $UserConfig = [PSCustomObject]@{
+                        LastSelectedProfile = $selectedProfileFileName
+                        ClipboardOrAPIPreference = $null
+                    }
+                if(Test-Path "$ResourcesDir\UserConfig.json"){
+                    
+                }#>
                 $ProfileEditGUI.Close()
             }
         })
