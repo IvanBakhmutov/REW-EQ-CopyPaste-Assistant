@@ -241,7 +241,7 @@ public class User32 {
 
 # --- Exported Functions ---
 Export-ModuleMember -Function `
-    Invoke-MouseMoveBy,
+Invoke-MouseMoveBy,
 Invoke-MouseClickLeftAt,
 Invoke-MouseClickRightAt,
 Invoke-MouseClickRelative,

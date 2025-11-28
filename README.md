@@ -64,6 +64,10 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
 
+### 28.11.2025
+ver 0.3.1<br>
+Profile editor GUI window corrected sizing
+
 ### 27.11.2025
 ver 0.3.0:<br>
 Added tabs with Profile Overview and Details<br>

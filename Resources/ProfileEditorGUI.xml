@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:WpfApp1"
 
         Title="Edit profile" Height="600" Width="800" MinWidth="800" MinHeight="600" Margin="-3,0,0,0">
-   <Grid>
+     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="521*"/>
             <RowDefinition Height="48*"/>
@@ -59,80 +59,89 @@
 
                     </DataGrid.Columns>
                 </DataGrid>
-                 <Button x:Name="Help" ToolTipService.InitialShowDelay="200" ToolTip="Open help documentation page"  Content="Help" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Margin="10,0,0,9" HorizontalAlignment="Left" Width="75" Height="20" VerticalAlignment="Bottom"/>
+                <Button x:Name="Help" ToolTipService.InitialShowDelay="200" ToolTip="Open help documentation page"  Content="Help" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Margin="10,0,0,9" HorizontalAlignment="Left" Width="75" Height="20" VerticalAlignment="Bottom"/>
             </Grid>
 
         </GroupBox>
-        <TextBox x:Name="FileNameEdit" VerticalScrollBarVisibility="Auto" Height="23" Margin="24,36,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="filename" IsEnabled="False"/>
-        <Label Content="File Name" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="26" Width="63"/>
-        <TextBox x:Name="DescriptionEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Profile description" Height="68" Margin="24,90,15,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto"/>
-        <Label Content="Description" HorizontalAlignment="Left" Margin="24,64,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
-        <TextBox x:Name="ProcessNameEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Full or partial window process name. Wildcard character *" VerticalScrollBarVisibility="Auto" Height="22" Margin="24,189,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Label Content="DSP Software Process Name" HorizontalAlignment="Left" Margin="24,163,0,0" VerticalAlignment="Top" Height="26" Width="159"/>
-        <GroupBox Header="Decimals" Height="147" Margin="24,216,15,0" VerticalAlignment="Top">
-            <Grid Margin="10,0">
-                <TextBox x:Name="FreqDecimalsEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for frequency values" HorizontalAlignment="Left" Height="23" Margin="0,26,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="70"/>
-                <Label Content="Freq" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBox x:Name="QDecimalsEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for Q values" HorizontalAlignment="Left" Height="23" Margin="75,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
-                <Label Content="Q" HorizontalAlignment="Left" Margin="75,0,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="GainDecimalsEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for gain values" HorizontalAlignment="Left" Height="23" Margin="150,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
-                <Label Content="Gain" HorizontalAlignment="Left" Margin="145,0,0,0" VerticalAlignment="Top"/>
-                <Label Content="Decimal separator" HorizontalAlignment="Left" Margin="0,54,0,0" VerticalAlignment="Top"/>
-                <RadioButton x:Name="DecimalSeparatorDot"  ToolTipService.InitialShowDelay="200" ToolTip="Use dot as decimal separator, example 1.5" Content="Dot &quot;.&quot;" HorizontalAlignment="Left" Margin="0,85,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup" IsChecked="True"/>
-                <RadioButton x:Name="DecimalSeparatorComma"  ToolTipService.InitialShowDelay="200" ToolTip="Use comma as decimal separator, example 1,5" Content="Comma &quot;,&quot;" HorizontalAlignment="Left" Margin="0,105,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup"/>
-                <Label Content="Q Divider" HorizontalAlignment="Left" Margin="150,54,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
-                <TextBox x:Name="QDividerEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Divider for Q values, example 2 means Q values will be divided by 2, or 0.5 means Q values will be multiplied by 2. Default is 1" HorizontalAlignment="Left" Height="23" Margin="150,80,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="32"/>
-            </Grid>
-        </GroupBox>
-        <TextBox x:Name="StartingPositionEdit" ToolTipService.InitialShowDelay="200" ToolTip="Display message to help user understand starting position of the paste operation"  VerticalScrollBarVisibility="Auto" Height="23" Margin="24,394,15,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Label Content="Starting position hint"  HorizontalAlignment="Left" Margin="24,368,0,0" VerticalAlignment="Top" Height="26" Width="159"/>
-        <Label Content="Hotkey/delay" HorizontalAlignment="Left" Margin="24,422,0,0" VerticalAlignment="Top" Height="26" Width="94"/>
-        <RadioButton x:Name="HotkeySelected" ToolTipService.InitialShowDelay="200" ToolTip="Select to use a hotkey for the action"  Content="Hotkey" HorizontalAlignment="Left" Margin="24,448,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" IsChecked="True" Height="15" Width="57"/>
-        <RadioButton x:Name="DelaySelected" ToolTipService.InitialShowDelay="200" ToolTip="Select to use a delay for the action" Content="Delay" HorizontalAlignment="Left" Margin="24,468,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" Height="15" Width="49"/>
+
+        <Button x:Name="SaveBTN" ToolTipService.InitialShowDelay="200" ToolTip="Save the current profile"  Content="Save" Grid.Column="1" Margin="0,0,170,10" Grid.Row="1" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" IsEnabled="False"/>
         <Button x:Name="SaveAsBTN" ToolTipService.InitialShowDelay="200" ToolTip="Save the current profile as a new file"  Content="Save as" Grid.Column="1" Margin="0,0,90,10" Grid.Row="1" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
         <Button x:Name="CancelBTN" ToolTipService.InitialShowDelay="200" ToolTip="Cancel editing and close the profile editor"  Content="Cancel" Grid.Column="1" Margin="0,0,10,10" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Height="20"/>
-        <Label x:Name="HotkeyLabel" Content="Hotkey" HorizontalAlignment="Left" Margin="106,422,0,0" VerticalAlignment="Top" Height="26" Width="57"/>
-        <RadioButton x:Name="HotkeyDefault" ToolTipService.InitialShowDelay="200" ToolTip="Use the default hotkey for the action"  Content="Default" HorizontalAlignment="Left" Margin="106,448,0,0" VerticalAlignment="Top" GroupName="HotkeyGroup" IsChecked="True" Height="15" Width="57"/>
-        <RadioButton x:Name="HotkeyOverride" ToolTipService.InitialShowDelay="200" ToolTip="Override the default hotkey for the action" Content="Override" HorizontalAlignment="Left" Margin="106,468,0,0" VerticalAlignment="Top" GroupName="HotkeyGroup" Height="15" Width="77"/>
-        <Label x:Name="ActionLabel" Content="Action" HorizontalAlignment="Left" Margin="185,422,0,0" VerticalAlignment="Top" Height="26" Width="57" Visibility="Hidden"/>
-        <Label x:Name="CancelLabel" Content="Cancel" HorizontalAlignment="Left" Margin="247,422,0,0" VerticalAlignment="Top" Height="26" Width="57" Visibility="Hidden"/>
-        <ComboBox x:Name="ActionHotkeyCombo"
-                  Visibility="Hidden"
+        <Grid Margin="0" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="63"/>
+                <RowDefinition Height="141*"/>
+                <RowDefinition Height="154"/>
+                <RowDefinition Height="115*"/>
+                <RowDefinition Height="96"/>
+            </Grid.RowDefinitions>
+            <TextBox x:Name="FileNameEdit" VerticalScrollBarVisibility="Auto" Height="23" Margin="24,36,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="filename" IsEnabled="False"/>
+            <Label Content="File Name" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="26" Width="63"/>
+            <TextBox x:Name="DescriptionEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Profile description" Margin="24,31,15,10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Row="1"/>
+            <Label Content="Description" HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="70" Grid.Row="1"/>
+
+            <GroupBox Header="Decimals" Height="147" Margin="24,1,15,0" VerticalAlignment="Top" Grid.Row="2">
+                <Grid Margin="10,0">
+                    <TextBox x:Name="FreqDecimalsEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for frequency values" HorizontalAlignment="Left" Height="23" Margin="0,26,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="70"/>
+                    <Label Content="Freq" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBox x:Name="QDecimalsEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for Q values" HorizontalAlignment="Left" Height="23" Margin="75,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
+                    <Label Content="Q" HorizontalAlignment="Left" Margin="75,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="GainDecimalsEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for gain values" HorizontalAlignment="Left" Height="23" Margin="150,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
+                    <Label Content="Gain" HorizontalAlignment="Left" Margin="145,0,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Decimal separator" HorizontalAlignment="Left" Margin="0,54,0,0" VerticalAlignment="Top"/>
+                    <RadioButton x:Name="DecimalSeparatorDot"  ToolTipService.InitialShowDelay="200" ToolTip="Use dot as decimal separator, example 1.5" Content="Dot &quot;.&quot;" HorizontalAlignment="Left" Margin="0,85,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup" IsChecked="True"/>
+                    <RadioButton x:Name="DecimalSeparatorComma"  ToolTipService.InitialShowDelay="200" ToolTip="Use comma as decimal separator, example 1,5" Content="Comma &quot;,&quot;" HorizontalAlignment="Left" Margin="0,105,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup"/>
+                    <Label Content="Q Divider" HorizontalAlignment="Left" Margin="150,54,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
+                    <TextBox x:Name="QDividerEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Divider for Q values, example 2 means Q values will be divided by 2, or 0.5 means Q values will be multiplied by 2. Default is 1" HorizontalAlignment="Left" Height="23" Margin="150,80,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="32"/>
+                </Grid>
+            </GroupBox>
+            <TextBox x:Name="StartingPositionEdit" ToolTipService.InitialShowDelay="200" ToolTip="Display message to help user understand starting position of the paste operation"  VerticalScrollBarVisibility="Auto" Margin="24,26,15,9" TextWrapping="Wrap" Grid.Row="3"/>
+            <Label Content="Starting position hint"  HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="159" Grid.Row="3"/>
+
+            <Label Content="Hotkey/delay" HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="94" Grid.Row="4"/>
+            <RadioButton x:Name="HotkeySelected" ToolTipService.InitialShowDelay="200" ToolTip="Select to use a hotkey for the action"  Content="Hotkey" HorizontalAlignment="Left" Margin="24,26,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" IsChecked="True" Height="15" Width="57" Grid.Row="4"/>
+            <RadioButton x:Name="DelaySelected" ToolTipService.InitialShowDelay="200" ToolTip="Select to use a delay for the action" Content="Delay" HorizontalAlignment="Left" Margin="24,46,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" Height="15" Width="49" Grid.Row="4"/>
+            <Label x:Name="HotkeyLabel" Content="Hotkey" HorizontalAlignment="Left" Margin="106,0,0,0" VerticalAlignment="Top" Height="26" Width="57" Grid.Row="4"/>
+            <RadioButton x:Name="HotkeyDefault" ToolTipService.InitialShowDelay="200" ToolTip="Use the default hotkey for the action"  Content="Default" HorizontalAlignment="Left" Margin="106,26,0,0" VerticalAlignment="Top" GroupName="HotkeyGroup" IsChecked="True" Height="15" Width="57" Grid.Row="4"/>
+            <RadioButton x:Name="HotkeyOverride" ToolTipService.InitialShowDelay="200" ToolTip="Override the default hotkey for the action" Content="Override" HorizontalAlignment="Left" Margin="106,46,0,0" VerticalAlignment="Top" GroupName="HotkeyGroup" Height="15" Width="77" Grid.Row="4"/>
+            <Label x:Name="ActionLabel" Content="Action" HorizontalAlignment="Left" Margin="185,0,0,0" VerticalAlignment="Top" Height="26" Width="57" Grid.Row="4" Visibility="Hidden"/>
+            <Label x:Name="CancelLabel" Content="Cancel" HorizontalAlignment="Left" Margin="242,0,0,0" VerticalAlignment="Top" Height="26" Width="57" Grid.Row="4" Visibility="Hidden"/>
+            <ComboBox x:Name="ActionHotkeyCombo"
           SelectedIndex="10"
-          IsEditable="False" Margin="188,453,67,38">
-            <ComboBoxItem>F1</ComboBoxItem>
-            <ComboBoxItem>F2</ComboBoxItem>
-            <ComboBoxItem>F3</ComboBoxItem>
-            <ComboBoxItem>F4</ComboBoxItem>
-            <ComboBoxItem>F5</ComboBoxItem>
-            <ComboBoxItem>F6</ComboBoxItem>
-            <ComboBoxItem>F7</ComboBoxItem>
-            <ComboBoxItem>F8</ComboBoxItem>
-            <ComboBoxItem>F9</ComboBoxItem>
-            <ComboBoxItem>F10</ComboBoxItem>
-            <ComboBoxItem>F11</ComboBoxItem>
-            <ComboBoxItem>F12</ComboBoxItem>
-        </ComboBox>
-        <ComboBox x:Name="CancelHotkeyCombo"
-                  Visibility="Hidden"
+          IsEditable="False" Margin="185,0,70,39" Grid.Row="4" Height="25" VerticalAlignment="Bottom" Visibility="Hidden">
+                <ComboBoxItem>F1</ComboBoxItem>
+                <ComboBoxItem>F2</ComboBoxItem>
+                <ComboBoxItem>F3</ComboBoxItem>
+                <ComboBoxItem>F4</ComboBoxItem>
+                <ComboBoxItem>F5</ComboBoxItem>
+                <ComboBoxItem>F6</ComboBoxItem>
+                <ComboBoxItem>F7</ComboBoxItem>
+                <ComboBoxItem>F8</ComboBoxItem>
+                <ComboBoxItem>F9</ComboBoxItem>
+                <ComboBoxItem>F10</ComboBoxItem>
+                <ComboBoxItem>F11</ComboBoxItem>
+                <ComboBoxItem>F12</ComboBoxItem>
+            </ComboBox>
+            <ComboBox x:Name="CancelHotkeyCombo"
             SelectedIndex="11"
-            IsEditable="False" Margin="247,453,8,38">
-            <ComboBoxItem Content="F1"/>
-            <ComboBoxItem Content="F2"/>
-            <ComboBoxItem Content="F3"/>
-            <ComboBoxItem Content="F4"/>
-            <ComboBoxItem Content="F5"/>
-            <ComboBoxItem Content="F6"/>
-            <ComboBoxItem Content="F7"/>
-            <ComboBoxItem Content="F8"/>
-            <ComboBoxItem Content="F9"/>
-            <ComboBoxItem Content="F10"/>
-            <ComboBoxItem Content="F11"/>
-            <ComboBoxItem Content="F12"/>
-        </ComboBox>
-        <Label x:Name="DelayLabel" Visibility="Hidden" Content="Delay, sec" HorizontalAlignment="Left" Margin="106,422,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
-        <TextBox x:Name="DelayEdit"  Visibility="Hidden" ToolTipService.InitialShowDelay="200" ToolTip="Set the delay in seconds for the action" HorizontalAlignment="Left" Height="23" Margin="106,448,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="32"/>
-        <Button x:Name="SaveBTN" ToolTipService.InitialShowDelay="200" ToolTip="Save the current profile"  Content="Save" Grid.Column="1" Margin="0,0,170,10" Grid.Row="1" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" IsEnabled="False"/>
-        <CheckBox x:Name="AdminRightsRequiredCHBX" ToolTipService.InitialShowDelay="200" ToolTip="Check if the DSP software requires administrative rights to run" Content="DSP software runs with admin rights" HorizontalAlignment="Left" Margin="24,488,0,0" VerticalAlignment="Top"/>
+            IsEditable="False" Margin="244,0,11,39" Grid.Row="4" Height="25" VerticalAlignment="Bottom" Visibility="Hidden">
+                <ComboBoxItem Content="F1"/>
+                <ComboBoxItem Content="F2"/>
+                <ComboBoxItem Content="F3"/>
+                <ComboBoxItem Content="F4"/>
+                <ComboBoxItem Content="F5"/>
+                <ComboBoxItem Content="F6"/>
+                <ComboBoxItem Content="F7"/>
+                <ComboBoxItem Content="F8"/>
+                <ComboBoxItem Content="F9"/>
+                <ComboBoxItem Content="F10"/>
+                <ComboBoxItem Content="F11"/>
+                <ComboBoxItem Content="F12"/>
+            </ComboBox>
+            <Label x:Name="DelayLabel" Content="Delay, sec" HorizontalAlignment="Left" Margin="106,0,0,0" VerticalAlignment="Top" Height="26" Width="62" Grid.Row="4" Visibility="Hidden"/>
+            <TextBox x:Name="DelayEdit" ToolTipService.InitialShowDelay="200" ToolTip="Set the delay in seconds for the action" HorizontalAlignment="Left" Height="23" Margin="106,26,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Width="32" Grid.Row="4" Visibility="Hidden"/>
+            <CheckBox x:Name="AdminRightsRequiredCHBX" ToolTipService.InitialShowDelay="200" ToolTip="Check if the DSP software requires administrative rights to run" Content="DSP software runs with admin rights" HorizontalAlignment="Left" Margin="24,66,0,0" VerticalAlignment="Top" Grid.Row="4" Height="15" Width="212"/>
+
+        </Grid>
     </Grid>
 </Window>
