@@ -16,9 +16,9 @@ Once you tested your own DSP profile please share it in the Discussion section o
 
 A demo video [<img src="Img/YouTube_Logo.png" alt="YouTube icon" height=12/> watch on YouTube](https://youtu.be/s-LkXFBM7A4)
 
-Special thanks to Denis GS for the ideas and collaboration!
+☕ Support this project **[<img src="Img/PayPal_Logo.png" alt="PayPal icon" height=12/> PayPal](https://paypal.me/IvanBakhmutovDonate)**
 
-Support this project **[<img src="Img/PayPal_Logo.png" alt="PayPal icon" height=12/> PayPal](https://paypal.me/IvanBakhmutovDonate)**
+Special thanks to Denis GS for the ideas and collaboration!
 
 <p align="center">
 <img src="Img/Picture.png" alt="Picture" width=800 />
