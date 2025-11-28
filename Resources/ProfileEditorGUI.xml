@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:WpfApp1"
 
         Title="Edit profile" Height="600" Width="800" MinWidth="800" MinHeight="600" Margin="-3,0,0,0">
-     <Grid>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="521*"/>
             <RowDefinition Height="48*"/>
@@ -70,17 +70,19 @@
         <Grid Margin="0" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="63"/>
-                <RowDefinition Height="141*"/>
-                <RowDefinition Height="154"/>
-                <RowDefinition Height="115*"/>
+                <RowDefinition Height="21*"/>
+                <RowDefinition Height="210"/>
+                <RowDefinition Height="19*"/>
                 <RowDefinition Height="96"/>
             </Grid.RowDefinitions>
             <TextBox x:Name="FileNameEdit" VerticalScrollBarVisibility="Auto" Height="23" Margin="24,36,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="filename" IsEnabled="False"/>
             <Label Content="File Name" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="26" Width="63"/>
             <TextBox x:Name="DescriptionEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Profile description" Margin="24,31,15,10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Row="1"/>
             <Label Content="Description" HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="70" Grid.Row="1"/>
+            <TextBox x:Name="ProcessNameEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Full or partial window process name. Wildcard character *" VerticalScrollBarVisibility="Auto" Height="22" Margin="24,31,15,0" TextWrapping="Wrap" VerticalAlignment="Top"  Grid.Row="2"/>
+            <Label Content="DSP Software Process Name" HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="159" Grid.Row="2" />
 
-            <GroupBox Header="Decimals" Height="147" Margin="24,1,15,0" VerticalAlignment="Top" Grid.Row="2">
+            <GroupBox Header="Decimals" Height="147" Margin="24,58,15,0" VerticalAlignment="Top" Grid.Row="2">
                 <Grid Margin="10,0">
                     <TextBox x:Name="FreqDecimalsEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for frequency values" HorizontalAlignment="Left" Height="23" Margin="0,26,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="70"/>
                     <Label Content="Freq" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -95,7 +97,7 @@
                     <TextBox x:Name="QDividerEdit"  ToolTipService.InitialShowDelay="200" ToolTip="Divider for Q values, example 2 means Q values will be divided by 2, or 0.5 means Q values will be multiplied by 2. Default is 1" HorizontalAlignment="Left" Height="23" Margin="150,80,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="32"/>
                 </Grid>
             </GroupBox>
-            <TextBox x:Name="StartingPositionEdit" ToolTipService.InitialShowDelay="200" ToolTip="Display message to help user understand starting position of the paste operation"  VerticalScrollBarVisibility="Auto" Margin="24,26,15,9" TextWrapping="Wrap" Grid.Row="3"/>
+            <TextBox x:Name="StartingPositionEdit" ToolTipService.InitialShowDelay="200" ToolTip="Display message to help user understand starting position of the paste operation"  VerticalScrollBarVisibility="Auto" Margin="24,26,15,10" TextWrapping="Wrap" Grid.Row="3"/>
             <Label Content="Starting position hint"  HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="159" Grid.Row="3"/>
 
             <Label Content="Hotkey/delay" HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="94" Grid.Row="4"/>
@@ -108,7 +110,7 @@
             <Label x:Name="CancelLabel" Content="Cancel" HorizontalAlignment="Left" Margin="242,0,0,0" VerticalAlignment="Top" Height="26" Width="57" Grid.Row="4" Visibility="Hidden"/>
             <ComboBox x:Name="ActionHotkeyCombo"
           SelectedIndex="10"
-          IsEditable="False" Margin="185,0,70,39" Grid.Row="4" Height="25" VerticalAlignment="Bottom" Visibility="Hidden">
+          IsEditable="False" Margin="185,0,0,39" Grid.Row="4" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="54" Visibility="Hidden">
                 <ComboBoxItem>F1</ComboBoxItem>
                 <ComboBoxItem>F2</ComboBoxItem>
                 <ComboBoxItem>F3</ComboBoxItem>
@@ -124,7 +126,7 @@
             </ComboBox>
             <ComboBox x:Name="CancelHotkeyCombo"
             SelectedIndex="11"
-            IsEditable="False" Margin="244,0,11,39" Grid.Row="4" Height="25" VerticalAlignment="Bottom" Visibility="Hidden">
+            IsEditable="False" Margin="244,0,0,39" Grid.Row="4" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="54" Visibility="Hidden">
                 <ComboBoxItem Content="F1"/>
                 <ComboBoxItem Content="F2"/>
                 <ComboBoxItem Content="F3"/>
