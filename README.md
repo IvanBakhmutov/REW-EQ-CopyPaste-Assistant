@@ -14,7 +14,7 @@ This is just an initial version of the tool. Experiment with it, create your own
 Strong suggestion, when you create profile for a DSP which doesn't fully support keyboard navigation and you are dealing with mouse moves and clicks and you would like to share your profile with others - leave the DSP app in its native resolution, don't make it maximized to a full screen (on different devices screen resolution may vary).
 Once you tested your own DSP profile please share it in the Discussion section of the repository so it will be added to the repo.
 
-A demo video [<img src="Img/YouTube_Logo.png" alt="YouTube icon" height=12/> watch on YouTube](https://youtu.be/s-LkXFBM7A4)
+A demo video [<img src="Img/YouTube_Logo.png" alt="YouTube icon" height=12/> watch on YouTube](https://youtu.be/nAJcuQtrowY)
 
 ☕ Support this project **[<img src="Img/PayPal_Logo.png" alt="PayPal icon" height=12/> PayPal](https://paypal.me/IvanBakhmutovDonate)**
 
@@ -71,6 +71,7 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 ### 28.11.2025
 ver 0.3.1<br>
 Profile editor GUI window corrected sizing
+Re-recorded demo
 
 ### 27.11.2025
 ver 0.3.0:<br>
