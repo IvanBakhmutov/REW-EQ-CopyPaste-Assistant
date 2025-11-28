@@ -1009,7 +1009,7 @@ Function Show-SelectProfileGui {
                 Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
                 $ButtonType = [System.Windows.MessageBoxButton]::OK
                 $MessageIcon = [System.Windows.MessageBoxImage]::Error
-                $MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'Run REW' button to launch REW in API mode automatically."
+                $MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'PLAY' button to launch REW in API mode automatically."
                 $MessageTitle = "REW Not Running or API Not Enabled"
                 [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
                 return
