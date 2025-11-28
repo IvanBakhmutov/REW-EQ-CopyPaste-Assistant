@@ -56,7 +56,7 @@
             <TabControl Margin="0">
                 <TabItem Header="Overview">
 
-                    <TextBlock x:Name="ProfileOverview" TextWrapping="Wrap" Text="Please select a profile"  Margin="0"/>
+                    <TextBlock x:Name="ProfileOverview" TextWrapping="Wrap" Text="Please select a profile"  Margin="5"/>
 
                 </TabItem>
                 <TabItem Header="Profile details">

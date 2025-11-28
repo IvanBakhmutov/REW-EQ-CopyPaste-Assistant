@@ -20,6 +20,10 @@ Special thanks to Denis GS for the ideas and collaboration!
 
 Support this project **[<img src="Img/PayPal_Logo.png" alt="PayPal icon" height=12/> PayPal](https://paypal.me/IvanBakhmutovDonate)**
 
+<p align="center">
+<img src="Img/Picture.png" alt="Picture" width=800 />
+</p>
+
 ## REW EQ Config Guide
 
 Before applying EQ filters to your measurements in REW make sure that EQ settings are correct. [Guide](Documentation/REW%20EQ%20Config%20Guide.md)
