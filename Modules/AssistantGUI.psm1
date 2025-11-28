@@ -114,7 +114,7 @@ Function Show-EditProfileGui {
     }
 
     $ProfileSelectGUI.FindName("Help").Add_Click({
-            start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/blob/main/DSPProfileFileFormat.md"
+            start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/blob/main/Documentation/DSPProfileFileFormat.md"
         })
     $ProfileSelectGUI.findname("SaveBTN").Add_Click({
             # Validate keystroke rows: if Action is MouseClick ensure Value is Left/Right
