@@ -1,3 +1,10 @@
+### 29.11.2025
+ver 0.3.2<br>
+Last used profile selected automatically on the next startup<br>
+UI fixes<br>
+Profile filter/list fix after a new profile created. Clear filter btn now also refreshes the list<br>
+Code cleanup<br>
+
 ### 28.11.2025
 ver 0.3.1<br>
 Profile editor GUI window corrected sizing

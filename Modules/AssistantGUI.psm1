@@ -222,7 +222,7 @@ Function Show-EditProfileGui {
                 [System.Windows.MessageBox]::Show("Error saving profile: $($_.Exception.Message)", "Save Error",
                     [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
             }
-        })
+       })
 
     # Save As - open SaveFileDialog in the profiles folder, require user confirmation
     $ProfileSelectGUI.FindName('SaveAsBTN').Add_Click({
@@ -690,7 +690,9 @@ Function Show-SelectProfileGui {
         [Parameter(Mandatory = $true)][string]$GlobalPerformActionHotkey,
         [Parameter(Mandatory = $true)][string]$GlobalCancelActionHotkey,
         [Parameter(Mandatory = $true)][string]$DSPProfilesDir,
-        [Parameter(Mandatory = $true)][string]$ModulesDir
+        [Parameter(Mandatory = $true)][string]$ModulesDir,
+        [Parameter(Mandatory = $false)][string]$LastSelectedProfile,
+        [Parameter(Mandatory = $true)][string]$AssistantVersion
     )
 
     function Get-OverviewText {
@@ -701,6 +703,80 @@ Function Show-SelectProfileGui {
          "DSP Software Process Name: $($profileContent.processName)`n`n" + `
          "Starting Position Hint: $($profileContent.StartingPositionHint)`n"
         return $result
+    }
+
+    function Get-ProfileContent {
+        param (
+            [Parameter(Mandatory = $true)]$selectedItem,
+            [Parameter(Mandatory = $true)]$DSPProfilesDir,
+            [Parameter(Mandatory = $true)]$ProfileEditGUI,
+            [Parameter(Mandatory = $true)]$result,
+            [Parameter(Mandatory = $true)]$GlobalPerformHotkey,
+            [Parameter(Mandatory = $true)]$GlobalCancelHotkey
+        )
+        if ($null -ne $selectedItem) {
+            $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedItem).json"
+            try {
+                # Read-JSONFile now returns the parsed JSON object or throws on error
+                $profileJson = Read-JSONFile -FilePath $profilePath -ErrorAction Stop
+
+                # Show nicely formatted JSON in the text box
+                $profileContent = $profileJson | ConvertTo-Json -Depth 10
+                $ProfileEditGUI.FindName("ProfileText").Text = $profileContent
+                $ProfileEditGUI.FindName('ProfileOverview').Text = Get-OverviewText -profileContent $profileJson
+                $result.processName = $profileJson.processName
+                if ($null -ne $profileJson.AdminRightsRequired) {
+                    $result.AdminRightsRequired = $profileJson.AdminRightsRequired
+                }
+                else {
+                    $result.AdminRightsRequired = "false"
+                }
+                $ProfileEditGUI.FindName("OKBTN").IsEnabled = $true
+                $ProfileEditGUI.FindName("EditBTN").IsEnabled = $true
+
+                # Use $profileJson directly for hotkey decisions
+                if (($profileJson.ProfilePerformActionHotkey -ne $GlobalPerformHotkey) -and
+                    ($null -ne $profileJson.ProfilePerformActionHotkey)) {
+                    $result.EffectivePerformActionHotkey = $profileJson.ProfilePerformActionHotkey
+                }
+                else {
+                    $result.EffectivePerformActionHotkey = $GlobalPerformHotkey
+                }
+
+                if (($profileJson.ProfileCancelActionHotkey -ne $GlobalCancelHotkey) -and
+                    ($null -ne $profileJson.ProfileCancelActionHotkey)) {
+                    $result.EffectiveCancelActionHotkey = $profileJson.ProfileCancelActionHotkey
+                }
+                else {
+                    $result.EffectiveCancelActionHotkey = $GlobalCancelActionHotkey
+                }
+
+                $hotkeyHintLabel = $ProfileEditGUI.FindName("HotkeyHint")
+                $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
+                if (($GlobalPerformHotkey -ne $result.EffectivePerformActionHotkey) -or
+                    ($GlobalCancelActionHotkey -ne $result.EffectiveCancelActionHotkey)) {
+                    $hotkeyHintLabel.Content += " (override)"
+                }
+
+                switch ($profileJson.HotkeyOrDelayPreference) {
+                    "Hotkey" { $hotkeyHintLabel.Visibility = "Visible" }
+                    "Delay" { $hotkeyHintLabel.Visibility = "Hidden" }
+                    Default { $hotkeyHintLabel.Visibility = "Hidden" }
+                }
+            }
+            catch {
+                $ProfileEditGUI.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file"
+                $ProfileEditGUI.FindName("ProfileOverview").Text = "Error parsing JSON profile. Please check the file"
+                $ProfileEditGUI.FindName("OKBTN").IsEnabled = $false
+                $ProfileEditGUI.FindName("EditBTN").IsEnabled = $false
+            }
+        }
+        else {
+            $ProfileEditGUI.FindName("ProfileText").Text = "Please select a profile"
+            $ProfileEditGUI.FindName("ProfileOverview").Text = "Please select a profile"
+            $ProfileEditGUI.FindName("OKBTN").IsEnabled = $false
+            $ProfileEditGUI.FindName("EditBTN").IsEnabled = $false
+        }
     }
 
     $result = [PSCustomObject]@{
@@ -723,34 +799,19 @@ Function Show-SelectProfileGui {
     $ProfileEditGUI = [Windows.Markup.XamlReader]::Load($reader)
 
     # Set hotkey hint label
-    $hotkeyHintLabel = $ProfileEditGUI.FindName("HotkeyHint")
-    $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
+    $ProfileEditGUI.FindName("HotkeyHint").Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
+    $ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion"
 
     # Populate the profiles list in the GUI
-    $profileListBox = $ProfileEditGUI.FindName("ProfileList")
     if (-not ($script:DSPProfilesList -is [System.Array])) { $script:DSPProfilesList = @() }
     $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-    <#foreach ($profileFileName in $DSPProfilesList) {
-        $profileListBox.Items.Add($profileFileName.baseName) | Out-Null
-    }#>
-    $profileListBox.ItemsSource = $script:DSPProfilesList.BaseName
+    $ProfileEditGUI.FindName("ProfileList").ItemsSource = $script:DSPProfilesList.BaseName
 
-    # Search box text changed handler to filter the profiles list
-    $ProfileEditGUI.FindName("SearchEDIT").Add_TextChanged({
-        param($searchSender, $searchArgs)
-        $searchText = $searchSender.Text.ToLower()
-        $filteredProfiles = @()
-        foreach ($profileFile in $script:DSPProfilesList) {
-            if ($profileFile.BaseName.ToLower().Contains($searchText)) {
-                $filteredProfiles += $profileFile.BaseName
-            }
-        }
-        $profileListBox.ItemsSource = $filteredProfiles
-    })
-
-    $ProfileEditGUI.FindName("ClearSearchBTN").Add_Click({
-        $ProfileEditGUI.FindName("SearchEDIT").Text = ""
-    })
+    # Select last used profile and manually trigger SelectionChanged event
+    if ($null -ne $LastSelectedProfile -and $ProfileEditGUI.FindName("ProfileList").ItemsSource -contains $LastSelectedProfile) {
+        $ProfileEditGUI.FindName("ProfileList").SelectedItem = $LastSelectedProfile
+        Get-ProfileContent -selectedItem $LastSelectedProfile -DSPProfilesDir $DSPProfilesDir -ProfileEditGUI $ProfileEditGUI -result $result -GlobalPerformHotkey $GlobalPerformActionHotkey -GlobalCancelHotkey $GlobalCancelActionHotkey
+    }
 
     #Region process checks
     $BGProcessCheck = New-Object Windows.Threading.DispatcherTimer
@@ -843,8 +904,29 @@ Function Show-SelectProfileGui {
         })
     $BGProcessCheck.Start()
     #Endregion
-    # Assign event handlers
 
+    #Region Assign event handlers
+        # Search box text changed handler to filter the profiles list
+    $ProfileEditGUI.FindName("SearchEDIT").Add_TextChanged({
+            param($searchSender, $searchArgs)
+            $searchText = $searchSender.Text.ToLower()
+            $filteredProfiles = @()
+            foreach ($profileFile in $script:DSPProfilesList) {
+                if ($profileFile.BaseName.ToLower().Contains($searchText)) {
+                    $filteredProfiles += $profileFile.BaseName
+                }
+            }
+            $ProfileEditGUI.FindName("ProfileList").ItemsSource = $filteredProfiles
+        })
+
+        # Search box clear click handler
+    $ProfileEditGUI.FindName("ClearSearchBTN").Add_Click({
+            $ProfileEditGUI.FindName("SearchEDIT").Text = ""
+            $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
+            $ProfileEditGUI.FindName("ProfileList").ItemsSource = $script:DSPProfilesList.BaseName
+        })
+
+        # Run REW button click handler
     $ProfileEditGUI.FindName("RunREWBTN").Add_Click({
             if ($result.REWStatus -eq "Not Running") {
                 # Locate the installation directory of Room EQ Wizard from the registry
@@ -887,17 +969,24 @@ Function Show-SelectProfileGui {
             }
         })
 
+        # GitHub button click handler
     $ProfileEditGUI.FindName("GitHub").Add_Click({
             start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant"
         })
+
+        # Donate button click handler
     $ProfileEditGUI.FindName("Donate").Add_Click({
             start-process "https://paypal.me/IvanBakhmutovDonate"
         })
+
+        # Close button click handler
     $ProfileEditGUI.FindName("CloseBTN").Add_Click({
             $BGProcessCheck.Stop()
             $ProfileEditGUI.Close()
             #return
         })
+
+        # New profile click handler
     $ProfileEditGUI.FindName("NewProfileBTN").Add_Click({
             # Prompt user to save a new profile file
             $saveFileDialog = New-Object System.Windows.Forms.SaveFileDialog
@@ -905,7 +994,7 @@ Function Show-SelectProfileGui {
             $saveFileDialog.Filter = "JSON files (*.json)|*.json"
             $saveFileDialog.Title = "Save New Profile"
             $saveFileDialog.FileName = "NewProfile.json"
-
+            $BGProcessCheck.stop()
             if ($saveFileDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
                 $newProfilePath = $saveFileDialog.FileName
 
@@ -913,7 +1002,7 @@ Function Show-SelectProfileGui {
                 $defaultProfile = [PSCustomObject]@{
                     version                 = "1.0"
                     Description             = "New Profile"
-                    processName             = "<DSP Software Name>"
+                    processName             = "---DSP Software Name---"
                     QDivider                = 1
                     QDecimals               = 1
                     GainDecimals            = 1
@@ -927,25 +1016,21 @@ Function Show-SelectProfileGui {
                 $defaultProfile | ConvertTo-Json -Depth 10 | Set-Content -Path $newProfilePath -Encoding UTF8
 
                 # Open the new profile in the editing GUI
-                $editResult = Show-EditProfileGui -FilePath $newProfilePath
+                $editResult = Show-EditProfileGui -FilePath $newProfilePath -ResourcesDir $ResourcesDir
 
                 # If the profile was saved, refresh the list and select the new item
                 if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
-                    $ProfileEditGUI.FindName('ProfileList').Items.Clear()
-
-                    $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
-                    $searchText = $ProfileEditGUI.FindName('SearchEDIT').Text.ToLower()
-                    foreach ($profileFile in $script:DSPProfilesList) {
-                        if ($profileFile.BaseName.ToLower().Contains($searchText)) {
-                            $filteredProfiles += $profileFile.BaseName
-                        }
-                    }
-                    $profileListBox.ItemsSource = $filteredProfiles
-                    $savedBase = (Get-Item -LiteralPath $newProfilePath).BaseName
-                    $ProfileEditGUI.FindName('ProfileList').SelectedItem = $savedBase
+                    $newProfileName = (get-item $editResult.FilePath | Select-Object -ExpandProperty basename)
+                    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json" | Select-Object -ExpandProperty BaseName
+                    $ProfileEditGUI.FindName("SearchEDIT").Text = $newProfileName
+                    $ProfileEditGUI.FindName("ProfileList").ItemsSource = [array]$newProfileName
+                    Get-ProfileContent -selectedItem $newProfileName -DSPProfilesDir $DSPProfilesDir -ProfileEditGUI $ProfileEditGUI -result $result -GlobalPerformHotkey $GlobalPerformActionHotkey -GlobalCancelHotkey $GlobalCancelActionHotkey
                 }
             }
+            $BGProcessCheck.start()
         })
+
+        # Profile selection changed handler
     $ProfileEditGUI.FindName("EditBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             if ($null -ne $selectedProfileFileName) {
@@ -966,7 +1051,7 @@ Function Show-SelectProfileGui {
                             $filteredProfiles += $profileFile.BaseName
                         }
                     }
-                    $profileListBox.ItemsSource = $filteredProfiles
+                    $ProfileEditGUI.FindName("ProfileList").ItemsSource = $filteredProfiles
                 # determine the base name of saved file and select it
                 try {
                     $savedPath = $editResult.FilePath
@@ -1001,6 +1086,8 @@ Function Show-SelectProfileGui {
                 }
             }
         })
+
+        # OK button click handler
     $ProfileEditGUI.FindName("OKBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
 
@@ -1050,85 +1137,19 @@ Function Show-SelectProfileGui {
                 $result.Action = "Open"
                 $result.SelectedProfile = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedProfileFileName).json"
                 $BGProcessCheck.Stop()
-
-                # Save last selected profile to Resources\UserConfig.json
-               <# $UserConfig = [PSCustomObject]@{
-                        LastSelectedProfile = $selectedProfileFileName
-                        ClipboardOrAPIPreference = $null
-                    }
-                if(Test-Path "$ResourcesDir\UserConfig.json"){
-                    
-                }#>
                 $ProfileEditGUI.Close()
             }
         })
 
+        # List selection changed handler
     $ProfileEditGUI.FindName("ProfileList").Add_SelectionChanged({
             $selectedItem = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             if ($null -ne $selectedItem) {
-                $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($selectedItem).json"
-                try {
-                    # Read-JSONFile now returns the parsed JSON object or throws on error
-                    $profileJson = Read-JSONFile -FilePath $profilePath -ErrorAction Stop
-
-                    # Show nicely formatted JSON in the text box
-                    $profileContent = $profileJson | ConvertTo-Json -Depth 10
-                    $ProfileEditGUI.FindName("ProfileText").Text = $profileContent
-                    $ProfileEditGUI.FindName('ProfileOverview').Text = Get-OverviewText -profileContent $profileJson
-                    $result.processName = $profileJson.processName
-                    if ($null -ne $profileJson.AdminRightsRequired) {
-                        $result.AdminRightsRequired = $profileJson.AdminRightsRequired
-                    }
-                    else {
-                        $result.AdminRightsRequired = "false"
-                    }
-                    $ProfileEditGUI.FindName("OKBTN").IsEnabled = $true
-                    $ProfileEditGUI.FindName("EditBTN").IsEnabled = $true
-
-                    # Use $profileJson directly for hotkey decisions
-                    if (($profileJson.ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and
-                        ($null -ne $profileJson.ProfilePerformActionHotkey)) {
-                        $result.EffectivePerformActionHotkey = $profileJson.ProfilePerformActionHotkey
-                    }
-                    else {
-                        $result.EffectivePerformActionHotkey = $GlobalPerformActionHotkey
-                    }
-
-                    if (($profileJson.ProfileCancelActionHotkey -ne $GlobalCancelActionHotkey) -and
-                        ($null -ne $profileJson.ProfileCancelActionHotkey)) {
-                        $result.EffectiveCancelActionHotkey = $profileJson.ProfileCancelActionHotkey
-                    }
-                    else {
-                        $result.EffectiveCancelActionHotkey = $GlobalCancelActionHotkey
-                    }
-
-                    $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
-                    if (($GlobalPerformActionHotkey -ne $result.EffectivePerformActionHotkey) -or
-                        ($GlobalCancelActionHotkey -ne $result.EffectiveCancelActionHotkey)) {
-                        $hotkeyHintLabel.Content += " (override)"
-                    }
-
-                    switch ($profileJson.HotkeyOrDelayPreference) {
-                        "Hotkey" { $hotkeyHintLabel.Visibility = "Visible" }
-                        "Delay" { $hotkeyHintLabel.Visibility = "Hidden" }
-                        Default { $hotkeyHintLabel.Visibility = "Hidden" }
-                    }
-                }
-                catch {
-                    $ProfileEditGUI.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file"
-                    $ProfileEditGUI.FindName("ProfileOverview").Text = "Error parsing JSON profile. Please check the file"
-                    $ProfileEditGUI.FindName("OKBTN").IsEnabled = $false
-                    $ProfileEditGUI.FindName("EditBTN").IsEnabled = $false
-                }
-            }
-            else {
-                $ProfileEditGUI.FindName("ProfileText").Text = "Please select a profile"
-                $ProfileEditGUI.FindName("ProfileOverview").Text = "Please select a profile"
-                $ProfileEditGUI.FindName("OKBTN").IsEnabled = $false
-                $ProfileEditGUI.FindName("EditBTN").IsEnabled = $false
+                Get-ProfileContent -selectedItem $selectedItem -DSPProfilesDir $DSPProfilesDir -ProfileEditGUI $ProfileEditGUI -result $result -GlobalPerformHotkey $GlobalPerformActionHotkey -GlobalCancelHotkey $GlobalCancelActionHotkey
             }
         })
-    # List doubleclick
+
+        # List doubleclick
     $ProfileEditGUI.FindName("ProfileList").Add_mouseDoubleClick({
             $ProfileEditGUI.FindName("ProfileList").SelectedItem = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             Start-Sleep -Milliseconds 100
@@ -1138,10 +1159,11 @@ Function Show-SelectProfileGui {
             }
         })
 
+        # Add Closed event to clean up
     $ProfileEditGUI.Add_Closed({
             return
         })
-
+    #EndRegion
     # Show the GUI
     $ProfileEditGUI.ShowDialog() | Out-Null
     return $result

@@ -18,12 +18,11 @@
 - ~~Mouse/KB action names with capital letters~~
 - ~~Profile search filter.~~
 - ~~ Right pane with 2 tabs: 1. Welcome when started and Overview when profile selected, 2. profile plain text~~
+- ~~Store the last selected profile and select it on the next startup~~
+
 ## Immediate plans
 
 - Reported issue with confirmation dialog (in parallels desktop)
-- Store the last selected profile and select it on the next startup.
-
-## Future plans
 - Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/REW-API-Experimental.ps1)  
     Breakdown of the idea: the tool checks "Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'" | Select-Object CommandLine" if it has -api argument. If it is - direct api connection:  
     In case if it it running with -api arg, then  
@@ -33,7 +32,10 @@
     - Filter EQ bands leaving only ones with PK filters
     - wait for hotkey and then proceed with DSP software inputs  
 Otherwise - backward compatibility with manual hit copy button on EQ window and then proceeding with hotkeys/delays.
-- Experimental: Try to make this script to connect to REW API to set default Configurable PEQ with DSP model specific options http://127.0.0.1:4735/eq/default-equaliser
+- Version check on startup
+
+## Future plans
+- Floating small semi-transperent window to show notifications instead of windows pop-ups with stop tool button
   
 ## Ideas to be reviewed
 - Folders with brand names for DSP profiles?

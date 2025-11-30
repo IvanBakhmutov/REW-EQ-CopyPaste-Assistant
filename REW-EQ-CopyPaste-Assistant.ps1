@@ -42,6 +42,13 @@ $GlobalConfig = Get-Content $ConfigPath -Raw | ConvertFrom-Json
 $EffectivePerformActionHotkey = $null
 $EffectiveCancelActionHotkey = $null
 
+$Version = Join-Path -Path $ResourcesDir -ChildPath "version"
+try {
+    $AssistantVersion = Get-Content $Version -Raw -ErrorAction Stop
+}
+catch {
+    $AssistantVersion = "n/a"
+}
 $selectedProfile = $null
 
 $ProfileSelectionResult = Show-SelectProfileGui `
@@ -49,7 +56,9 @@ $ProfileSelectionResult = Show-SelectProfileGui `
     -GlobalPerformActionHotkey $GlobalConfig.GlobalPerformActionHotkey `
     -GlobalCancelActionHotkey $GlobalConfig.GlobalCancelActionHotkey `
     -DSPProfilesDir $DSPProfilesDir `
-    -ModulesDir $ModulesDir
+    -ModulesDir $ModulesDir `
+    -LastSelectedProfile $GlobalConfig.LastSelectedProfile `
+    -AssistantVersion $AssistantVersion
 
 
 if ($ProfileSelectionResult.Action -eq "Cancel" -or $null -eq $ProfileSelectionResult.SelectedProfile) {
@@ -67,6 +76,21 @@ else {
 }
 
 write-host "Perform Action Hotkey = $effectivePerformActionHotkey and Cancel Action Hotkey = $EffectiveCancelActionHotkey"
+
+# Save last selected profile to config
+if (-not ($GlobalConfig.PSObject.Properties.Name -contains "LastSelectedProfile")) {
+    $GlobalConfig | Add-Member -MemberType NoteProperty -Name "LastSelectedProfile" `
+     -Value $(Get-Item -path $selectedProfile | Select-Object -ExpandProperty BaseName)
+} else {
+    $GlobalConfig.LastSelectedProfile = $(Get-Item -path $selectedProfile | Select-Object -ExpandProperty BaseName)
+}
+
+try {
+    $GlobalConfig | ConvertTo-Json -Depth 10 | Set-Content $ConfigPath -ErrorAction Stop | Out-Null
+}
+catch {
+    Write-Host "Failed to save global config. Continuing without saving." -ForegroundColor Red
+}
 
 # Load selected profile
 $DSPConfig = Get-Content $selectedProfile -Raw | ConvertFrom-Json

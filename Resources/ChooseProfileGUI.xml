@@ -41,7 +41,7 @@
                             Grid.Column="2"
                             Height="22"
                             Margin="2,1,2,0"
-                            ToolTip="Clear search filter" ToolTipService.InitialShowDelay="200" VerticalAlignment="Top" />
+                            ToolTip="Clear search filter and refresh list" ToolTipService.InitialShowDelay="200" VerticalAlignment="Top" />
                 </Grid>
                 <ListBox x:Name="ProfileList"
                  Grid.Row="1"
@@ -91,7 +91,7 @@
                 <TextBlock x:Name ="Hint" Text="Hint: Select a profile to begin" />
             </StatusBarItem>
             <StatusBarItem  BorderThickness="0" BorderBrush="#FFA8A8A8" HorizontalAlignment="Right" >
-                <TextBlock Text="Version: 0.3.1" />
+                <TextBlock x:Name ="Version" Text="Version: " />
             </StatusBarItem>
         </StatusBar>
     </Grid>
