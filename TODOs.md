@@ -25,7 +25,8 @@
 - Floating small semi-transperent window to show notifications instead of windows pop-ups with stop tool button
 - BUG: hotkeys hint not updated on Profile Choose GUI after a new profile saved
 - Reported issue with confirmation dialog (in parallels desktop)
-- Pictures on buttons instead of characters
+- Pictures on buttons instead of characters, icon/logo for the tool
+- Windows should appear in the center of the screen
 
 ## Future plans
 
