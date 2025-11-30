@@ -2,7 +2,7 @@
 # Module: AssistantGUI
 # Description: GUI module for REW-EQ-CopyPaste-Assistant
 # Author: Ivan Bakhmutov
-# Date: 2025-11-25
+# Date: 2025-11-30
 # ============================================
 
 Function Show-EditProfileGui {
@@ -801,6 +801,59 @@ Function Show-SelectProfileGui {
     # Set hotkey hint label
     $ProfileEditGUI.FindName("HotkeyHint").Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
     $ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion"
+
+    #Region Check updates
+    try {
+        # Set a timeout for the request
+        $webRequestOptions = @{
+            Uri         = "https://raw.githubusercontent.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/refs/heads/main/Resources/version"
+            Method      = "Get"
+            TimeoutSec  = 10
+            ErrorAction = "Stop"
+        }
+        $LatestVersion = Invoke-RestMethod @webRequestOptions
+
+        # Validate the version format (e.g., "1.0.0")
+        if ($LatestVersion -notmatch "^\d+\.\d+\.\d+$") {
+            throw "Invalid version format retrieved: $LatestVersion"
+        }
+    } catch {
+        # Log the error and set a default value
+        Write-Host "Failed to retrieve the latest version number: $($_.Exception.Message)" -ForegroundColor Red
+        $LatestVersion = "Unknown"
+    }
+
+    if($LatestVersion -ne "Unknown"){
+        try {
+            # Read the version from the local file
+            $localVersionPath = Join-Path -Path $ResourcesDir -ChildPath "version"
+            if (Test-Path -Path $localVersionPath) {
+                $LocalVersion = Get-Content -Path $localVersionPath -Raw -Encoding UTF8
+                if ($LocalVersion -notmatch "^\d+\.\d+\.\d+$") {
+                    throw "Invalid version format in local file: $LocalVersion"
+                }
+
+                # Compare the local version with the latest version
+                if ($LocalVersion -lt $LatestVersion) {
+                    Write-Host "A newer version ($LatestVersion) is available." -ForegroundColor Yellow
+                } elseif ($LocalVersion -gt $LatestVersion) {
+                    Write-Host "Tool version ($LocalVersion) is ahead of the latest update online ($LatestVersion)." -ForegroundColor DarkRed
+                } else {
+                    Write-Host "Tool version is up-to-date." -ForegroundColor Cyan
+                }
+            } else {
+                Write-Host "Tool version file not found." -ForegroundColor Red
+            }
+        } catch {
+            Write-Host "Error checking updates: $($_.Exception.Message)" -ForegroundColor Red
+        }
+    }
+    #Endregion
+
+    # Placeholder for another dispatcher timer for hints array including version check
+    # to be shown on the hint label
+    # maybe check rew version as well
+    #
 
     # Populate the profiles list in the GUI
     if (-not ($script:DSPProfilesList -is [System.Array])) { $script:DSPProfilesList = @() }
