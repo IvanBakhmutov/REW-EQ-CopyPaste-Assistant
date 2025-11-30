@@ -17,13 +17,22 @@
 - ~~Configurable PEQ guidelines for each profile in a separate text box~~
 - ~~Mouse/KB action names with capital letters~~
 - ~~Profile search filter.~~
-- ~~ Right pane with 2 tabs: 1. Welcome when started and Overview when profile selected, 2. profile plain text~~
+- ~~Right pane with 2 tabs: 1. Welcome when started and Overview when profile selected, 2. profile plain text~~
 - ~~Store the last selected profile and select it on the next startup~~
+- ~~Version check on startup~~
 
 ## Immediate plans
-
+- Floating small semi-transperent window to show notifications instead of windows pop-ups with stop tool button
+- BUG: hotkeys hint not updated on Profile Choose GUI after a new profile saved
 - Reported issue with confirmation dialog (in parallels desktop)
-- Experimental: Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/REW-API-Experimental.ps1)  
+- Pictures on buttons instead of characters
+
+## Future plans
+
+  
+## Ideas to be reviewed
+- Folders with brand names for DSP profiles?
+- Experimental: (for the future to consider as still cannot see use case) - Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/REW-API-Experimental.ps1)  
     Breakdown of the idea: the tool checks "Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'" | Select-Object CommandLine" if it has -api argument. If it is - direct api connection:  
     In case if it it running with -api arg, then  
     - Check API connectivity on the tool startup, notification if roomeqwizard.exe runs in API enabled mode
@@ -32,13 +41,7 @@
     - Filter EQ bands leaving only ones with PK filters
     - wait for hotkey and then proceed with DSP software inputs  
 Otherwise - backward compatibility with manual hit copy button on EQ window and then proceeding with hotkeys/delays.
-- Version check on startup
-
-## Future plans
-- Floating small semi-transperent window to show notifications instead of windows pop-ups with stop tool button
-  
-## Ideas to be reviewed
-- Folders with brand names for DSP profiles?
+- Check all suitable processes if there are any matches with DSP software and suggest options
 
 ## DSP profiles list to check
  ~~ESX~~,  

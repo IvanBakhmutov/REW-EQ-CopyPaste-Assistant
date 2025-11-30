@@ -840,6 +840,7 @@ Function Show-SelectProfileGui {
                 } elseif ($LocalVersion -gt $LatestVersion) {
                     Write-Host "Tool version ($LocalVersion) is ahead of the latest update online ($LatestVersion)." -ForegroundColor DarkRed
                 } else {
+                    $ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion (Latest)"
                     Write-Host "Tool version is up-to-date." -ForegroundColor Cyan
                 }
             } else {
