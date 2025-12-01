@@ -23,6 +23,7 @@
 
 ## Immediate plans
 - Floating small semi-transperent window to show notifications instead of windows pop-ups with stop tool button
+- Test the tool and transperancy of the main window on Win7/8.1/10/11
 - BUG: hotkeys hint not updated on Profile Choose GUI after a new profile saved
 - Reported issue with confirmation dialog (in parallels desktop)
 - Pictures on buttons instead of characters, icon/logo for the tool
