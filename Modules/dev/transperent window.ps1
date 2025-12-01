@@ -9,7 +9,8 @@ $winBuild = [Environment]::OSVersion.Version.Build
 # ---------------------------------------------------------
 # Blur API for Win7 (Aero)
 # ---------------------------------------------------------
-Add-Type @"
+if (-not ([System.Management.Automation.PSTypeName]'Win7Blur').Type) {
+    Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 
@@ -28,11 +29,13 @@ public static class Win7Blur {
     public static extern int DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND bb);
 }
 "@
+}
 
 # ---------------------------------------------------------
 # Accent Blur for Win10/11
 # ---------------------------------------------------------
-Add-Type @"
+if (-not ([System.Management.Automation.PSTypeName]'Win10Blur').Type) {
+    Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 
@@ -64,6 +67,7 @@ public static class Win10Blur {
     public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
 }
 "@
+}
 
 # ---------------------------------------------------------
 # WPF UI
@@ -102,27 +106,19 @@ $xaml = @"
 $xmlDoc = New-Object System.Xml.XmlDocument
 $xmlDoc.LoadXml($xaml)
 
-$reader = New-Object System.Xml.XmlNodeReader $xmlDoc
+$reader = New-Object System.Xml.XmlNodeReader($xmlDoc)  # Pass $xmlDoc as parameter, not separate
 $window = [Windows.Markup.XamlReader]::Load($reader)
 $grid   = $window.FindName("MainGrid")
 $button = $window.FindName("MyButton")
 
 # ---------------------------------------------------------
-# Drag behavior
+# Drag behavior - ONLY in MouseDown, remove the general window handler
 # ---------------------------------------------------------
 $grid.Add_MouseDown({
     if ($_.LeftButton -eq "Pressed") {
         $window.DragMove()
     }
 })
-
-# Attach to the window itself, not just Grid
-$window.Add_MouseDown({
-    if ($_.LeftButton -eq "Pressed") {
-        try { $window.DragMove() } catch {}
-    }
-})
-
 
 # Button click
 $button.Add_Click({
