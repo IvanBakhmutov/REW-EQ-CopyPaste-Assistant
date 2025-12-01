@@ -32,10 +32,11 @@
 
 ## Future plans
 
-  
+- New DSP profiles
+
 ## Ideas to be reviewed
 - Folders with brand names for DSP profiles?
-- Experimental: (for the future to consider as still cannot see use case) - Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/REW-API-Experimental.ps1)  
+- Experimental: (for the future to consider as still cannot see use case) - Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/dev/REW-API-Experimental.ps1)  
     Breakdown of the idea: the tool checks "Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'" | Select-Object CommandLine" if it has -api argument. If it is - direct api connection:  
     In case if it it running with -api arg, then  
     - Check API connectivity on the tool startup, notification if roomeqwizard.exe runs in API enabled mode
