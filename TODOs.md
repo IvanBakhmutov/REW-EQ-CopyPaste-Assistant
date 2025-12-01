@@ -27,6 +27,8 @@
 - Reported issue with confirmation dialog (in parallels desktop)
 - Pictures on buttons instead of characters, icon/logo for the tool
 - Windows should appear in the center of the screen
+- Profile Editor extra button switch for DSP process name, custom/generic
+- Mouse Scroll up/down actions to be added
 
 ## Future plans
 
