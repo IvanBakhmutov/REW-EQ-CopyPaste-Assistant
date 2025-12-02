@@ -15,23 +15,14 @@ Remove-Module AssistantGUI -ErrorAction SilentlyContinue -Force
 Import-Module "$ModulesDir\REW-EQ-CopyPaste-Assistant.psm1"
 Import-Module "$ModulesDir\InputControls.psm1"
 Import-Module "$ModulesDir\AssistantGUI.psm1"
+Import-Module "$ModulesDir\Import-Types.psm1"
+Import-Types
 
 # Set the console output encoding to UTF-8 to properly display Cyrillic characters
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Write-Host "Script started" -ForegroundColor Yellow
 
-# Minimize parent cmd.exe window
-Add-Type @"
-using System;
-using System.Runtime.InteropServices;
-public class Win {
-    [DllImport("kernel32.dll")]
-    public static extern IntPtr GetConsoleWindow();
 
-    [DllImport("user32.dll")]
-    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-}
-"@
 
 $hwnd = [Win]::GetConsoleWindow()
 [Win]::ShowWindow($hwnd, 2) | Out-Null  # 2 = SW_MINIMIZE

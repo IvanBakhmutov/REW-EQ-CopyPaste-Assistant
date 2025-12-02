@@ -5,74 +5,6 @@
 # Date: 2025-11-25
 # ============================================
 
-# Ensure .NET types are defined only once
-if (-not ("MouseControl" -as [type])) {
-    Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-
-public class MouseControl {
-    [DllImport("user32.dll")]
-    public static extern bool SetCursorPos(int X, int Y);
-
-    [DllImport("user32.dll")]
-    public static extern bool GetCursorPos(out POINT lpPoint);
-
-    [DllImport("user32.dll")]
-    public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, UIntPtr dwExtraInfo);
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct POINT {
-        public int X;
-        public int Y;
-    }
-
-    private const uint MOUSEEVENTF_LEFTDOWN = 0x02;
-    private const uint MOUSEEVENTF_LEFTUP = 0x04;
-    private const uint MOUSEEVENTF_RIGHTDOWN = 0x08;
-    private const uint MOUSEEVENTF_RIGHTUP = 0x10;
-    private const uint MOUSEEVENTF_WHEEL = 0x0800;
-
-    public static void MoveBy(int dx, int dy) {
-        POINT pos;
-        GetCursorPos(out pos);
-        SetCursorPos(pos.X + dx, pos.Y + dy);
-    }
-
-    public static void ClickAt(int x, int y) {
-        SetCursorPos(x, y);
-        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
-    }
-
-    public static void ClickRelative(int dx, int dy) {
-        POINT pos;
-        GetCursorPos(out pos);
-        SetCursorPos(pos.X + dx, pos.Y + dy);
-        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
-    }
-
-    public static void RightClick() {
-        mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, 0, 0, 0, UIntPtr.Zero);
-    }
-
-    public static void LeftClick() {
-        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
-    }
-
-    public static void ScrollUp(int amount) {
-        mouse_event(MOUSEEVENTF_WHEEL, 0, 0, (uint)amount, UIntPtr.Zero);
-    }
-
-    public static void ScrollDown(int amount) {
-        mouse_event(MOUSEEVENTF_WHEEL, 0, 0, unchecked((uint)-amount), UIntPtr.Zero);
-    }
-}
-"@
-}
-
-# --- Load SendKeys support (for keyboard input) ---
-Add-Type -AssemblyName System.Windows.Forms
-
 # --- Mouse wrapper functions ---
 function Invoke-MouseMoveBy {
     [CmdletBinding()]
@@ -181,18 +113,7 @@ function Wait-HotkeyInput {
         [string[]]$KeysToMonitor # Array of key names to monitor (e.g., "F1", "F2")
     )
 
-    Add-Type -AssemblyName System.Windows.Forms
 
-    if (-not ("User32" -as [type])) {
-        Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-public class User32 {
-    [DllImport("user32.dll")]
-    public static extern short GetAsyncKeyState(int vKey);
-}
-"@
-    }
 
     # Map key names to virtual key codes
     $keyNameToCode = @{

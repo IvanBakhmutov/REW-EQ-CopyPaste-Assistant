@@ -45,7 +45,6 @@ Function Show-EditProfileGui {
     }
 
     # Parse the XAML to create the GUI
-    Add-Type -AssemblyName PresentationFramework
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $ProfileSelectGUI = [Windows.Markup.XamlReader]::Load($reader)
 
@@ -794,7 +793,6 @@ Function Show-SelectProfileGui {
     [xml]$xaml = (Get-Content -Path "$ResourcesDir\ChooseProfileGUI.xml" -Raw -Encoding UTF8)
 
     # Parse the XAML to create the GUI
-    Add-Type -AssemblyName PresentationFramework
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $ProfileEditGUI = [Windows.Markup.XamlReader]::Load($reader)
 
@@ -1148,7 +1146,6 @@ Function Show-SelectProfileGui {
 
             # check if REW is running with API enabled
             if ($result.REWStatus -eq "Not Running") {
-                Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
                 $ButtonType = [System.Windows.MessageBoxButton]::OK
                 $MessageIcon = [System.Windows.MessageBoxImage]::Error
                 $MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'PLAY' button to launch REW in API mode automatically."
@@ -1156,7 +1153,6 @@ Function Show-SelectProfileGui {
                 [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
                 return
             } elseif ($result.REWStatus -eq "API Not Enabled") {
-                Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
                 $ButtonType = [System.Windows.MessageBoxButton]::OK
                 $MessageIcon = [System.Windows.MessageBoxImage]::Warning
                 $MessageBody = "Room EQ Wizard (REW) is running but API mode is not enabled. You will have to click 'Copy the filter settings to the clipboard' button or press Alt-C and proceed with paste procedure in your DSP software."
@@ -1166,7 +1162,6 @@ Function Show-SelectProfileGui {
 
             # Check if process is running
             if ($result.ProcessStatus -ne "Running") {
-                Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
                 $ButtonType = [System.Windows.MessageBoxButton]::OK
                 $MessageIcon = [System.Windows.MessageBoxImage]::Error
                 $MessageBody = "The target DSP software process is not running. Please start the software and try again."
@@ -1179,7 +1174,6 @@ Function Show-SelectProfileGui {
             if ($result.AdminRightsRequired -eq "true") {
                 if (-not (Get-RunningAsAdminFlag)) {
 
-                    Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
                     $ButtonType = [System.Windows.MessageBoxButton]::OK
                     $MessageIcon = [System.Windows.MessageBoxImage]::Error
                     $MessageBody = "Selected DSP profile requires administrative privileges. Please run the script as an administrator."

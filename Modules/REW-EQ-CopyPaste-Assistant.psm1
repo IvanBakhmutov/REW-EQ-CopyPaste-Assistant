@@ -103,8 +103,6 @@ function Show-ConfirmationDialog {
     param(
         [Parameter(Mandatory = $true)][string]$StartingPositionHint
     )
-    Add-Type -AssemblyName System.Windows.Forms
-
     # Create the form
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "EQ Paste Confirmation"
@@ -166,44 +164,7 @@ function Show-DSPWindowToFront {
         [string]$ProcessName
     )
 
-    Add-Type -AssemblyName System.Windows.Forms
 
-    Add-Type @"
-using System;
-using System.Runtime.InteropServices;
-
-public static class NativeMethods {
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetForegroundWindow();
-
-    [DllImport("user32.dll")]
-    public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-    [DllImport("kernel32.dll")]
-    public static extern uint GetCurrentThreadId();
-
-    [DllImport("user32.dll")]
-    public static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
-
-    [DllImport("user32.dll")]
-    public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
-
-    [DllImport("user32.dll")]
-    public static extern bool BringWindowToTop(IntPtr hWnd);
-
-    [DllImport("user32.dll", SetLastError=true)]
-    public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
-    public static readonly IntPtr HWND_TOP = new IntPtr(0);
-    public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
-    public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
-    public const uint SWP_NOMOVE = 0x0002;
-    public const uint SWP_NOSIZE = 0x0001;
-}
-"@ -ErrorAction Stop
 
     # find DSP software processes with window
     $processes = Get-Process | Where-Object {
@@ -332,7 +293,6 @@ function Show-Notification {
 
     Start-Job -ScriptBlock {
         param($Title, $Message, $Timeout)
-        Add-Type -AssemblyName System.Windows.Forms
         $notify = New-Object System.Windows.Forms.NotifyIcon
         $notify.Icon = [System.Drawing.SystemIcons]::Information
         $notify.BalloonTipTitle = $Title
@@ -364,7 +324,6 @@ function Get-RunningAsAdminFlag {
 
     <#if (-not $isAdmin) {
         try {
-            Add-Type -AssemblyName PresentationCore,PresentationFramework -ErrorAction SilentlyContinue
             $ButtonType   = [System.Windows.MessageBoxButton]::OK
             $MessageIcon  = [System.Windows.MessageBoxImage]::Error
             $MessageBody  = "Selected DSP profile requires administrative privileges. Please run the script as an administrator."
