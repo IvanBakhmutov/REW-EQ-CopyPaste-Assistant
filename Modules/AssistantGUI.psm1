@@ -1255,7 +1255,7 @@ $window.Top = $screenHeight - $window.Height - $taskbarHeight - 30  # 30px margi
     $grid   = $window.FindName("MainGrid")
     $button = $window.FindName("ExitBTN")
     $MessageTextBlock = $window.FindName("MessageTextBlock")
-
+    $Icon = $window.FindName("Icon")
     # ---------------------------------------------------------
     # Drag behavior - ONLY in MouseDown, remove the general window handler
     # ---------------------------------------------------------
@@ -1375,11 +1375,13 @@ if ($ProcessName -eq "Generic") {
     Write-Host "Using Generic profile. DSP software will not automatically shown in foreground." -ForegroundColor Yellow
     #Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Using Generic profile.`nWaiting for EQ data from REW in clipboard"
     $MessageTextBlock.Text = "Using Generic profile. DSP software will not automatically shown in foreground.`n`nWaiting for EQ data from REW in clipboard"
+    $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Bulb.48.png"
 }
 else {
     Write-Host "Found DSP process: $($ProfileSelectionResult.ProcessName)" -ForegroundColor Green
     # Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($ProfileSelectionResult.ProcessName)`nWaiting for EQ data from REW in clipboard"
     $MessageTextBlock.Text = "Found $($DSPConfig.Description) process: $($ProfileSelectionResult.ProcessName)`n`nWaiting for EQ data from REW in clipboard"
+    $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Bulb.48.png"
 }
 
 #Write-Host "Hint: When finished with EQ close PowerShell window or hit ctrl-c and confirm exit" -ForegroundColor Yellow
@@ -1424,7 +1426,6 @@ Register-GlobalHotkey -HotkeyId $HotkeyIdCancel -Modifiers 0 -VirtualKeyCode ([S
         $MouseY = $null
         $keyToSend = $null
         $UserHasConfirmedAction = $false
-        
 
                 Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
 
@@ -1438,6 +1439,7 @@ Register-GlobalHotkey -HotkeyId $HotkeyIdCancel -Modifiers 0 -VirtualKeyCode ([S
                 #Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
                 #    -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."
                 $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."
+                $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Logview.48.png"
                 $MessageTextBlock.Dispatcher.Invoke([Windows.Threading.DispatcherPriority]::Render, [action]{} )
                 Write-Host "Waiting for user to press '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel. Timeout in $($GlobalConfig.HotkeyTimeoutSecs) seconds..." -ForegroundColor Yellow
                 $hotkeyResult = $(Wait-HotkeyInput -TimeoutSecs $GlobalConfig.HotkeyTimeoutSecs -KeysToMonitor $($EffectivePerformActionHotkey, $EffectiveCancelActionHotkey) )
@@ -1451,6 +1453,7 @@ Register-GlobalHotkey -HotkeyId $HotkeyIdCancel -Modifiers 0 -VirtualKeyCode ([S
                     $null {
                         Write-Host "`nHotkey timeout reached after $($GlobalConfig.HotkeyTimeoutSecs) seconds. Paste action cancelled.  " -ForegroundColor Yellow -NoNewline
                         $MessageTextBlock.Text = "Hotkey timeout reached after $($GlobalConfig.HotkeyTimeoutSecs) seconds. Paste action cancelled."
+                        $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Apport.48.png"
                         $UserHasConfirmedAction = $false
                     }
                 }
@@ -1459,6 +1462,7 @@ Register-GlobalHotkey -HotkeyId $HotkeyIdCancel -Modifiers 0 -VirtualKeyCode ([S
                 #Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
                 #    -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
                 $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
+                $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Preferences-system-network.48.png"
                 Write-Host "Waiting for user confirmation dialog to proceed with paste..." -ForegroundColor Yellow
                 $UserHasConfirmedAction = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
             }
@@ -1481,6 +1485,7 @@ Register-GlobalHotkey -HotkeyId $HotkeyIdCancel -Modifiers 0 -VirtualKeyCode ([S
                     #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" `
                     #     -Message "Make sure the DSP window is visible and not covered by other windows."
                     $MessageTextBlock.text = "CopyPaste started...`n`nMake sure the DSP window is visible and not covered by other windows."
+                    $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Edit.48.png"
                     $MouseX, $MouseY = Get-MousePosition
                     Write-Host "Current mouse position: X=$MouseX, Y=$MouseY" -foregroundColor blue
                 }
@@ -1488,6 +1493,7 @@ Register-GlobalHotkey -HotkeyId $HotkeyIdCancel -Modifiers 0 -VirtualKeyCode ([S
                     Write-Host "No mouse actions detected in profile. Proceeding with keyboard input only." -ForegroundColor Yellow
                     #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started." -Timeout 1000
                     $MessageTextBlock.text = "CopyPaste started...`n`nKeyboard input started."
+                $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Edit.48.png"
                 }
 
                 # Start pasting EQ bands with configured keystrokes and mouse actions
@@ -1543,6 +1549,7 @@ Register-GlobalHotkey -HotkeyId $HotkeyIdCancel -Modifiers 0 -VirtualKeyCode ([S
                 Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
                 #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste finished" -Message "Waiting for new data in clipboard"
                 $MessageTextBlock.text = "Finished paste.`n`nWaiting for new data in clipboard."
+                $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Checkbox.48.png"
             }
             else {
                 Write-Host "Cancelled by user or timedout. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline

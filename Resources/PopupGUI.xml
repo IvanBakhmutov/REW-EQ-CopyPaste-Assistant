@@ -2,7 +2,7 @@
         WindowStyle='none'
         AllowsTransparency='True'
         Background='Transparent'
-        Width='272' Height='170'
+        Width='280' Height='200'
         Topmost='True'
         ShowInTaskbar='False'
         Title='REW EQ CopyPaste Assistant'>
@@ -19,8 +19,8 @@
                     VerticalAlignment='Bottom'
                     Content='Exit' Margin="0,0,10,10"/>
             <Label Name="Title" Content="REW EQ CopyPaste Assistant" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-            <TextBlock Name="MessageTextBlock" HorizontalAlignment="Left" Margin="10,41,0,0" TextWrapping="Wrap" Text="Message text" VerticalAlignment="Top" Height="85" Width="247"/>
-            <Image Margin="10,126,228,10"/>
+            <TextBlock Name="MessageTextBlock" Margin="10,41,10,40" TextWrapping="Wrap" Text="Message text"/>
+            <Image Name="Icon" Margin="10,156,236,10" Width="32" Height="32"/>
         </Grid>
     </Border>
 </Window>
