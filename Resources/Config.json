@@ -7,5 +7,6 @@
     "QDecimals":  1,
     "FreqDecimals":  0,
     "DecimalSeparator":  ".",
-    "TimeoutBeforePasteSecs":  6
+    "TimeoutBeforePasteSecs":  6,
+    "LastSelectedProfile":  "ESX ESXToolkit"
 }

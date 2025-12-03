@@ -2,76 +2,8 @@
 # Module: Mouse and Keyboard Control Utilities for REW-EQ-CopyPaste-Assistant
 # Description: Provides mouse & keyboard control utilities
 # Author: Ivan Bakhmutov
-# Date: 2025-11-25
+# Date: 2024-06-10
 # ============================================
-
-# Ensure .NET types are defined only once
-if (-not ("MouseControl" -as [type])) {
-    Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-
-public class MouseControl {
-    [DllImport("user32.dll")]
-    public static extern bool SetCursorPos(int X, int Y);
-
-    [DllImport("user32.dll")]
-    public static extern bool GetCursorPos(out POINT lpPoint);
-
-    [DllImport("user32.dll")]
-    public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, UIntPtr dwExtraInfo);
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct POINT {
-        public int X;
-        public int Y;
-    }
-
-    private const uint MOUSEEVENTF_LEFTDOWN = 0x02;
-    private const uint MOUSEEVENTF_LEFTUP = 0x04;
-    private const uint MOUSEEVENTF_RIGHTDOWN = 0x08;
-    private const uint MOUSEEVENTF_RIGHTUP = 0x10;
-    private const uint MOUSEEVENTF_WHEEL = 0x0800;
-
-    public static void MoveBy(int dx, int dy) {
-        POINT pos;
-        GetCursorPos(out pos);
-        SetCursorPos(pos.X + dx, pos.Y + dy);
-    }
-
-    public static void ClickAt(int x, int y) {
-        SetCursorPos(x, y);
-        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
-    }
-
-    public static void ClickRelative(int dx, int dy) {
-        POINT pos;
-        GetCursorPos(out pos);
-        SetCursorPos(pos.X + dx, pos.Y + dy);
-        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
-    }
-
-    public static void RightClick() {
-        mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, 0, 0, 0, UIntPtr.Zero);
-    }
-
-    public static void LeftClick() {
-        mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
-    }
-
-    public static void ScrollUp(int amount) {
-        mouse_event(MOUSEEVENTF_WHEEL, 0, 0, (uint)amount, UIntPtr.Zero);
-    }
-
-    public static void ScrollDown(int amount) {
-        mouse_event(MOUSEEVENTF_WHEEL, 0, 0, unchecked((uint)-amount), UIntPtr.Zero);
-    }
-}
-"@
-}
-
-# --- Load SendKeys support (for keyboard input) ---
-Add-Type -AssemblyName System.Windows.Forms
 
 # --- Mouse wrapper functions ---
 function Invoke-MouseMoveBy {
@@ -181,18 +113,7 @@ function Wait-HotkeyInput {
         [string[]]$KeysToMonitor # Array of key names to monitor (e.g., "F1", "F2")
     )
 
-    Add-Type -AssemblyName System.Windows.Forms
 
-    if (-not ("User32" -as [type])) {
-        Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
-public class User32 {
-    [DllImport("user32.dll")]
-    public static extern short GetAsyncKeyState(int vKey);
-}
-"@
-    }
 
     # Map key names to virtual key codes
     $keyNameToCode = @{
@@ -235,21 +156,174 @@ public class User32 {
             return $s
         }
         $s_prev = $s
-        Start-Sleep -Milliseconds 100
+        Start-Sleep -Milliseconds 50
     }
 }
 
+
+<#
+function Wait-HotkeyInput {
+    [CmdletBinding()]
+    param(
+        [int]$TimeoutSecs = 60,
+        [string[]]$KeysToMonitor
+    )
+
+    # Load WinForms (optional, but harmless)
+    Add-Type -AssemblyName System.Windows.Forms
+
+    # Load User32 API if not defined
+    if (-not ("User32" -as [Type])) {
+        Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+
+public static class User32 {
+    [DllImport("user32.dll")]
+    public static extern short GetAsyncKeyState(int vKey);
+}
+"@
+    }
+
+    # Key mapping (extend if needed)
+    $KeyNameToCode = @{
+        "F1" = 112; "F2" = 113; "F3" = 114; "F4" = 115;
+        "F5" = 116; "F6" = 117; "F7" = 118; "F8" = 119;
+        "F9" = 120; "F10" = 121; "F11" = 122; "F12" = 123;
+    }
+
+    # Validate requested keys
+    foreach ($key in $KeysToMonitor) {
+        if (-not $KeyNameToCode.ContainsKey($key)) {
+            throw "Unknown key: '$key'. Supported keys: $($KeyNameToCode.Keys -join ', ')"
+        }
+    }
+
+    # Build reverse map (virtual-key → key-name)
+    $CodeToName = @{}
+    foreach ($pair in $KeyNameToCode.GetEnumerator()) {
+        $CodeToName[$pair.Value] = $pair.Key
+    }
+
+    # Convert key names → virtual codes once
+    $KeyCodes = $KeysToMonitor | ForEach-Object { $KeyNameToCode[$_] }
+
+    # Timeout setup
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
+    # Track previous key-down states
+    $PrevKeysDown = @()
+
+    while ($stopwatch.Elapsed.TotalSeconds -lt $TimeoutSecs) {
+
+        $KeysDown = foreach ($code in $KeyCodes) {
+            $state = [User32]::GetAsyncKeyState($code)
+
+            # High bit (0x8000) = key is physically down
+            if ($state -band 0x8000) {
+                $CodeToName[$code]
+            }
+        }
+
+        # Detect fresh press (transition: up → down)
+        $NewKeys = $KeysDown | Where-Object { $_ -notin $PrevKeysDown }
+
+        if ($NewKeys.Count -gt 0) {
+        return $NewKeys
+          #  return [PSCustomObject]@{
+          #      Timestamp = Get-Date
+          #      Keys      = $NewKeys
+          #      AllDown   = $KeysDown
+          #  }
+        }
+
+        $PrevKeysDown = $KeysDown
+        Start-Sleep -Milliseconds 20
+    }
+
+    return $null  # Timed out
+}
+#>
+
+# Add global hotkey registration using Windows API
+if (-not ("HotKeyManager" -as [type])) {
+    Add-Type -TypeDefinition @"
+    using System;
+    using System.Runtime.InteropServices;
+
+    public static class HotKeyManager
+    {
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+    }
+"@
+}
+
+function Register-GlobalHotkey {
+    param (
+        [int]$HotkeyId,
+        [UInt32]$Modifiers, # e.g., MOD_ALT = 0x1, MOD_CONTROL = 0x2
+        [UInt32]$VirtualKeyCode # e.g., 0x70 for F1
+    )
+    $result = [HotKeyManager]::RegisterHotKey([IntPtr]::Zero, $HotkeyId, $Modifiers, $VirtualKeyCode)
+    if (-not $result) {
+        $errorCode = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
+        if ($errorCode -eq 1409) {
+            # ERROR_HOTKEY_ALREADY_REGISTERED
+            Write-Host "Hotkey already registered. Attempting to unregister and re-register..." -ForegroundColor Yellow
+            [HotKeyManager]::UnregisterHotKey([IntPtr]::Zero, $HotkeyId) | Out-Null
+            $result = [HotKeyManager]::RegisterHotKey([IntPtr]::Zero, $HotkeyId, $Modifiers, $VirtualKeyCode)
+            if ($result) {
+                Write-Host "Successfully re-registered hotkey with ID $HotkeyId" -ForegroundColor Green
+            }
+            else {
+                $errorCode = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
+                Write-Host "Failed to re-register hotkey. Error code: $errorCode" -ForegroundColor Red
+            }
+        }
+        else {
+            Write-Host "Failed to register hotkey. Error code: $errorCode" -ForegroundColor Red
+        }
+    }
+    else {
+        Write-Host "Successfully registered hotkey with ID $HotkeyId" -ForegroundColor Green
+    }
+}
+
+function Unregister-GlobalHotkey {
+    param (
+        [int]$HotkeyId
+    )
+    $result = [HotKeyManager]::UnregisterHotKey([IntPtr]::Zero, $HotkeyId)
+    if (-not $result) {
+        $errorCode = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
+        Write-Host "Failed to unregister hotkey. Error code: $errorCode" -ForegroundColor Red
+    }
+    else {
+        Write-Host "Successfully unregistered hotkey with ID $HotkeyId" -ForegroundColor Green
+    }
+}
+
+# Example usage:
+# Register-GlobalHotkey -HotkeyId 1 -Modifiers 0 -VirtualKeyCode 0x70 # F1
+# Unregister-GlobalHotkey -HotkeyId 1
+
 # --- Exported Functions ---
 Export-ModuleMember -Function `
-Invoke-MouseMoveBy,
-Invoke-MouseClickLeftAt,
-Invoke-MouseClickRightAt,
-Invoke-MouseClickRelative,
-Invoke-MouseLeftClick,
-Invoke-MouseRightClick,
-Invoke-MouseScrollUp,
-Invoke-MouseScrollDown,
-Move-CursorToPosition,
-Invoke-KeyStroke,
-Get-MousePosition,
-Wait-HotkeyInput
+    Invoke-MouseMoveBy,
+    Invoke-MouseClickLeftAt,
+    Invoke-MouseClickRightAt,
+    Invoke-MouseClickRelative,
+    Invoke-MouseLeftClick,
+    Invoke-MouseRightClick,
+    Invoke-MouseScrollUp,
+    Invoke-MouseScrollDown,
+    Move-CursorToPosition,
+    Invoke-KeyStroke,
+    Get-MousePosition,
+    Wait-HotkeyInput,
+    Register-GlobalHotkey,
+    Unregister-GlobalHotkey

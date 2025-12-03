@@ -2,7 +2,7 @@
 # Script: REW-EQ-CopyPaste-Assistant
 # Description: Provides automated mouse & keyboard input to paste REW EQ settings into DSP software
 # Author: Ivan Bakhmutov
-# Date: 2025-11-25
+# Date: 2025-12-03
 # ============================================
 
 $scriptDir = Split-Path -Parent $PSCommandPath
@@ -15,26 +15,16 @@ Remove-Module AssistantGUI -ErrorAction SilentlyContinue -Force
 Import-Module "$ModulesDir\REW-EQ-CopyPaste-Assistant.psm1"
 Import-Module "$ModulesDir\InputControls.psm1"
 Import-Module "$ModulesDir\AssistantGUI.psm1"
+Import-Module "$ModulesDir\Import-Types.psm1"
+Import-Types
 
 # Set the console output encoding to UTF-8 to properly display Cyrillic characters
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-Write-Host "Script started" -ForegroundColor Yellow
-
-# Minimize parent cmd.exe window
-Add-Type @"
-using System;
-using System.Runtime.InteropServices;
-public class Win {
-    [DllImport("kernel32.dll")]
-    public static extern IntPtr GetConsoleWindow();
-
-    [DllImport("user32.dll")]
-    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-}
-"@
+Write-Host "REW EQ CopyPaste Assistant started" -ForegroundColor Yellow
 
 $hwnd = [Win]::GetConsoleWindow()
 [Win]::ShowWindow($hwnd, 2) | Out-Null  # 2 = SW_MINIMIZE
+#Endregion
 
 # Load global config
 $ConfigPath = Join-Path -Path $ResourcesDir -ChildPath "Config.json"
@@ -80,8 +70,9 @@ write-host "Perform Action Hotkey = $effectivePerformActionHotkey and Cancel Act
 # Save last selected profile to config
 if (-not ($GlobalConfig.PSObject.Properties.Name -contains "LastSelectedProfile")) {
     $GlobalConfig | Add-Member -MemberType NoteProperty -Name "LastSelectedProfile" `
-     -Value $(Get-Item -path $selectedProfile | Select-Object -ExpandProperty BaseName)
-} else {
+        -Value $(Get-Item -path $selectedProfile | Select-Object -ExpandProperty BaseName)
+}
+else {
     $GlobalConfig.LastSelectedProfile = $(Get-Item -path $selectedProfile | Select-Object -ExpandProperty BaseName)
 }
 
@@ -95,225 +86,4 @@ catch {
 # Load selected profile
 $DSPConfig = Get-Content $selectedProfile -Raw | ConvertFrom-Json
 
-if ($null -ne $DSPConfig.AdminRightsRequired) {
-    if ($DSPConfig.AdminRightsRequired -eq "true") {
-        if (Get-RunningAsAdminFlag) {
-            Write-Host "Running with administrative privileges as required by the DSP profile." -ForegroundColor Yellow
-        }
-        else {
-            Write-Host "This DSP profile requires administrative privileges. Please run the script as an administrator." -ForegroundColor Red
-            start-sleep -Seconds 3
-            exit
-        }
-    }
-}
-else {
-    Write-Host "No AdminRightsRequired flag found in profile. Proceeding without admin rights." -ForegroundColor Yellow
-}
-if ($null -ne $DSPConfig.processName) {
-    if ($DSPConfig.processName -eq "Generic") {
-        $ProcessName = "Generic"
-    }
-    else {
-        $ProcessName = $DSPConfig.processName
-    }
-}
-else {
-    $ProcessName = "Generic"
-}
-if ($null -ne $DSPConfig.QDivider) {
-    $QDivider = $DSPConfig.QDivider
-}
-if ($null -ne $DSPConfig.DecimalSeparator) {
-    $DecimalSeparator = $DSPConfig.DecimalSeparator
-}
-else {
-    $DecimalSeparator = $GlobalConfig.DecimalSeparator
-}
-if ($null -ne $DSPConfig.FreqDecimals) {
-    $FreqDecimals = $DSPConfig.FreqDecimals
-}
-else {
-    $FreqDecimals = $GlobalConfig.FreqDecimals
-}
-if ($null -ne $DSPConfig.QDecimals) {
-    $QDecimals = $DSPConfig.QDecimals
-}
-else {
-    $QDecimals = $GlobalConfig.QDecimals
-}
-if ($null -ne $DSPConfig.GainDecimals) {
-    $GainDecimals = $DSPConfig.GainDecimals
-}
-else {
-    $GainDecimals = $GlobalConfig.GainDecimals
-}
-if ($null -ne $DSPConfig.HotkeyOrDelayPreference) {
-    $HotkeyOrDelayPreference = $DSPConfig.HotkeyOrDelayPreference
-}
-else {
-    $HotkeyOrDelayPreference = $GlobalConfig.HotkeyOrDelayPreference
-}
-if ($null -ne $DSPConfig.TimeoutBeforePasteSecs) {
-    $TimeoutBeforePasteSecs = $DSPConfig.TimeoutBeforePasteSecs
-}
-else {
-    $TimeoutBeforePasteSecs = $GlobalConfig.TimeoutBeforePasteSecs
-}
-$StartingPositionHint = $DSPConfig.StartingPositionHint
-
-Write-Host "`nUsing DSP Profile: $($DSPConfig.Description)" -ForegroundColor Green
-
-
-if ($ProcessName -eq "Generic") {
-    Write-Host "Using Generic profile. DSP software will not automatically shown in foreground." -ForegroundColor Yellow
-    Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Using Generic profile.`nWaiting for EQ data from REW in clipboard"
-}
-else {
-    Write-Host "Found DSP process: $($ProfileSelectionResult.ProcessName)" -ForegroundColor Green
-    Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($ProfileSelectionResult.ProcessName)`nWaiting for EQ data from REW in clipboard"
-}
-
-Write-Host "Hint: When finished with EQ close PowerShell window or hit ctrl-c and confirm exit" -ForegroundColor Yellow
-Write-Host "Hotkey Or Delay Preference: $HotkeyOrDelayPreference" -ForegroundColor Cyan
-Write-Host "Waiting for EQ data from REW in clipboard  " -ForegroundColor Yellow -NoNewline
-
-$spinner = @('/', '-', '\', '|')
-$spinnerindex = 0
-
-do {
-    $MouseX = $null
-    $MouseY = $null
-    $keyToSend = $null
-    $UserHasConfirmedAction = $false
-    $bufferHeader = $null
-
-    # Check clipboard content
-    $buffer = get-clipboard
-    $bufferHeader = $($buffer -split "`n")[0]
-    if ($bufferHeader -in "Configurable_PEQ", "Generic", "Extended") {
-        [array]$bands = Read-EQText `
-            -Text ($buffer | Out-String) `
-            -QDivider $QDivider `
-            -FreqDecimals $FreqDecimals `
-            -QDecimals $QDecimals `
-            -GainDecimals $GainDecimals `
-            -DecimalSeparator $DecimalSeparator
-        Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
-
-        Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP" -ForegroundColor Yellow
-
-        if ($ProcessName -ne "Generic") {
-            Show-DSPWindowToFront -processName $ProcessName | Out-Null
-        }
-        if (($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -eq "Hotkey")) {
-            Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
-                -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."
-
-            Write-Host "Waiting for user to press '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel. Timeout in $($GlobalConfig.HotkeyTimeoutSecs) seconds..." -ForegroundColor Yellow
-            $hotkeyResult = $(Wait-HotkeyInput -TimeoutSecs $GlobalConfig.HotkeyTimeoutSecs -KeysToMonitor $($EffectivePerformActionHotkey, $EffectiveCancelActionHotkey) )
-            switch ($hotkeyResult) {
-                "$EffectivePerformActionHotkey" {
-                    $UserHasConfirmedAction = $true
-                }
-                "$EffectiveCancelActionHotkey" {
-                    $UserHasConfirmedAction = $false
-                }
-            }
-        }
-        else {
-            Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
-                -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
-            Write-Host "Waiting for user confirmation dialog to proceed with paste..." -ForegroundColor Yellow
-            $UserHasConfirmedAction = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
-        }
-
-        if ($UserHasConfirmedAction -eq $true) {
-            Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
-
-            if ((($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -ne "Hotkey")) `
-                    -or (($null -eq $DSPConfig.HotkeyOrDelayPreference))) {
-                write-host "Waiting $($TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
-                Start-Sleep -Seconds $TimeoutBeforePasteSecs
-            }
-
-            # Check if mouse actions are defined in the profile
-            $hasMouseAction = $DSPConfig.KeystrokeSequence | Where-Object {
-                $_.PSObject.Properties.Name -match '^mouse'
-            }
-            if ($null -ne $hasMouseAction) {
-                Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
-                #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" `
-                #     -Message "Make sure the DSP window is visible and not covered by other windows."
-                $MouseX, $MouseY = Get-MousePosition
-                Write-Host "Current mouse position: X=$MouseX, Y=$MouseY" -foregroundColor blue
-            }
-            else {
-                Write-Host "No mouse actions detected in profile. Proceeding with keyboard input only." -ForegroundColor Yellow
-                #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started." -Timeout 1000
-            }
-
-            # Start pasting EQ bands with configured keystrokes and mouse actions
-            foreach ($band in $bands) {
-                foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
-                    switch ($KeySet.PSObject.Properties.Name) {
-                        "MouseChangePositionY" {
-                            $MouseY += [int]$KeySet.MouseChangePositionY
-                            Start-Sleep -Milliseconds $KeySet.Delay_ms
-                            Write-Host -ForegroundColor Blue "New MouseY: $MouseY"
-                        }
-                        "MouseChangePositionX" {
-                            $MouseX += [int]$KeySet.MouseChangePositionX
-                            Start-Sleep -Milliseconds $KeySet.Delay_ms
-                            Write-Host -ForegroundColor Blue "New MouseX: $MouseX"
-                        }
-                        "MouseClick" {
-                            switch ($KeySet.MouseClick.ToLower()) {
-                                "left" {
-                                    Invoke-MouseClickLeftAt -X $MouseX -Y $MouseY | Out-Null
-                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                    Write-Host -ForegroundColor Blue "Left click at X:$MouseX Y:$MouseY"
-                                }
-                                "right" {
-                                    Invoke-MouseClickRightAt -X $MouseX -Y $MouseY | Out-Null
-                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                    Write-Host -ForegroundColor Blue "Right click at X:$MouseX Y:$MouseY"
-                                }
-                            }
-                        }
-                        "MouseScrollUp" {
-                            Invoke-MouseScrollUp -Amount $KeySet.MouseScrollUp
-                            Start-Sleep -Milliseconds $KeySet.Delay_ms
-                            Write-Host -ForegroundColor Blue "Mouse scroll up by $($KeySet.MouseScrollUp)"
-                        }
-                        "Invoke-MouseScrollDown" {
-                            Invoke-MouseScrollDown -Amount $KeySet.MouseScrollDown
-                            Start-Sleep -Milliseconds $KeySet.Delay_ms
-                            Write-Host -ForegroundColor Blue "Mouse scroll down by $($KeySet.MouseScrollDown)"
-                        }
-                        "Keys" {
-                            $keyToSend = $KeySet.Keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber)
-                            Invoke-KeyStroke -Keys $keyToSend
-                            Start-Sleep -Milliseconds $KeySet.Delay_ms
-                            Write-Host -ForegroundColor Blue "Sent keystrokes: $keyToSend"
-                        }
-                    }
-                }
-            }
-
-            # Show transposed table of pasted bands
-            # Show-TransposedTable -bands $bands | Format-Table -AutoSize
-            Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
-            Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste finished" -Message "Waiting for new data in clipboard"
-        }
-        else {
-            Write-Host "Cancelled by user or timedout. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
-            Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste canceled" -Message "Cancelled by user or timedout. Waiting for new data in clipboard"
-            Set-Clipboard "Canceled"
-        }
-
-    }
-    Write-Host -NoNewline ("`b" + $spinner[$spinnerindex])
-    $spinnerindex = ($spinnerindex + 1) % $spinner.Length
-    Start-Sleep -Seconds 1
-} while (1)
+Show-PopupGUI -ResourcesDir $ResourcesDir -DSPConfig $DSPConfig -GlobalConfig $GlobalConfig

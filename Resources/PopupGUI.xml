@@ -1,0 +1,26 @@
+<Window xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
+        WindowStyle='none'
+        AllowsTransparency='True'
+        Background='Transparent'
+        Width='280' Height='200'
+        Topmost='True'
+        ShowInTaskbar='False'
+        Title='REW EQ CopyPaste Assistant'>
+    <Border Name='WindowBorder'
+
+            BorderBrush='#3383D487'
+            BorderThickness='1'>
+
+        <Grid Name='MainGrid' Background="White">
+            <Button Name='ExitBTN'
+                    Width='80'
+                    Height='25'
+                    HorizontalAlignment='Right'
+                    VerticalAlignment='Bottom'
+                    Content='Exit' Margin="0,0,10,10"/>
+            <Label Name="Title" Content="REW EQ CopyPaste Assistant" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+            <TextBlock Name="MessageTextBlock" Margin="10,41,10,40" TextWrapping="Wrap" Text="Message text"/>
+            <Image Name="Icon" Margin="10,156,236,10" Width="32" Height="32"/>
+        </Grid>
+    </Border>
+</Window>

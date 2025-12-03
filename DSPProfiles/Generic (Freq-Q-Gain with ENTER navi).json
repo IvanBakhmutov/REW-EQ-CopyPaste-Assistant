@@ -1,18 +1,20 @@
-{
-    "version": "1.0",
-	"Description": "Generic profile (non specific to any DSP brand/software). Navigation through Freq, Q and Gain boxes with the ENTER key.",
-    "processName": "Generic",
-    "QDivider": 1,
-    "FreqDecimals": 0,
-    "QDecimals": 1,
-    "GainDecimals": 1,
-    "DecimalSeparator": ".",
-    "StartingPositionHint": "Please select 1 band Freq box and hit hotkey",
-    "HotkeyOrDelayPreference": "Hotkey",
-    "KeystrokeSequence": [
-        {
-            "Keys": "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
-            "Delay_ms": 200
-        }
-    ]
+﻿{
+    "version":  "1.0",
+    "Description":  "Generic profile (non specific to any DSP brand/software). Navigation through Freq, Q and Gain boxes with the ENTER key.",
+    "processName":  "Generic",
+    "QDivider":  1,
+    "QDecimals":  1,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please select 1 band Freq box and hit hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Delay",
+    "TimeoutBeforePasteSecs":  6,
+    "KeystrokeSequence":  [
+                              {
+                                  "Keys":  "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
+                                  "Delay_ms":  200
+                              }
+                          ]
 }
