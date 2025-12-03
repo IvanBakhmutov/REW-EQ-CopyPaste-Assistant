@@ -271,20 +271,24 @@ function Register-GlobalHotkey {
     $result = [HotKeyManager]::RegisterHotKey([IntPtr]::Zero, $HotkeyId, $Modifiers, $VirtualKeyCode)
     if (-not $result) {
         $errorCode = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
-        if ($errorCode -eq 1409) { # ERROR_HOTKEY_ALREADY_REGISTERED
+        if ($errorCode -eq 1409) {
+            # ERROR_HOTKEY_ALREADY_REGISTERED
             Write-Host "Hotkey already registered. Attempting to unregister and re-register..." -ForegroundColor Yellow
             [HotKeyManager]::UnregisterHotKey([IntPtr]::Zero, $HotkeyId) | Out-Null
             $result = [HotKeyManager]::RegisterHotKey([IntPtr]::Zero, $HotkeyId, $Modifiers, $VirtualKeyCode)
             if ($result) {
                 Write-Host "Successfully re-registered hotkey with ID $HotkeyId" -ForegroundColor Green
-            } else {
+            }
+            else {
                 $errorCode = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
                 Write-Host "Failed to re-register hotkey. Error code: $errorCode" -ForegroundColor Red
             }
-        } else {
+        }
+        else {
             Write-Host "Failed to register hotkey. Error code: $errorCode" -ForegroundColor Red
         }
-    } else {
+    }
+    else {
         Write-Host "Successfully registered hotkey with ID $HotkeyId" -ForegroundColor Green
     }
 }
@@ -297,7 +301,8 @@ function Unregister-GlobalHotkey {
     if (-not $result) {
         $errorCode = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
         Write-Host "Failed to unregister hotkey. Error code: $errorCode" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "Successfully unregistered hotkey with ID $HotkeyId" -ForegroundColor Green
     }
 }
@@ -308,17 +313,17 @@ function Unregister-GlobalHotkey {
 
 # --- Exported Functions ---
 Export-ModuleMember -Function `
-Invoke-MouseMoveBy,
-Invoke-MouseClickLeftAt,
-Invoke-MouseClickRightAt,
-Invoke-MouseClickRelative,
-Invoke-MouseLeftClick,
-Invoke-MouseRightClick,
-Invoke-MouseScrollUp,
-Invoke-MouseScrollDown,
-Move-CursorToPosition,
-Invoke-KeyStroke,
-Get-MousePosition,
-Wait-HotkeyInput,
-Register-GlobalHotkey,
-Unregister-GlobalHotkey
+    Invoke-MouseMoveBy,
+    Invoke-MouseClickLeftAt,
+    Invoke-MouseClickRightAt,
+    Invoke-MouseClickRelative,
+    Invoke-MouseLeftClick,
+    Invoke-MouseRightClick,
+    Invoke-MouseScrollUp,
+    Invoke-MouseScrollDown,
+    Move-CursorToPosition,
+    Invoke-KeyStroke,
+    Get-MousePosition,
+    Wait-HotkeyInput,
+    Register-GlobalHotkey,
+    Unregister-GlobalHotkey

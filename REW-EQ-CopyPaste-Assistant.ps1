@@ -2,7 +2,7 @@
 # Script: REW-EQ-CopyPaste-Assistant
 # Description: Provides automated mouse & keyboard input to paste REW EQ settings into DSP software
 # Author: Ivan Bakhmutov
-# Date: 2025-11-25
+# Date: 2025-12-03
 # ============================================
 
 $scriptDir = Split-Path -Parent $PSCommandPath
@@ -20,9 +20,7 @@ Import-Types
 
 # Set the console output encoding to UTF-8 to properly display Cyrillic characters
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-Write-Host "Script started" -ForegroundColor Yellow
-
-
+Write-Host "REW EQ CopyPaste Assistant started" -ForegroundColor Yellow
 
 $hwnd = [Win]::GetConsoleWindow()
 [Win]::ShowWindow($hwnd, 2) | Out-Null  # 2 = SW_MINIMIZE
@@ -72,8 +70,9 @@ write-host "Perform Action Hotkey = $effectivePerformActionHotkey and Cancel Act
 # Save last selected profile to config
 if (-not ($GlobalConfig.PSObject.Properties.Name -contains "LastSelectedProfile")) {
     $GlobalConfig | Add-Member -MemberType NoteProperty -Name "LastSelectedProfile" `
-     -Value $(Get-Item -path $selectedProfile | Select-Object -ExpandProperty BaseName)
-} else {
+        -Value $(Get-Item -path $selectedProfile | Select-Object -ExpandProperty BaseName)
+}
+else {
     $GlobalConfig.LastSelectedProfile = $(Get-Item -path $selectedProfile | Select-Object -ExpandProperty BaseName)
 }
 
@@ -87,22 +86,4 @@ catch {
 # Load selected profile
 $DSPConfig = Get-Content $selectedProfile -Raw | ConvertFrom-Json
 
-
-
 Show-PopupGUI -ResourcesDir $ResourcesDir -DSPConfig $DSPConfig -GlobalConfig $GlobalConfig
-
-<#if ($null -ne $DSPConfig.AdminRightsRequired) {
-    if ($DSPConfig.AdminRightsRequired -eq "true") {
-        if (Get-RunningAsAdminFlag) {
-            Write-Host "Running with administrative privileges as required by the DSP profile." -ForegroundColor Yellow
-        }
-        else {
-            Write-Host "This DSP profile requires administrative privileges. Please run the script as an administrator." -ForegroundColor Red
-            start-sleep -Seconds 3
-            exit
-        }
-    }
-}
-else {
-    Write-Host "No AdminRightsRequired flag found in profile. Proceeding without admin rights." -ForegroundColor Yellow
-} #>

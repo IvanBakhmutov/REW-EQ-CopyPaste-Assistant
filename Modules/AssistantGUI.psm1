@@ -2,7 +2,7 @@
 # Module: AssistantGUI
 # Description: GUI module for REW-EQ-CopyPaste-Assistant
 # Author: Ivan Bakhmutov
-# Date: 2025-11-30
+# Date: 2025-12-03
 # ============================================
 
 Function Show-EditProfileGui {
@@ -108,7 +108,8 @@ Function Show-EditProfileGui {
     # Load AdminRightsRequired value from JSON and set checkbox
     if ($null -ne $originalProfile.AdminRightsRequired -and $originalProfile.AdminRightsRequired -eq "true") {
         $ProfileSelectGUI.FindName("AdminRightsRequiredCHBX").IsChecked = $true
-    } else {
+    }
+    else {
         $ProfileSelectGUI.FindName("AdminRightsRequiredCHBX").IsChecked = $false
     }
 
@@ -130,7 +131,7 @@ Function Show-EditProfileGui {
             }
 
             # Build the profile object from form data
-            $profileObject= [ordered]@{
+            $profileObject = [ordered]@{
                 version = "1.0"
             }
 
@@ -162,7 +163,8 @@ Function Show-EditProfileGui {
             }
             if ($ProfileSelectGUI.FindName("AdminRightsRequiredCHBX").IsChecked) {
                 $profileObject.AdminRightsRequired = "true"
-            } else {
+            }
+            else {
                 $profileObject.AdminRightsRequired = "false"
             }
             # Hotkey or Delay preference
@@ -212,7 +214,7 @@ Function Show-EditProfileGui {
 
             # Save to file
             try {
-                $jsonContent = $profileObject| ConvertTo-Json -Depth 10
+                $jsonContent = $profileObject | ConvertTo-Json -Depth 10
                 Set-Content -Path $FilePath -Value $jsonContent -Encoding UTF8 -Force
                 $result.Action = "Saved"
                 $ProfileSelectGUI.Close()
@@ -221,7 +223,7 @@ Function Show-EditProfileGui {
                 [System.Windows.MessageBox]::Show("Error saving profile: $($_.Exception.Message)", "Save Error",
                     [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
             }
-       })
+        })
 
     # Save As - open SaveFileDialog in the profiles folder, require user confirmation
     $ProfileSelectGUI.FindName('SaveAsBTN').Add_Click({
@@ -239,7 +241,7 @@ Function Show-EditProfileGui {
             }
 
             # Build the profile object from form data (same as Save)
-            $profileObject= [ordered]@{
+            $profileObject = [ordered]@{
                 version = "1.0"
             }
 
@@ -309,7 +311,7 @@ Function Show-EditProfileGui {
                 $dlgRes = $sfd.ShowDialog()
                 if ($dlgRes -eq $true) {
                     try {
-                        $jsonContent = $profileObject| ConvertTo-Json -Depth 10
+                        $jsonContent = $profileObject | ConvertTo-Json -Depth 10
                         Set-Content -Path $sfd.FileName -Value $jsonContent -Encoding UTF8 -Force
                         $result.Action = "SavedAs"
                         # expose new filepath to caller so caller can refresh and select it
@@ -333,7 +335,6 @@ Function Show-EditProfileGui {
     $ProfileSelectGUI.FindName("CancelBTN").Add_Click({
             $result.Action = "Cancel"
             $ProfileSelectGUI.Close()
-            #  exit
         })
 
     # Change tracking - enable Save button when any field is modified
@@ -699,8 +700,8 @@ Function Show-SelectProfileGui {
             [Parameter(Mandatory = $true)]$profileContent
         )
         $result = "Description: $($profileContent.description)`n`n" + `
-         "DSP Software Process Name: $($profileContent.processName)`n`n" + `
-         "Starting Position Hint: $($profileContent.StartingPositionHint)`n"
+            "DSP Software Process Name: $($profileContent.processName)`n`n" + `
+            "Starting Position Hint: $($profileContent.StartingPositionHint)`n"
         return $result
     }
 
@@ -815,13 +816,14 @@ Function Show-SelectProfileGui {
         if ($LatestVersion -notmatch "^\d+\.\d+\.\d+$") {
             throw "Invalid version format retrieved: $LatestVersion"
         }
-    } catch {
+    }
+    catch {
         # Log the error and set a default value
         Write-Host "Failed to retrieve the latest version number: $($_.Exception.Message)" -ForegroundColor Red
         $LatestVersion = "Unknown"
     }
 
-    if($LatestVersion -ne "Unknown"){
+    if ($LatestVersion -ne "Unknown") {
         try {
             # Read the version from the local file
             $localVersionPath = Join-Path -Path $ResourcesDir -ChildPath "version"
@@ -835,16 +837,20 @@ Function Show-SelectProfileGui {
                 if ($LocalVersion -lt $LatestVersion) {
                     Write-Host "A newer version ($LatestVersion) is available." -ForegroundColor Yellow
                     $ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion (update available)"
-                } elseif ($LocalVersion -gt $LatestVersion) {
+                }
+                elseif ($LocalVersion -gt $LatestVersion) {
                     Write-Host "Tool version ($LocalVersion) is ahead of the latest update online ($LatestVersion)." -ForegroundColor DarkRed
-                } else {
+                }
+                else {
                     $ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion (Latest)"
                     Write-Host "Tool version is up-to-date." -ForegroundColor Cyan
                 }
-            } else {
+            }
+            else {
                 Write-Host "Tool version file not found." -ForegroundColor Red
             }
-        } catch {
+        }
+        catch {
             Write-Host "Error checking updates: $($_.Exception.Message)" -ForegroundColor Red
         }
     }
@@ -959,7 +965,7 @@ Function Show-SelectProfileGui {
     #Endregion
 
     #Region Assign event handlers
-        # Search box text changed handler to filter the profiles list
+    # Search box text changed handler to filter the profiles list
     $ProfileEditGUI.FindName("SearchEDIT").Add_TextChanged({
             param($searchSender, $searchArgs)
             $searchText = $searchSender.Text.ToLower()
@@ -972,14 +978,14 @@ Function Show-SelectProfileGui {
             $ProfileEditGUI.FindName("ProfileList").ItemsSource = $filteredProfiles
         })
 
-        # Search box clear click handler
+    # Search box clear click handler
     $ProfileEditGUI.FindName("ClearSearchBTN").Add_Click({
             $ProfileEditGUI.FindName("SearchEDIT").Text = ""
             $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
             $ProfileEditGUI.FindName("ProfileList").ItemsSource = $script:DSPProfilesList.BaseName
         })
 
-        # Run REW button click handler
+    # Run REW button click handler
     $ProfileEditGUI.FindName("RunREWBTN").Add_Click({
             if ($result.REWStatus -eq "Not Running") {
                 # Locate the installation directory of Room EQ Wizard from the registry
@@ -1022,24 +1028,24 @@ Function Show-SelectProfileGui {
             }
         })
 
-        # GitHub button click handler
+    # GitHub button click handler
     $ProfileEditGUI.FindName("GitHub").Add_Click({
             start-process "https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant"
         })
 
-        # Donate button click handler
+    # Donate button click handler
     $ProfileEditGUI.FindName("Donate").Add_Click({
             start-process "https://paypal.me/IvanBakhmutovDonate"
         })
 
-        # Close button click handler
+    # Close button click handler
     $ProfileEditGUI.FindName("CloseBTN").Add_Click({
             $BGProcessCheck.Stop()
             $ProfileEditGUI.Close()
             #return
         })
 
-        # New profile click handler
+    # New profile click handler
     $ProfileEditGUI.FindName("NewProfileBTN").Add_Click({
             # Prompt user to save a new profile file
             $saveFileDialog = New-Object System.Windows.Forms.SaveFileDialog
@@ -1083,7 +1089,7 @@ Function Show-SelectProfileGui {
             $BGProcessCheck.start()
         })
 
-        # Profile selection changed handler
+    # Profile selection changed handler
     $ProfileEditGUI.FindName("EditBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             if ($null -ne $selectedProfileFileName) {
@@ -1099,12 +1105,12 @@ Function Show-SelectProfileGui {
                 $script:DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json"
                 $searchText = $ProfileEditGUI.FindName('SearchEDIT').Text.ToLower()
                 [array]$filteredProfiles = @()
-                    foreach ($profileFile in $script:DSPProfilesList) {
-                        if ($profileFile.BaseName.ToLower().Contains($searchText)) {
-                            $filteredProfiles += $profileFile.BaseName
-                        }
+                foreach ($profileFile in $script:DSPProfilesList) {
+                    if ($profileFile.BaseName.ToLower().Contains($searchText)) {
+                        $filteredProfiles += $profileFile.BaseName
                     }
-                    $ProfileEditGUI.FindName("ProfileList").ItemsSource = $filteredProfiles
+                }
+                $ProfileEditGUI.FindName("ProfileList").ItemsSource = $filteredProfiles
                 # determine the base name of saved file and select it
                 try {
                     $savedPath = $editResult.FilePath
@@ -1140,7 +1146,7 @@ Function Show-SelectProfileGui {
             }
         })
 
-        # OK button click handler
+    # OK button click handler
     $ProfileEditGUI.FindName("OKBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
 
@@ -1152,7 +1158,8 @@ Function Show-SelectProfileGui {
                 $MessageTitle = "REW Not Running or API Not Enabled"
                 [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
                 return
-            } elseif ($result.REWStatus -eq "API Not Enabled") {
+            }
+            elseif ($result.REWStatus -eq "API Not Enabled") {
                 $ButtonType = [System.Windows.MessageBoxButton]::OK
                 $MessageIcon = [System.Windows.MessageBoxImage]::Warning
                 $MessageBody = "Room EQ Wizard (REW) is running but API mode is not enabled. You will have to click 'Copy the filter settings to the clipboard' button or press Alt-C and proceed with paste procedure in your DSP software."
@@ -1190,7 +1197,7 @@ Function Show-SelectProfileGui {
             }
         })
 
-        # List selection changed handler
+    # List selection changed handler
     $ProfileEditGUI.FindName("ProfileList").Add_SelectionChanged({
             $selectedItem = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             if ($null -ne $selectedItem) {
@@ -1198,7 +1205,7 @@ Function Show-SelectProfileGui {
             }
         })
 
-        # List doubleclick
+    # List doubleclick
     $ProfileEditGUI.FindName("ProfileList").Add_mouseDoubleClick({
             $ProfileEditGUI.FindName("ProfileList").SelectedItem = $ProfileEditGUI.FindName("ProfileList").SelectedItem
             Start-Sleep -Milliseconds 100
@@ -1208,7 +1215,7 @@ Function Show-SelectProfileGui {
             }
         })
 
-        # Add Closed event to clean up
+    # Add Closed event to clean up
     $ProfileEditGUI.Add_Closed({
             return
         })
@@ -1234,7 +1241,7 @@ function Show-PopupGUI {
     $winMajor = [Environment]::OSVersion.Version.Major
     $winBuild = [Environment]::OSVersion.Version.Build
 
- 
+
     # ---------------------------------------------------------
     # WPF UI
     # ---------------------------------------------------------
@@ -1244,15 +1251,15 @@ function Show-PopupGUI {
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $window = [Windows.Markup.XamlReader]::Load($reader)
 
-# Position the window at the bottom-right corner of the screen, avoiding the taskbar
-$screenWidth = [System.Windows.SystemParameters]::PrimaryScreenWidth
-$screenHeight = [System.Windows.SystemParameters]::PrimaryScreenHeight
-$taskbarHeight = [System.Windows.SystemParameters]::WindowCaptionHeight + [System.Windows.SystemParameters]::ResizeFrameHorizontalBorderHeight
+    # Position the window at the bottom-right corner of the screen, avoiding the taskbar
+    $screenWidth = [System.Windows.SystemParameters]::PrimaryScreenWidth
+    $screenHeight = [System.Windows.SystemParameters]::PrimaryScreenHeight
+    $taskbarHeight = [System.Windows.SystemParameters]::WindowCaptionHeight + [System.Windows.SystemParameters]::ResizeFrameHorizontalBorderHeight
 
-$window.Left = $screenWidth - $window.Width - 10  # 10px margin from the right edge
-$window.Top = $screenHeight - $window.Height - $taskbarHeight - 30  # 30px margin from the bottom edge
+    $window.Left = $screenWidth - $window.Width - 10  # 10px margin from the right edge
+    $window.Top = $screenHeight - $window.Height - $taskbarHeight - 30  # 30px margin from the bottom edge
 
-    $grid   = $window.FindName("MainGrid")
+    $grid = $window.FindName("MainGrid")
     $button = $window.FindName("ExitBTN")
     $MessageTextBlock = $window.FindName("MessageTextBlock")
     $Icon = $window.FindName("Icon")
@@ -1260,319 +1267,284 @@ $window.Top = $screenHeight - $window.Height - $taskbarHeight - 30  # 30px margi
     # Drag behavior - ONLY in MouseDown, remove the general window handler
     # ---------------------------------------------------------
     $grid.Add_MouseDown({
-        if ($_.LeftButton -eq "Pressed") {
-            $window.DragMove()
-        }
-    })
+            if ($_.LeftButton -eq "Pressed") {
+                $window.DragMove()
+            }
+        })
 
     # Button click
     $button.Add_Click({
-        #[System.Windows.MessageBox]::Show("Finished!")
-        $window.close()
-        exit
-    })
+            #[System.Windows.MessageBox]::Show("Finished!")
+            $window.close()
+            exit
+        })
 
     # Hover opacity
     $window.Opacity = 0.5
     $window.Add_MouseEnter({ $window.Opacity = 1.0 })
     $window.Add_MouseLeave({
-        if (-not $window.IsMouseOver) { $window.Opacity = 0.5 }
-    })
+            if (-not $window.IsMouseOver) { $window.Opacity = 0.5 }
+        })
 
     # ---------------------------------------------------------
     # Apply blur + shadow after hwnd exists
     # ---------------------------------------------------------
     $window.Add_SourceInitialized({
-        $hwnd = (New-Object System.Windows.Interop.WindowInteropHelper $window).Handle
+            $hwnd = (New-Object System.Windows.Interop.WindowInteropHelper $window).Handle
 
-        # Apply shadow
-    #  [ShadowHelper]::ApplyShadow($hwnd)
+            # Apply shadow
+            #  [ShadowHelper]::ApplyShadow($hwnd)
 
-        # Windows 7 Aero Glass
-        if ($winMajor -eq 6 -and $winBuild -lt 9200) {
-            $bb = New-Object Win7Blur+DWM_BLURBEHIND
-            $bb.dwFlags = [Win7Blur]::DWM_BB_ENABLE
-            $bb.fEnable = $true
-            [Win7Blur]::DwmEnableBlurBehindWindow($hwnd, [ref]$bb) | Out-Null
+            # Windows 7 Aero Glass
+            if ($winMajor -eq 6 -and $winBuild -lt 9200) {
+                $bb = New-Object Win7Blur+DWM_BLURBEHIND
+                $bb.dwFlags = [Win7Blur]::DWM_BB_ENABLE
+                $bb.fEnable = $true
+                [Win7Blur]::DwmEnableBlurBehindWindow($hwnd, [ref]$bb) | Out-Null
+            }
+            # Windows 10 / 11 Acrylic / Blur
+            elseif ($winMajor -ge 10) {
+                $accent = New-Object AccentPolicy
+                $accent.AccentState = [AccentState]::ACCENT_ENABLE_BLURBEHIND
+                # For acrylic use: ACCENT_ENABLE_ACRYLICBLURBEHIND
+
+                $accentSize = [System.Runtime.InteropServices.Marshal]::SizeOf($accent)
+                $accentPtr = [System.Runtime.InteropServices.Marshal]::AllocHGlobal($accentSize)
+                [System.Runtime.InteropServices.Marshal]::StructureToPtr($accent, $accentPtr, $false)
+
+                $data = New-Object WindowCompositionAttributeData
+                $data.Attribute = 19 # WCA_ACCENT_POLICY
+                $data.SizeOfData = $accentSize
+                $data.Data = $accentPtr
+
+                [Win10Blur]::SetWindowCompositionAttribute($hwnd, [ref]$data) | Out-Null
+
+                [System.Runtime.InteropServices.Marshal]::FreeHGlobal($accentPtr)
+            }
+        })
+    #################################################################################################################
+    if ($null -ne $DSPConfig.processName) {
+        if ($DSPConfig.processName -eq "Generic") {
+            $ProcessName = "Generic"
         }
-        # Windows 10 / 11 Acrylic / Blur
-        elseif ($winMajor -ge 10) {
-            $accent = New-Object AccentPolicy
-            $accent.AccentState = [AccentState]::ACCENT_ENABLE_BLURBEHIND
-            # For acrylic use: ACCENT_ENABLE_ACRYLICBLURBEHIND
-
-            $accentSize = [System.Runtime.InteropServices.Marshal]::SizeOf($accent)
-            $accentPtr = [System.Runtime.InteropServices.Marshal]::AllocHGlobal($accentSize)
-            [System.Runtime.InteropServices.Marshal]::StructureToPtr($accent, $accentPtr, $false)
-
-            $data = New-Object WindowCompositionAttributeData
-            $data.Attribute = 19 # WCA_ACCENT_POLICY
-            $data.SizeOfData = $accentSize
-            $data.Data = $accentPtr
-
-            [Win10Blur]::SetWindowCompositionAttribute($hwnd, [ref]$data) | Out-Null
-
-            [System.Runtime.InteropServices.Marshal]::FreeHGlobal($accentPtr)
+        else {
+            $ProcessName = $DSPConfig.processName
         }
-    })
-#################################################################################################################
-if ($null -ne $DSPConfig.processName) {
-    if ($DSPConfig.processName -eq "Generic") {
-        $ProcessName = "Generic"
     }
     else {
-        $ProcessName = $DSPConfig.processName
+        $ProcessName = "Generic"
     }
-}
-else {
-    $ProcessName = "Generic"
-}
-if ($null -ne $DSPConfig.QDivider) {
-    $QDivider = $DSPConfig.QDivider
-}
-if ($null -ne $DSPConfig.DecimalSeparator) {
-    $DecimalSeparator = $DSPConfig.DecimalSeparator
-}
-else {
-    $DecimalSeparator = $GlobalConfig.DecimalSeparator
-}
-if ($null -ne $DSPConfig.FreqDecimals) {
-    $FreqDecimals = $DSPConfig.FreqDecimals
-}
-else {
-    $FreqDecimals = $GlobalConfig.FreqDecimals
-}
-if ($null -ne $DSPConfig.QDecimals) {
-    $QDecimals = $DSPConfig.QDecimals
-}
-else {
-    $QDecimals = $GlobalConfig.QDecimals
-}
-if ($null -ne $DSPConfig.GainDecimals) {
-    $GainDecimals = $DSPConfig.GainDecimals
-}
-else {
-    $GainDecimals = $GlobalConfig.GainDecimals
-}
-if ($null -ne $DSPConfig.HotkeyOrDelayPreference) {
-    $HotkeyOrDelayPreference = $DSPConfig.HotkeyOrDelayPreference
-}
-else {
-    $HotkeyOrDelayPreference = $GlobalConfig.HotkeyOrDelayPreference
-}
-if ($null -ne $DSPConfig.TimeoutBeforePasteSecs) {
-    $TimeoutBeforePasteSecs = $DSPConfig.TimeoutBeforePasteSecs
-}
-else {
-    $TimeoutBeforePasteSecs = $GlobalConfig.TimeoutBeforePasteSecs
-}
-$StartingPositionHint = $DSPConfig.StartingPositionHint
+    if ($null -ne $DSPConfig.QDivider) {
+        $QDivider = $DSPConfig.QDivider
+    }
+    if ($null -ne $DSPConfig.DecimalSeparator) {
+        $DecimalSeparator = $DSPConfig.DecimalSeparator
+    }
+    else {
+        $DecimalSeparator = $GlobalConfig.DecimalSeparator
+    }
+    if ($null -ne $DSPConfig.FreqDecimals) {
+        $FreqDecimals = $DSPConfig.FreqDecimals
+    }
+    else {
+        $FreqDecimals = $GlobalConfig.FreqDecimals
+    }
+    if ($null -ne $DSPConfig.QDecimals) {
+        $QDecimals = $DSPConfig.QDecimals
+    }
+    else {
+        $QDecimals = $GlobalConfig.QDecimals
+    }
+    if ($null -ne $DSPConfig.GainDecimals) {
+        $GainDecimals = $DSPConfig.GainDecimals
+    }
+    else {
+        $GainDecimals = $GlobalConfig.GainDecimals
+    }
+    if ($null -ne $DSPConfig.HotkeyOrDelayPreference) {
+        $HotkeyOrDelayPreference = $DSPConfig.HotkeyOrDelayPreference
+    }
+    else {
+        $HotkeyOrDelayPreference = $GlobalConfig.HotkeyOrDelayPreference
+    }
+    if ($null -ne $DSPConfig.TimeoutBeforePasteSecs) {
+        $TimeoutBeforePasteSecs = $DSPConfig.TimeoutBeforePasteSecs
+    }
+    else {
+        $TimeoutBeforePasteSecs = $GlobalConfig.TimeoutBeforePasteSecs
+    }
+    $StartingPositionHint = $DSPConfig.StartingPositionHint
 
-Write-Host "`nUsing DSP Profile: $($DSPConfig.Description)" -ForegroundColor Green
+    Write-Host "`nUsing DSP Profile: $($DSPConfig.Description)" -ForegroundColor Green
 
 
-if ($ProcessName -eq "Generic") {
-    Write-Host "Using Generic profile. DSP software will not automatically shown in foreground." -ForegroundColor Yellow
-    #Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Using Generic profile.`nWaiting for EQ data from REW in clipboard"
-    $MessageTextBlock.Text = "Using Generic profile. DSP software will not automatically shown in foreground.`n`nWaiting for EQ data from REW in clipboard"
-    $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Bulb.48.png"
-}
-else {
-    Write-Host "Found DSP process: $($ProfileSelectionResult.ProcessName)" -ForegroundColor Green
-    # Show-Notification -Title "REW EQ CopyPaste Assistant" -Message "Found $($DSPConfig.Description) process: $($ProfileSelectionResult.ProcessName)`nWaiting for EQ data from REW in clipboard"
-    $MessageTextBlock.Text = "Found $($DSPConfig.Description) process: $($ProfileSelectionResult.ProcessName)`n`nWaiting for EQ data from REW in clipboard"
-    $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Bulb.48.png"
-}
+    if ($ProcessName -eq "Generic") {
+        Write-Host "Using Generic profile. DSP software will not automatically shown in foreground." -ForegroundColor Yellow
+        $MessageTextBlock.Text = "Using Generic profile. DSP software will not automatically shown in foreground.`n`nWaiting for EQ data from REW in clipboard"
+        $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Bulb.48.png"
+    }
+    else {
+        Write-Host "Found DSP process: $($ProfileSelectionResult.ProcessName)" -ForegroundColor Green
+        $MessageTextBlock.Text = "Found $($DSPConfig.Description) process: $($ProfileSelectionResult.ProcessName)`n`nWaiting for EQ data from REW in clipboard"
+        $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Bulb.48.png"
+    }
 
-#Write-Host "Hint: When finished with EQ close PowerShell window or hit ctrl-c and confirm exit" -ForegroundColor Yellow
-Write-Host "Hotkey Or Delay Preference: $HotkeyOrDelayPreference" -ForegroundColor Cyan
-Write-Host "Waiting for EQ data from REW in clipboard  " -ForegroundColor Yellow -NoNewline
+    Write-Host "Hotkey Or Delay Preference: $HotkeyOrDelayPreference" -ForegroundColor Cyan
+    Write-Host "Waiting for EQ data from REW in clipboard  " -ForegroundColor Yellow -NoNewline
 
-
-$HotkeyIdPerform = 1
-$HotkeyIdCancel = 2
-Register-GlobalHotkey -HotkeyId $HotkeyIdPerform -Modifiers 0 -VirtualKeyCode ([System.Windows.Forms.Keys]::$EffectivePerformActionHotkey)
-Register-GlobalHotkey -HotkeyId $HotkeyIdCancel -Modifiers 0 -VirtualKeyCode ([System.Windows.Forms.Keys]::$EffectiveCancelActionHotkey)
-
-
-
-
-        $spinner = @('|', '/', '-', '\')
-        $script:spinnerindex = 0
+    $spinner = @('|', '/', '-', '\')
+    $script:spinnerindex = 0
 
     $MainDispatcher = New-Object Windows.Threading.DispatcherTimer
     $MainDispatcher.Interval = [TimeSpan]::FromMilliseconds(300)
     $MainDispatcher.Add_Tick({
+            # Check clipboard content
+            $bufferHeader = $null
+            $buffer = get-clipboard
+            $bufferHeader = $($buffer -split "`n")[0]
+            if ($bufferHeader -in "Configurable_PEQ", "Generic", "Extended") {
 
-
-
-
-
-
-        # Check clipboard content
-        $bufferHeader = $null
-        $buffer = get-clipboard
-        $bufferHeader = $($buffer -split "`n")[0]
-        if ($bufferHeader -in "Configurable_PEQ", "Generic", "Extended") {
-
-            [array]$bands = Read-EQText `
-                -Text ($buffer | Out-String) `
-                -QDivider $QDivider `
-                -FreqDecimals $FreqDecimals `
-                -QDecimals $QDecimals `
-                -GainDecimals $GainDecimals `
-                -DecimalSeparator $DecimalSeparator
-        $MouseX = $null
-        $MouseY = $null
-        $keyToSend = $null
-        $UserHasConfirmedAction = $false
+                [array]$bands = Read-EQText `
+                    -Text ($buffer | Out-String) `
+                    -QDivider $QDivider `
+                    -FreqDecimals $FreqDecimals `
+                    -QDecimals $QDecimals `
+                    -GainDecimals $GainDecimals `
+                    -DecimalSeparator $DecimalSeparator
+                $MouseX = $null
+                $MouseY = $null
+                $keyToSend = $null
+                $UserHasConfirmedAction = $false
 
                 Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
 
-            Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP  " -ForegroundColor Yellow -NoNewline
+                Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP  " -ForegroundColor Yellow -NoNewline
 
-            if ($ProcessName -ne "Generic") {
-                Show-DSPWindowToFront -processName $ProcessName | Out-Null
-            }
-
-            if (($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -eq "Hotkey")) {
-                #Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
-                #    -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."
-                $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."
-                $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Logview.48.png"
-                $MessageTextBlock.Dispatcher.Invoke([Windows.Threading.DispatcherPriority]::Render, [action]{} )
-                Write-Host "Waiting for user to press '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel. Timeout in $($GlobalConfig.HotkeyTimeoutSecs) seconds..." -ForegroundColor Yellow
-                $hotkeyResult = $(Wait-HotkeyInput -TimeoutSecs $GlobalConfig.HotkeyTimeoutSecs -KeysToMonitor $($EffectivePerformActionHotkey, $EffectiveCancelActionHotkey) )
-                switch ($hotkeyResult) {
-                    "$EffectivePerformActionHotkey" {
-                        $UserHasConfirmedAction = $true
-                    }
-                    "$EffectiveCancelActionHotkey" {
-                        $UserHasConfirmedAction = $false
-                    }
-                    $null {
-                        Write-Host "`nHotkey timeout reached after $($GlobalConfig.HotkeyTimeoutSecs) seconds. Paste action cancelled.  " -ForegroundColor Yellow -NoNewline
-                        $MessageTextBlock.Text = "Hotkey timeout reached after $($GlobalConfig.HotkeyTimeoutSecs) seconds. Paste action cancelled."
-                        $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Apport.48.png"
-                        $UserHasConfirmedAction = $false
-                    }
-                }
-            }
-           else {
-                #Show-Notification -Title "REW EQ CopyPaste Assistant - Confirm" `
-                #    -Message "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
-                $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
-                $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Preferences-system-network.48.png"
-                Write-Host "Waiting for user confirmation dialog to proceed with paste..." -ForegroundColor Yellow
-                $UserHasConfirmedAction = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
-            }
- 
-            if ($UserHasConfirmedAction -eq $true) {
-                Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
-
-                if ((($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -ne "Hotkey")) `
-                        -or (($null -eq $DSPConfig.HotkeyOrDelayPreference))) {
-                    write-host "Waiting $($TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
-                    Start-Sleep -Seconds $TimeoutBeforePasteSecs
+                if ($ProcessName -ne "Generic") {
+                    Show-DSPWindowToFront -processName $ProcessName | Out-Null
                 }
 
-                # Check if mouse actions are defined in the profile
-                $hasMouseAction = $DSPConfig.KeystrokeSequence | Where-Object {
-                    $_.PSObject.Properties.Name -match '^mouse'
-                }
-                if ($null -ne $hasMouseAction) {
-                    Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
-                    #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" `
-                    #     -Message "Make sure the DSP window is visible and not covered by other windows."
-                    $MessageTextBlock.text = "CopyPaste started...`n`nMake sure the DSP window is visible and not covered by other windows."
-                    $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Edit.48.png"
-                    $MouseX, $MouseY = Get-MousePosition
-                    Write-Host "Current mouse position: X=$MouseX, Y=$MouseY" -foregroundColor blue
-                }
-                else {
-                    Write-Host "No mouse actions detected in profile. Proceeding with keyboard input only." -ForegroundColor Yellow
-                    #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste started" -Message "Keyboard input started." -Timeout 1000
-                    $MessageTextBlock.text = "CopyPaste started...`n`nKeyboard input started."
-                $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Edit.48.png"
-                }
-
-                # Start pasting EQ bands with configured keystrokes and mouse actions
-                foreach ($band in $bands) {
-                    foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
-                        switch ($KeySet.PSObject.Properties.Name) {
-                            "MouseChangePositionY" {
-                                $MouseY += [int]$KeySet.MouseChangePositionY
-                                Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                Write-Host -ForegroundColor Blue "New MouseY: $MouseY"
-                            }
-                            "MouseChangePositionX" {
-                                $MouseX += [int]$KeySet.MouseChangePositionX
-                                Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                Write-Host -ForegroundColor Blue "New MouseX: $MouseX"
-                            }
-                            "MouseClick" {
-                                switch ($KeySet.MouseClick.ToLower()) {
-                                    "left" {
-                                        Invoke-MouseClickLeftAt -X $MouseX -Y $MouseY | Out-Null
-                                        Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                        Write-Host -ForegroundColor Blue "Left click at X:$MouseX Y:$MouseY"
-                                    }
-                                    "right" {
-                                        Invoke-MouseClickRightAt -X $MouseX -Y $MouseY | Out-Null
-                                        Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                        Write-Host -ForegroundColor Blue "Right click at X:$MouseX Y:$MouseY"
-                                    }
-                                }
-                            }
-                            "MouseScrollUp" {
-                                Invoke-MouseScrollUp -Amount $KeySet.MouseScrollUp
-                                Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                Write-Host -ForegroundColor Blue "Mouse scroll up by $($KeySet.MouseScrollUp)"
-                            }
-                            "Invoke-MouseScrollDown" {
-                                Invoke-MouseScrollDown -Amount $KeySet.MouseScrollDown
-                                Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                Write-Host -ForegroundColor Blue "Mouse scroll down by $($KeySet.MouseScrollDown)"
-                            }
-                            "Keys" {
-                                $keyToSend = $KeySet.Keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber)
-                                Invoke-KeyStroke -Keys $keyToSend
-                                Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                Write-Host -ForegroundColor Blue "Sent keystrokes: $keyToSend"
-                            }
+                if (($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -eq "Hotkey")) {
+                    $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."
+                    $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Logview.48.png"
+                    $MessageTextBlock.Dispatcher.Invoke([Windows.Threading.DispatcherPriority]::Render, [action] {} )
+                    Write-Host "Waiting for user to press '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel. Timeout in $($GlobalConfig.HotkeyTimeoutSecs) seconds..." -ForegroundColor Yellow
+                    $hotkeyResult = $(Wait-HotkeyInput -TimeoutSecs $GlobalConfig.HotkeyTimeoutSecs -KeysToMonitor $($EffectivePerformActionHotkey, $EffectiveCancelActionHotkey) )
+                    switch ($hotkeyResult) {
+                        "$EffectivePerformActionHotkey" {
+                            $UserHasConfirmedAction = $true
+                        }
+                        "$EffectiveCancelActionHotkey" {
+                            $UserHasConfirmedAction = $false
+                        }
+                        $null {
+                            Write-Host "`nHotkey timeout reached after $($GlobalConfig.HotkeyTimeoutSecs) seconds. Paste action cancelled.  " -ForegroundColor Yellow -NoNewline
+                            $MessageTextBlock.Text = "Hotkey timeout reached after $($GlobalConfig.HotkeyTimeoutSecs) seconds. Paste action cancelled."
+                            $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Apport.48.png"
+                            $UserHasConfirmedAction = $false
                         }
                     }
                 }
+                else {
+                    $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
+                    $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Preferences-system-network.48.png"
+                    Write-Host "Waiting for user confirmation dialog to proceed with paste..." -ForegroundColor Yellow
+                    $UserHasConfirmedAction = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
+                }
 
-                # Show transposed table of pasted bands
-                # Show-TransposedTable -bands $bands | Format-Table -AutoSize
-                Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
-                #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste finished" -Message "Waiting for new data in clipboard"
-                $MessageTextBlock.text = "Finished paste.`n`nWaiting for new data in clipboard."
-                $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Checkbox.48.png"
-            }
-            else {
-                Write-Host "Cancelled by user or timedout. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
-                #Show-Notification -Title "REW EQ CopyPaste Assistant - CopyPaste canceled" -Message "Cancelled by user or timedout. Waiting for new data in clipboard"
-                $MessageTextBlock.text = "Cancelled by user or timedout.`n`nWaiting for new data in clipboard."
-                Set-Clipboard "Canceled"
-            }
+                if ($UserHasConfirmedAction -eq $true) {
+                    Write-Host "Proceeding with pasting EQ settings..." -ForegroundColor Yellow
 
-        }
-        Write-Host -NoNewline ("`b" + $spinner[$spinnerindex])
-        #Write-Host $($script:spinnerindex)
-        $script:spinnerindex = ($script:spinnerindex + 1) % $spinner.Length
-    })  # Close the Add_Tick scriptblock
+                    if ((($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -ne "Hotkey")) `
+                            -or (($null -eq $DSPConfig.HotkeyOrDelayPreference))) {
+                        write-host "Waiting $($TimeoutBeforePasteSecs) seconds before auto-paste. $($DSPConfig.StartingPositionHint)" -ForegroundColor Yellow
+                        Start-Sleep -Seconds $TimeoutBeforePasteSecs
+                    }
+
+                    # Check if mouse actions are defined in the profile
+                    $hasMouseAction = $DSPConfig.KeystrokeSequence | Where-Object {
+                        $_.PSObject.Properties.Name -match '^mouse'
+                    }
+                    if ($null -ne $hasMouseAction) {
+                        Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
+                        $MessageTextBlock.text = "CopyPaste started...`n`nMake sure the DSP window is visible and not covered by other windows."
+                        $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Edit.48.png"
+                        $MouseX, $MouseY = Get-MousePosition
+                        Write-Host "Current mouse position: X=$MouseX, Y=$MouseY" -foregroundColor blue
+                    }
+                    else {
+                        Write-Host "No mouse actions detected in profile. Proceeding with keyboard input only." -ForegroundColor Yellow
+                        $MessageTextBlock.text = "CopyPaste started...`n`nKeyboard input started."
+                        $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Edit.48.png"
+                    }
+
+                    # Start pasting EQ bands with configured keystrokes and mouse actions
+                    foreach ($band in $bands) {
+                        foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
+                            switch ($KeySet.PSObject.Properties.Name) {
+                                "MouseChangePositionY" {
+                                    $MouseY += [int]$KeySet.MouseChangePositionY
+                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
+                                    Write-Host -ForegroundColor Blue "New MouseY: $MouseY"
+                                }
+                                "MouseChangePositionX" {
+                                    $MouseX += [int]$KeySet.MouseChangePositionX
+                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
+                                    Write-Host -ForegroundColor Blue "New MouseX: $MouseX"
+                                }
+                                "MouseClick" {
+                                    switch ($KeySet.MouseClick.ToLower()) {
+                                        "left" {
+                                            Invoke-MouseClickLeftAt -X $MouseX -Y $MouseY | Out-Null
+                                            Start-Sleep -Milliseconds $KeySet.Delay_ms
+                                            Write-Host -ForegroundColor Blue "Left click at X:$MouseX Y:$MouseY"
+                                        }
+                                        "right" {
+                                            Invoke-MouseClickRightAt -X $MouseX -Y $MouseY | Out-Null
+                                            Start-Sleep -Milliseconds $KeySet.Delay_ms
+                                            Write-Host -ForegroundColor Blue "Right click at X:$MouseX Y:$MouseY"
+                                        }
+                                    }
+                                }
+                                "MouseScrollUp" {
+                                    Invoke-MouseScrollUp -Amount $KeySet.MouseScrollUp
+                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
+                                    Write-Host -ForegroundColor Blue "Mouse scroll up by $($KeySet.MouseScrollUp)"
+                                }
+                                "Invoke-MouseScrollDown" {
+                                    Invoke-MouseScrollDown -Amount $KeySet.MouseScrollDown
+                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
+                                    Write-Host -ForegroundColor Blue "Mouse scroll down by $($KeySet.MouseScrollDown)"
+                                }
+                                "Keys" {
+                                    $keyToSend = $KeySet.Keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber)
+                                    Invoke-KeyStroke -Keys $keyToSend
+                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
+                                    Write-Host -ForegroundColor Blue "Sent keystrokes: $keyToSend"
+                                }
+                            }
+                        }
+                    }
+
+                    # Show transposed table of pasted bands
+                    # Show-TransposedTable -bands $bands | Format-Table -AutoSize
+                    Write-Host "Finished paste. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
+                    $MessageTextBlock.text = "Finished paste.`n`nWaiting for new data in clipboard."
+                    $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Checkbox.48.png"
+                }
+                else {
+                    Write-Host "Cancelled by user or timedout. Waiting for new data in clipboard  " -ForegroundColor Yellow -NoNewline
+                    $MessageTextBlock.text = "Cancelled by user or timedout.`n`nWaiting for new data in clipboard."
+                    Set-Clipboard "Canceled"
+                }
+
+            }
+            Write-Host -NoNewline ("`b" + $spinner[$spinnerindex])
+            $script:spinnerindex = ($script:spinnerindex + 1) % $spinner.Length
+        })  # Close the Add_Tick scriptblock
     $MainDispatcher.Start()
 
-#################################################################################################################
     # Run
-
-$window.Add_Closed({
-    Unregister-GlobalHotkey -HotkeyId $HotkeyIdPerform
-    Unregister-GlobalHotkey -HotkeyId $HotkeyIdCancel
-})
-
     $window.ShowDialog() | Out-Null
     $MainDispatcher.Stop()
     Return $null
