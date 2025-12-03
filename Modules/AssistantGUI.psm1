@@ -807,7 +807,7 @@ Function Show-SelectProfileGui {
         $webRequestOptions = @{
             Uri         = "https://raw.githubusercontent.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/refs/heads/main/Resources/version"
             Method      = "Get"
-            TimeoutSec  = 10
+            TimeoutSec  = 3
             ErrorAction = "Stop"
         }
         $LatestVersion = Invoke-RestMethod @webRequestOptions
@@ -855,11 +855,6 @@ Function Show-SelectProfileGui {
         }
     }
     #Endregion
-
-    # Placeholder for another dispatcher timer for hints array including version check
-    # to be shown on the hint label
-    # maybe check rew version as well
-    #
 
     # Populate the profiles list in the GUI
     if (-not ($script:DSPProfilesList -is [System.Array])) { $script:DSPProfilesList = @() }
@@ -936,12 +931,17 @@ Function Show-SelectProfileGui {
 
             if ($null -eq $REWProcess) {
                 $ProfileEditGUI.FindName("REWStatus").foreground = "Red"
-                $ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running (click PLAY button to launch REW in API mode)"
+                #$ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running (click PLAY button to launch REW in API mode)"
+                $ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running (click PLAY button to launch REW)"
                 $result.REWStatus = "Not Running"
                 $ProfileEditGUI.FindName("RunREWBTN").visibility = "Visible"
             }
             else {
-                $rewWMIprocess = Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'"
+                $ProfileEditGUI.FindName("REWStatus").foreground = "Lime"
+                $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName)."
+                $result.REWStatus = "Running"
+                $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
+                <#$rewWMIprocess = Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'"
                 if ($null -ne $rewWMIprocess) {
                     $checkpREWargs = $rewWMIprocess | Select-Object CommandLine
                     if ($checkpREWargs.CommandLine -notmatch "-api") {
@@ -956,7 +956,7 @@ Function Show-SelectProfileGui {
                         $result.REWStatus = "Running"
                         $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
                     }
-                }
+                }#>
             }
 
 
@@ -1020,7 +1020,8 @@ Function Show-SelectProfileGui {
 
                 # Start Room EQ Wizard with the -api command-line parameter
                 try {
-                    Start-Process -FilePath $rewExecutable -ArgumentList "-api"
+                    #Start-Process -FilePath $rewExecutable -ArgumentList "-api"
+                    Start-Process -FilePath $rewExecutable
                 }
                 catch {
                     [System.Windows.MessageBox]::Show("Failed to start Room EQ Wizard: $($_.Exception.Message)", "Error", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error)
@@ -1154,18 +1155,19 @@ Function Show-SelectProfileGui {
             if ($result.REWStatus -eq "Not Running") {
                 $ButtonType = [System.Windows.MessageBoxButton]::OK
                 $MessageIcon = [System.Windows.MessageBoxImage]::Error
-                $MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'PLAY' button to launch REW in API mode automatically."
+                $MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'PLAY' button to launch REW."
+                #$MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'PLAY' button to launch REW in API mode automatically."
                 $MessageTitle = "REW Not Running or API Not Enabled"
                 [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
                 return
-            }
+            } <#
             elseif ($result.REWStatus -eq "API Not Enabled") {
                 $ButtonType = [System.Windows.MessageBoxButton]::OK
                 $MessageIcon = [System.Windows.MessageBoxImage]::Warning
                 $MessageBody = "Room EQ Wizard (REW) is running but API mode is not enabled. You will have to click 'Copy the filter settings to the clipboard' button or press Alt-C and proceed with paste procedure in your DSP software."
                 $MessageTitle = "REW API Not Enabled"
                 [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
-            }
+            } #>
 
             # Check if process is running
             if ($result.ProcessStatus -ne "Running") {

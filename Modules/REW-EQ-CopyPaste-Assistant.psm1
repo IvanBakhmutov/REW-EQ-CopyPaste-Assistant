@@ -244,7 +244,7 @@ Show-TransposedTable -Bands $bands | Format-Table -AutoSize
    [array] - An array of transposed objects for display.
 
 #>
-<#function Show-TransposedTable {
+function Show-TransposedTable {
     param(
         [Parameter(Mandatory = $true)][array]$Bands
     )
@@ -266,7 +266,7 @@ Show-TransposedTable -Bands $bands | Format-Table -AutoSize
         $transposed += [pscustomobject]$row
     }
     return $transposed
-}#>
+}
 
 # Show a desktop notification with specified title and message.
 <#
@@ -319,22 +319,7 @@ function Show-Notification {
 function Get-RunningAsAdminFlag {
     $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
-
     $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-
-    <#if (-not $isAdmin) {
-        try {
-            $ButtonType   = [System.Windows.MessageBoxButton]::OK
-            $MessageIcon  = [System.Windows.MessageBoxImage]::Error
-            $MessageBody  = "Selected DSP profile requires administrative privileges. Please run the script as an administrator."
-            $MessageTitle = "Administrative Privileges Required"
-            [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
-        }
-        catch {
-            Write-Host "Selected DSP profile requires administrative privileges. Please run the script as an administrator." -ForegroundColor Red
-        }
-    }#>
-
     return $isAdmin
 }
 

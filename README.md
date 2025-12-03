@@ -68,26 +68,18 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
 
+### 03.12.2025
+ver 0.4.0<br>
+Floating small semi-transparent window to show notifications instead of Windows pop-ups with a stop tool button. **Why?** Standard Windows pop-ups play notification sounds, which may go to speakers while you configure your system. Additionally, there is no way to configure timeouts for them, and they do not appear quickly one after another. With the custom notification window, the look and feel are improved now.<br>
+Hotkeys are now more responsive. Previously, there was a timing issue with hotkey reactions (a fast hit on a hotkey was not triggering actions)
+
 ### 29.11.2025
 ver 0.3.2<br>
 Last used profile selected automatically on the next startup<br>
 UI fixes<br>
 Profile filter/list fix after a new profile created. Clear filter btn now also refreshes the list<br>
 Code cleanup<br>
-
-### 28.11.2025
-ver 0.3.1<br>
-Profile editor GUI window corrected sizing<br>
-Re-recorded demo
-
-### 27.11.2025
-ver 0.3.0:<br>
-Added tabs with Profile Overview and Details<br>
-ver 0.2.2:<br>
-Added filter for searching profile in the profile selection window.<br>
-Added a [guide for REW EQ config](Documentation/REW%20EQ%20Config%20Guide.md).<br>
-Changed tool's versioning format<br>
-DBX DriveRack Pa2 profile added<br>
+Removed confusing REW API mode warning message<br>
 <br>
 [Full change log...](Documentation/Changelog.md)
 
