@@ -62,11 +62,20 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 | Behringer | DCX-Remote | ❎ | DCX2496 |
 | DBX | pa2ui | ❎ | DriveRack Pa2 |
 | Powersoft | ArmoniaPlus | ❎ | DSP-Lite E |
+| RedPower | RP_DSP | ❎ | IMPERATOR, YAKUZA, DSP8CH |
+| Ground Zero | GZHA MINI FIVE-DSP_GUI  | ❎ | GZHA MINI FIVE-DSP |
+| Ground Zero | TuN software | ❎ | GZDSP 6-10SQ |
 
 ## Project plans
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
+
+### 04.12.2025
+Profiles added:<br>
+RedPower RP_DSP (IMPERATOR, YAKUZA, DSP8CH)<br>
+Ground Zero GZHA MINI FIVE-DSP_GUI<br>
+Ground Zero GZDSP 6-10SQ (TuN software)<br>
 
 ### 03.12.2025
 ver 0.4.0<br>

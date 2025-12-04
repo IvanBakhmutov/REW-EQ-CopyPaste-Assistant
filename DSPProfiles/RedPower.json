@@ -1,0 +1,23 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "RP_DSP (IMPERATOR, YAKUZA, DSP8CH)",
+    "processName":  "Generic",
+    "QDivider":  1,
+    "QDecimals":  1,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please select text in 1 band Freq box and hit hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "Keys":  "FREQ{TAB}QVALUE{TAB}GAIN",
+                                  "Delay_ms":  200
+                              },
+                              {
+                                  "Keys":  "{TAB}{TAB}",
+                                  "Delay_ms":  200
+                              }
+                          ]
+}

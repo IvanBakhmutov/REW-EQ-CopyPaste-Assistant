@@ -1,0 +1,55 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "GZHA MINI FIVE-DSP",
+    "processName":  "GZHA MINI FIVE-DSP_GUI*",
+    "QDivider":  1,
+    "QDecimals":  2,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please hover 1 band Freq box and hit hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "FREQ",
+                                  "Delay_ms":  200
+                              },
+                              {
+                                  "MouseChangePositionY":  "22",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "QVALUE",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionY":  "22",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "GAIN",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionY":  "-44",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionX":  "91",
+                                  "Delay_ms":  100
+                              }
+                          ]
+}

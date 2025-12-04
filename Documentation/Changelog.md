@@ -1,3 +1,9 @@
+### 04.12.2025
+Profiles added:<br>
+RedPower RP_DSP (IMPERATOR, YAKUZA, DSP8CH)<br>
+Ground Zero GZHA MINI FIVE-DSP_GUI<br>
+Ground Zero GZDSP 6-10SQ (TuN software)<br>
+
 ### 03.12.2025
 ver 0.4.0<br>
 Floating small semi-transparent window to show notifications instead of Windows pop-ups with a stop tool button. **Why?** Standard Windows pop-ups play notification sounds, which may go to speakers while you configure your system. Additionally, there is no way to configure timeouts for them, and they do not appear quickly one after another. With the custom notification window, the look and feel are improved now.<br>
