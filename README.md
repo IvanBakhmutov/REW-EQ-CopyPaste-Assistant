@@ -64,7 +64,7 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 | Powersoft | ArmoniaPlus | ❎ | DSP-Lite E |
 | RedPower | RP_DSP | ❎ | IMPERATOR, YAKUZA, DSP8CH |
 | Ground Zero | GZHA MINI FIVE-DSP_GUI  | ❎ | GZHA MINI FIVE-DSP |
-| Ground Zero | TuN software | ❎ | GZDSP 6-10SQ |
+| Ground Zero | GZDSP 6-10SQ | ❎ | GZDSP 6-10SQ |
 
 ## Project plans
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
