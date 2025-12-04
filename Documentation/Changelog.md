@@ -3,6 +3,9 @@ Profiles added:<br>
 RedPower RP_DSP (IMPERATOR, YAKUZA, DSP8CH)<br>
 Ground Zero GZHA MINI FIVE-DSP_GUI<br>
 Ground Zero GZDSP 6-10SQ (TuN software)<br>
+<br>
+JL TwK VXi, MVi<br> have 10 band eq, and it is not possible to automate as it always rearranges bands once you change Freq of a given band and jumps all over window. Even with the mouse actions it is hard to understand where a given band will change position to.<br>
+GZDSP-4.80A PRO ground zero rquires mouse scroll actions, will be implemented on upcoming versions
 
 ### 03.12.2025
 ver 0.4.0<br>
