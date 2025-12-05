@@ -1542,13 +1542,13 @@ function Show-PopupGUI {
 
                                     if ($MouseScrollDirection -eq "Up") {
                                         for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
-                                            Invoke-MouseScrollUp
+                                            Invoke-MouseScrollUp -X $MouseX -Y $MouseY | Out-Null
                                             Start-Sleep -Milliseconds 50
                                         }
                                     }
                                     elseif ($MouseScrollDirection -eq "Down") {
                                         for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
-                                            Invoke-MouseScrollDown
+                                            Invoke-MouseScrollDown -X $MouseX -Y $MouseY | Out-Null
                                             Start-Sleep -Milliseconds 50
                                         }
                                     }
