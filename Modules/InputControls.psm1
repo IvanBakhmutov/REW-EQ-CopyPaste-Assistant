@@ -59,17 +59,23 @@ function Invoke-MouseLeftClick {
 function Invoke-MouseScrollUp {
     [CmdletBinding()]
     param (
+        [int]$X,
+        [int]$Y,
         [int]$Amount = 120
     )
-    [MouseControl]::ScrollUp($Amount)
+    Move-CursorToPosition -X $X -Y $Y # Move cursor to the specified position
+    [MouseControl]::ScrollUp($Amount) # Perform the scroll up action
 }
 
 function Invoke-MouseScrollDown {
     [CmdletBinding()]
     param (
+        [int]$X,
+        [int]$Y,
         [int]$Amount = 120
     )
-    [MouseControl]::ScrollDown($Amount)
+    Move-CursorToPosition -X $X -Y $Y # Move cursor to the specified position
+    [MouseControl]::ScrollDown($Amount) # Perform the scroll down action
 }
 
 function Move-CursorToPosition {

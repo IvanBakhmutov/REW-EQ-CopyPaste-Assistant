@@ -1,0 +1,51 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "GZDSP (6-8X, 4.60ISO, 4.80AMP, 6.120AMP)",
+    "processName":  "DSP_Ground_Zero",
+    "QDivider":  1,
+    "QDecimals":  5,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please hover 1 band Freq box and hit hotkey",
+    "AdminRightsRequired":  "true",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "MouseScroll":  "GAIN;0.5",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionY":  "71",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "^aFREQ",
+                                  "Delay_ms":  200
+                              },
+                              {
+                                  "MouseChangePositionY":  "19",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "^aQVALUE",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionY":  "-90",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionX":  "37",
+                                  "Delay_ms":  100
+                              }
+                          ]
+}
