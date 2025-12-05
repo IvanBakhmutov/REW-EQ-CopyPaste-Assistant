@@ -206,6 +206,9 @@ Function Show-EditProfileGui {
                         'MouseChangePositionY' {
                             $ksItem.MouseChangePositionY = [string]$row.Value
                         }
+                        'MouseScroll' {
+                            $ksItem.MouseScroll = [string]$row.Value
+                        }
                     }
                     try { $ksItem.Delay_ms = [int]$row.DelayMs } catch { $ksItem.Delay_ms = 100 }
                     $profileObject.KeystrokeSequence += $ksItem
@@ -295,6 +298,7 @@ Function Show-EditProfileGui {
                         'MouseClick' { $ksItem.MouseClick = [string]$row.Value }
                         'MouseChangePositionX' { $ksItem.MouseChangePositionX = [string]$row.Value }
                         'MouseChangePositionY' { $ksItem.MouseChangePositionY = [string]$row.Value }
+                        'MouseScroll' { $ksItem.MouseScroll = [string]$row.Value }
                     }
                     try { $ksItem.Delay_ms = [int]$row.DelayMs } catch { $ksItem.Delay_ms = 100 }
                     $profileObject.KeystrokeSequence += $ksItem
@@ -506,6 +510,10 @@ Function Show-EditProfileGui {
                         $action = 'MouseChangePositionY'
                         $value = [string]$ks.MouseChangePositionY
                     }
+                    elseif ($null -ne $ks.MouseScroll) {
+                        $action = 'MouseScroll'
+                        $value = [string]$ks.MouseScroll
+                    }
 
                     if ($null -ne $ks.Delay_ms) {
                         $delayMs = $ks.Delay_ms
@@ -571,6 +579,10 @@ Function Show-EditProfileGui {
                                         'Keys' {
                                             # Reset to empty for key action
                                             $rowItem.Value = ''
+                                        }
+                                        'MouseScroll' {
+                                            # Default to GAIN for mouse scroll
+                                            $rowItem.Value = 'GAIN'
                                         }
                                     }
                                 })
@@ -1508,15 +1520,46 @@ function Show-PopupGUI {
                                         }
                                     }
                                 }
-                                "MouseScrollUp" {
-                                    Invoke-MouseScrollUp -Amount $KeySet.MouseScrollUp
+                                "MouseScroll" {
+                                    $MouseScrollValue = [float](($KeySet.MouseScroll -split ";")[0].Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber))
+                                    if ($null -ne (($KeySet.MouseScroll -split ";")[1])) {
+                                        $MouseScrollFactor = [float](($KeySet.MouseScroll -split ";")[1].replace(",", "."))
+                                        $MouseScrollTimes = [Math]::Abs([int]($MouseScrollValue / $MouseScrollFactor))
+                                    }
+                                    else {
+                                        $MouseScrollTimes = [Math]::Abs([int]($MouseScrollValue))
+                                    }
+
+                                    if ($MouseScrollValue -gt 0) {
+                                        $MouseScrollDirection = "Up"
+                                    }
+                                    elseif ($MouseScrollValue -lt 0) {
+                                        $MouseScrollDirection = "Down"
+                                    }
+                                    else {
+                                        $MouseScrollDirection = "None"
+                                    }
+
+                                    if ($MouseScrollDirection -eq "Up") {
+                                        for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
+                                            Invoke-MouseScrollUp
+                                            Start-Sleep -Milliseconds 250
+                                        }
+                                    }
+                                    elseif ($MouseScrollDirection -eq "Down") {
+                                        for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
+                                            Invoke-MouseScrollDown
+                                            Start-Sleep -Milliseconds 250
+                                        }
+                                    }
+
                                     Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                    Write-Host -ForegroundColor Blue "Mouse scroll up by $($KeySet.MouseScrollUp)"
-                                }
-                                "Invoke-MouseScrollDown" {
-                                    Invoke-MouseScrollDown -Amount $KeySet.MouseScrollDown
-                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                    Write-Host -ForegroundColor Blue "Mouse scroll down by $($KeySet.MouseScrollDown)"
+                                    if ($MouseScrollDirection -ne "None") {
+                                        Write-Host -ForegroundColor Blue "Mouse scroll $MouseScrollDirection x $MouseScrollTimes times"
+                                    }
+                                    else {
+                                        Write-Host -ForegroundColor Blue "Mouse scroll action skipped as value is zero."
+                                    }
                                 }
                                 "Keys" {
                                     $keyToSend = $KeySet.Keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber)
