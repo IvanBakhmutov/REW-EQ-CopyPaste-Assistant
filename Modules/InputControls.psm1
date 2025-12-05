@@ -6,14 +6,14 @@
 # ============================================
 
 # --- Mouse wrapper functions ---
-function Invoke-MouseMoveBy {
+<#function Invoke-MouseMoveBy {
     [CmdletBinding()]
     param (
         [int]$X,
         [int]$Y
     )
     [MouseControl]::MoveBy($X, $Y)
-}
+}#>
 
 function Invoke-MouseClickLeftAt {
     [CmdletBinding()]
@@ -35,14 +35,14 @@ function Invoke-MouseClickRightAt {
     [MouseControl]::RightClick()         # Perform the right click
 }
 
-function Invoke-MouseClickRelative {
+<#function Invoke-MouseClickRelative {
     [CmdletBinding()]
     param (
         [int]$X,
         [int]$Y
     )
     [MouseControl]::ClickRelative($X, $Y) # Perform the relative click
-}
+}#>
 
 function Invoke-MouseRightClick {
     [CmdletBinding()]
@@ -250,7 +250,7 @@ public static class User32 {
     return $null  # Timed out
 }
 #>
-
+<#
 # Add global hotkey registration using Windows API
 if (-not ("HotKeyManager" -as [type])) {
     Add-Type -TypeDefinition @"
@@ -316,13 +316,14 @@ function Unregister-GlobalHotkey {
 # Example usage:
 # Register-GlobalHotkey -HotkeyId 1 -Modifiers 0 -VirtualKeyCode 0x70 # F1
 # Unregister-GlobalHotkey -HotkeyId 1
+#> 
 
 # --- Exported Functions ---
 Export-ModuleMember -Function `
-    Invoke-MouseMoveBy,
+   # Invoke-MouseMoveBy,
     Invoke-MouseClickLeftAt,
     Invoke-MouseClickRightAt,
-    Invoke-MouseClickRelative,
+   # Invoke-MouseClickRelative,
     Invoke-MouseLeftClick,
     Invoke-MouseRightClick,
     Invoke-MouseScrollUp,
@@ -331,5 +332,5 @@ Export-ModuleMember -Function `
     Invoke-KeyStroke,
     Get-MousePosition,
     Wait-HotkeyInput,
-    Register-GlobalHotkey,
-    Unregister-GlobalHotkey
+   # Register-GlobalHotkey,
+   # Unregister-GlobalHotkey
