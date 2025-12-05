@@ -320,9 +320,9 @@ function Unregister-GlobalHotkey {
 
 # --- Exported Functions ---
 Export-ModuleMember -Function `
-   # Invoke-MouseMoveBy,
     Invoke-MouseClickLeftAt,
     Invoke-MouseClickRightAt,
+   # Invoke-MouseMoveBy,    
    # Invoke-MouseClickRelative,
     Invoke-MouseLeftClick,
     Invoke-MouseRightClick,
@@ -331,6 +331,6 @@ Export-ModuleMember -Function `
     Move-CursorToPosition,
     Invoke-KeyStroke,
     Get-MousePosition,
-    Wait-HotkeyInput,
+    Wait-HotkeyInput #,
    # Register-GlobalHotkey,
    # Unregister-GlobalHotkey
