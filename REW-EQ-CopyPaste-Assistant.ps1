@@ -1,20 +1,23 @@
 ﻿# ============================================
-# Script: REW-EQ-CopyPaste-Assistant
+# Script: REW-EQ-CopyPaste-Assistant.ps1
 # Description: Provides automated mouse & keyboard input to paste REW EQ settings into DSP software
 # Author: Ivan Bakhmutov
-# Date: 2025-12-03
+# Date: 2025-12-07
 # ============================================
 
 $scriptDir = Split-Path -Parent $PSCommandPath
 $DSPProfilesDir = Join-Path -Path $scriptDir -ChildPath "DSPProfiles"
 $ModulesDir = Join-Path -Path $scriptDir -ChildPath "Modules"
 $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources"
-Remove-Module REW-EQ-CopyPaste-Assistant -ErrorAction SilentlyContinue -Force
-Remove-Module InputControls -ErrorAction SilentlyContinue -Force
-Remove-Module AssistantGUI -ErrorAction SilentlyContinue -Force
-Import-Module "$ModulesDir\REW-EQ-CopyPaste-Assistant.psm1"
-Import-Module "$ModulesDir\InputControls.psm1"
-Import-Module "$ModulesDir\AssistantGUI.psm1"
+# Clear previously loaded modules
+Remove-Module Assistant-GUI -ErrorAction SilentlyContinue -Force
+Remove-Module Input-Controls -ErrorAction SilentlyContinue -Force
+Remove-Module Assistant-Functions -ErrorAction SilentlyContinue -Force
+Remove-Module Import-Types -ErrorAction SilentlyContinue -Force
+#region Load Modules
+Import-Module "$ModulesDir\Assistant-Functions.psm1"
+Import-Module "$ModulesDir\Input-Controls.psm1"
+Import-Module "$ModulesDir\Assistant-GUI.psm1"
 Import-Module "$ModulesDir\Import-Types.psm1"
 Import-Types
 

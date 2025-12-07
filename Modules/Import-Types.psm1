@@ -1,5 +1,13 @@
+# ============================================
+# Module: Import-Types
+# Description: Supplemental Types Import Module
+# Author: Ivan Bakhmutov
+# Date: 2025-12-07
+# ============================================
+
+
 function Import-Types {
-    Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
+    Add-Type -AssemblyName PresentationCore, PresentationFramework, System.Windows.Forms -ErrorAction SilentlyContinue
 
     # Minimize parent cmd.exe window
     Add-Type @"
@@ -80,7 +88,7 @@ public class MouseControl {
     }
 
     # --- Load SendKeys support (for keyboard input) ---
-    Add-Type -AssemblyName System.Windows.Forms
+   # Add-Type -AssemblyName 
 
     if (-not ([type]::GetType("User32"))) {
         Add-Type -TypeDefinition @"
@@ -93,8 +101,9 @@ public class User32 {
 "@
     }
 
-    Add-Type -AssemblyName System.Windows.Forms
+   # Add-Type -AssemblyName System.Windows.Forms
 
+    # Window to foreground API
     if (-not ([type]::GetType("NativeMethods"))) {
         Add-Type @"
 using System;

@@ -1,8 +1,8 @@
 # ============================================
-# Module: AssistantGUI
+# Module: Assistant-GUI
 # Description: GUI module for REW-EQ-CopyPaste-Assistant
 # Author: Ivan Bakhmutov
-# Date: 2025-12-03
+# Date: 2025-12-07
 # ============================================
 
 Function Show-EditProfileGui {
@@ -1498,23 +1498,26 @@ function Show-PopupGUI {
                             switch ($KeySet.PSObject.Properties.Name) {
                                 "MouseChangePositionY" {
                                     $MouseY += [int]$KeySet.MouseChangePositionY
+                                    Move-CursorToPosition -X $MouseX -Y $MouseY
                                     Start-Sleep -Milliseconds $KeySet.Delay_ms
                                     Write-Host -ForegroundColor Blue "New MouseY: $MouseY"
                                 }
                                 "MouseChangePositionX" {
                                     $MouseX += [int]$KeySet.MouseChangePositionX
+                                    Move-CursorToPosition -X $MouseX -Y $MouseY
                                     Start-Sleep -Milliseconds $KeySet.Delay_ms
                                     Write-Host -ForegroundColor Blue "New MouseX: $MouseX"
                                 }
                                 "MouseClick" {
                                     switch ($KeySet.MouseClick.ToLower()) {
                                         "left" {
-                                            Invoke-MouseClickLeftAt -X $MouseX -Y $MouseY | Out-Null
+                                            Invoke-MouseLeftClick
                                             Start-Sleep -Milliseconds $KeySet.Delay_ms
                                             Write-Host -ForegroundColor Blue "Left click at X:$MouseX Y:$MouseY"
                                         }
                                         "right" {
-                                            Invoke-MouseClickRightAt -X $MouseX -Y $MouseY | Out-Null
+
+                                            Invoke-MouseLeftClick
                                             Start-Sleep -Milliseconds $KeySet.Delay_ms
                                             Write-Host -ForegroundColor Blue "Right click at X:$MouseX Y:$MouseY"
                                         }
@@ -1542,13 +1545,15 @@ function Show-PopupGUI {
 
                                     if ($MouseScrollDirection -eq "Up") {
                                         for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
-                                            Invoke-MouseScrollUp -X $MouseX -Y $MouseY | Out-Null
+
+                                            Invoke-MouseScrollUp
                                             Start-Sleep -Milliseconds 50
                                         }
                                     }
                                     elseif ($MouseScrollDirection -eq "Down") {
                                         for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
-                                            Invoke-MouseScrollDown -X $MouseX -Y $MouseY | Out-Null
+
+                                            Invoke-MouseScrollDown
                                             Start-Sleep -Milliseconds 50
                                         }
                                     }
