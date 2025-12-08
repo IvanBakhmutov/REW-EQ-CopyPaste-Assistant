@@ -4,6 +4,8 @@ The mouse cursor now visibly moves to the specified position before clicking, ma
 Implemented functionality for mouse scrolling and dragging (left/right mouse button hold and release)<br>
 Removed unused functions and performed code cleanup<br>
 Renamed files and functions for better clarity<br>
+Windows centered<br>
+Profile selection button in popup<br>
 
 ### 04.12.2025
 Profiles added:<br>

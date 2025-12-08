@@ -691,6 +691,12 @@ Function Show-EditProfileGui {
         $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
     }
 
+    # Center the window on the screen
+    $screenWidth = [System.Windows.SystemParameters]::PrimaryScreenWidth
+    $screenHeight = [System.Windows.SystemParameters]::PrimaryScreenHeight
+    $ProfileSelectGUI.Left = ($screenWidth - $ProfileSelectGUI.Width) / 2
+    $ProfileSelectGUI.Top = ($screenHeight - $ProfileSelectGUI.Height) / 2
+
     # Show the GUI
     $ProfileSelectGUI.ShowDialog() | Out-Null
     return $result
@@ -1234,6 +1240,12 @@ Function Show-SelectProfileGui {
             return
         })
     #EndRegion
+    # Center the window on the screen
+    $screenWidth = [System.Windows.SystemParameters]::PrimaryScreenWidth
+    $screenHeight = [System.Windows.SystemParameters]::PrimaryScreenHeight
+    $ProfileEditGUI.Left = ($screenWidth - $ProfileEditGUI.Width) / 2
+    $ProfileEditGUI.Top = ($screenHeight - $ProfileEditGUI.Height) / 2
+
     # Show the GUI
     $ProfileEditGUI.ShowDialog() | Out-Null
     return $result
@@ -1247,7 +1259,8 @@ function Show-PopupGUI {
         [Parameter(Mandatory = $true)]$DSPConfig,
         [Parameter(Mandatory = $true)]$GlobalConfig
     )
-    Add-Type -AssemblyName PresentationFramework
+
+    $script:returnResult = $null
 
     # ---------------------------------------------------------
     # Decide OS version
@@ -1255,13 +1268,11 @@ function Show-PopupGUI {
     $winMajor = [Environment]::OSVersion.Version.Major
     $winBuild = [Environment]::OSVersion.Version.Build
 
-
     # ---------------------------------------------------------
     # WPF UI
     # ---------------------------------------------------------
     [xml]$xaml = (Get-Content "$ResourcesDir\PopupGUI.xml" -Raw -Encoding utf8)
 
-    Add-Type -AssemblyName PresentationFramework
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $window = [Windows.Markup.XamlReader]::Load($reader)
 
@@ -1274,7 +1285,8 @@ function Show-PopupGUI {
     $window.Top = $screenHeight - $window.Height - $taskbarHeight - 30  # 30px margin from the bottom edge
 
     $grid = $window.FindName("MainGrid")
-    $button = $window.FindName("ExitBTN")
+    $ExitBTN = $window.FindName("ExitBTN")
+    $SelectProfileBTN = $window.FindName("SelectProfileBTN")
     $MessageTextBlock = $window.FindName("MessageTextBlock")
     $Icon = $window.FindName("Icon")
     # ---------------------------------------------------------
@@ -1287,10 +1299,13 @@ function Show-PopupGUI {
         })
 
     # Button click
-    $button.Add_Click({
-            #[System.Windows.MessageBox]::Show("Finished!")
+    $ExitBTN.Add_Click({
+            $script:returnResult = "Exit"
             $window.close()
-            exit
+        })
+    $SelectProfileBTN.Add_Click({
+            $script:returnResult = "SelectProfile"
+            $window.close()
         })
 
     # Hover opacity
@@ -1597,7 +1612,7 @@ function Show-PopupGUI {
     # Run
     $window.ShowDialog() | Out-Null
     $MainDispatcher.Stop()
-    Return $null
+    Return $script:returnResult
 }
 
 Export-ModuleMember -Function `
