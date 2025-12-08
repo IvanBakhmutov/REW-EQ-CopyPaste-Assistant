@@ -387,7 +387,7 @@ Function Show-EditProfileGui {
 
     # Radio buttons share the same logical group. Attach the same Checked handler to both
     $updateHotkeyDelayVisibility = {
-        param($sender, $args)
+        param($HotkeyDelaysender, $HotkeyDelayargs)
         $selectedRadioButton = $ProfileSelectGUI.FindName("HotkeySelected").IsChecked
         if ($selectedRadioButton) {
             $ProfileSelectGUI.FindName("HotkeyLabel").Visibility = "Visible"
@@ -441,7 +441,7 @@ Function Show-EditProfileGui {
 
     # Update the Hotkey/Delay visibility handler to restore override controls when switching back to Hotkey
     $updateHotkeyDelayVisibility = {
-        param($sender, $args)
+        param($HotkeyDelaysender, $HotkeyDelayargs)
         $selectedRadioButton = $ProfileSelectGUI.FindName("HotkeySelected").IsChecked
         if ($selectedRadioButton) {
             $ProfileSelectGUI.FindName("HotkeyLabel").Visibility = "Visible"
@@ -934,7 +934,7 @@ Function Show-SelectProfileGui {
     #Region Assign event handlers
     # Search box text changed handler to filter the profiles list
     $ProfileEditGUI.FindName("SearchEDIT").Add_TextChanged({
-            param($searchSender, $searchArgs)
+            param($searchSender, $searchEventArgs)
             $searchText = $searchSender.Text.ToLower()
             $filteredProfiles = @()
             foreach ($profileFile in $script:DSPProfilesList) {
@@ -1096,7 +1096,7 @@ Function Show-SelectProfileGui {
                     if (($profileJson.ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and ($null -ne $profileJson.ProfilePerformActionHotkey)) {
                         $result.EffectivePerformActionHotkey = $profileJson.ProfilePerformActionHotkey
                     }
-                    else { $result.EffectivePerformActionHotkey = $GlobalPerformActionHotkey }
+                    else { $result.EffectivePerformActionHotkey = $GlobalPerformHotkey }
                     if (($profileJson.ProfileCancelActionHotkey -ne $GlobalCancelActionHotkey) -and ($null -ne $profileJson.ProfileCancelActionHotkey)) {
                         $result.EffectiveCancelActionHotkey = $profileJson.ProfileCancelActionHotkey
                     }
