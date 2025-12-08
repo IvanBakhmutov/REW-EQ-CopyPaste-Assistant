@@ -57,7 +57,7 @@
                         <DataGridTextColumn Header="Value" Width="180*" Binding="{Binding Value, Mode=TwoWay}" />
 
                         <!-- 3. Delay Column (Text only) -->
-                        <DataGridTextColumn Header="Delay_ms" Width="100" Binding="{Binding DelayMs, Mode=TwoWay}" />
+                        <DataGridTextColumn Header="Delay (ms)" Width="100" Binding="{Binding Delay_ms, Mode=TwoWay}" />
 
                     </DataGrid.Columns>
                 </DataGrid>

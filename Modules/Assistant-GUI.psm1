@@ -210,7 +210,7 @@ Function Show-EditProfileGui {
                             $ksItem.MouseScroll = [string]$row.Value
                         }
                     }
-                    try { $ksItem.Delay_ms = [int]$row.DelayMs } catch { $ksItem.Delay_ms = 100 }
+                    try { $ksItem.Delay_ms = [int]$row.Delay_ms } catch { $ksItem.Delay_ms = 100 }
                     $profileObject.KeystrokeSequence += $ksItem
                 }
             }
@@ -300,7 +300,7 @@ Function Show-EditProfileGui {
                         'MouseChangePositionY' { $ksItem.MouseChangePositionY = [string]$row.Value }
                         'MouseScroll' { $ksItem.MouseScroll = [string]$row.Value }
                     }
-                    try { $ksItem.Delay_ms = [int]$row.DelayMs } catch { $ksItem.Delay_ms = 100 }
+                    try { $ksItem.Delay_ms = [int]$row.Delay_ms } catch { $ksItem.Delay_ms = 100 }
                     $profileObject.KeystrokeSequence += $ksItem
                 }
             }
@@ -492,7 +492,7 @@ Function Show-EditProfileGui {
                     # Determine the action type based on properties present
                     $action = 'Keys'
                     $value = ''
-                    $delayMs = 100
+                    $Delay_ms = 100
 
                     if ($null -ne $ks.Keys) {
                         $action = 'Keys'
@@ -516,13 +516,13 @@ Function Show-EditProfileGui {
                     }
 
                     if ($null -ne $ks.Delay_ms) {
-                        $delayMs = $ks.Delay_ms
+                        $Delay_ms = $ks.Delay_ms
                     }
 
                     $rowItem = [pscustomobject]@{
                         Action  = $action
                         Value   = $value
-                        DelayMs = $delayMs
+                        Delay_ms = $Delay_ms
                     }
                     $keystrokeCollection.Add($rowItem) | Out-Null
                 }
@@ -600,7 +600,7 @@ Function Show-EditProfileGui {
             $new = [pscustomobject]@{
                 Action  = 'Keys'
                 Value   = ''
-                DelayMs = 100
+                Delay_ms = 100
             }
             $keystrokeCollection.Add($new) | Out-Null
             try { $keystrokesDG.ScrollIntoView($new) } catch { }
@@ -1048,7 +1048,7 @@ Function Show-SelectProfileGui {
                 # If the profile was saved, refresh the list and select the new item
                 if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                     $newProfileName = (get-item $editResult.FilePath | Select-Object -ExpandProperty basename)
-                    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json" | Select-Object -ExpandProperty BaseName
+                    #$DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json" | Select-Object -ExpandProperty BaseName
                     $ProfileEditGUI.FindName("SearchEDIT").Text = $newProfileName
                     $ProfileEditGUI.FindName("ProfileList").ItemsSource = [array]$newProfileName
                     Get-ProfileContent -selectedItem $newProfileName -DSPProfilesDir $DSPProfilesDir -ProfileEditGUI $ProfileEditGUI -result $result -GlobalPerformHotkey $GlobalPerformActionHotkey -GlobalCancelHotkey $GlobalCancelActionHotkey
