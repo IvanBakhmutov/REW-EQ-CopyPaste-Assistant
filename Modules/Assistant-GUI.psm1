@@ -1252,6 +1252,8 @@ function Show-PopupGUI {
         })
     $SelectProfileBTN.Add_Click({
             $script:returnResult = "SelectProfile"
+            Write-Host "`nUser requested profile selection from popup GUI" -ForegroundColor Yellow
+            Clear-Host
             $window.close()
         })
 
