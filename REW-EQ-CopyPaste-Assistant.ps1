@@ -9,39 +9,32 @@ $scriptDir = Split-Path -Parent $PSCommandPath
 $DSPProfilesDir = Join-Path -Path $scriptDir -ChildPath "DSPProfiles"
 $ModulesDir = Join-Path -Path $scriptDir -ChildPath "Modules"
 $ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources"
+
+#region Load Modules
 # Clear previously loaded modules
 Remove-Module Assistant-GUI -ErrorAction SilentlyContinue -Force
 Remove-Module Input-Controls -ErrorAction SilentlyContinue -Force
 Remove-Module Assistant-Functions -ErrorAction SilentlyContinue -Force
 Remove-Module Import-Types -ErrorAction SilentlyContinue -Force
-#region Load Modules
+# Load modules
 Import-Module "$ModulesDir\Assistant-Functions.psm1"
 Import-Module "$ModulesDir\Input-Controls.psm1"
 Import-Module "$ModulesDir\Assistant-GUI.psm1"
 Import-Module "$ModulesDir\Import-Types.psm1"
 Import-Types
+#Endregion
 
 # Set the console output encoding to UTF-8 to properly display Cyrillic characters
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Write-Host "REW EQ CopyPaste Assistant started" -ForegroundColor Yellow
-
 $hwnd = [Win]::GetConsoleWindow()
 [Win]::ShowWindow($hwnd, 2) | Out-Null  # 2 = SW_MINIMIZE
-#Endregion
 
 # Load global config
 $ConfigPath = Join-Path -Path $ResourcesDir -ChildPath "Config.json"
 $GlobalConfig = Get-Content $ConfigPath -Raw | ConvertFrom-Json
 $EffectivePerformActionHotkey = $null
 $EffectiveCancelActionHotkey = $null
-
-$Version = Join-Path -Path $ResourcesDir -ChildPath "version"
-try {
-    $AssistantVersion = Get-Content $Version -Raw -ErrorAction Stop
-}
-catch {
-    $AssistantVersion = "n/a"
-}
 
  #Region Check updates
     try {
@@ -113,7 +106,6 @@ do {
         -ModulesDir $ModulesDir `
         -LastSelectedProfile $GlobalConfig.LastSelectedProfile `
         -VersionLabelText $AssistantVersion
-
 
     if ($ProfileSelectionResult.Action -eq "Cancel" -or $null -eq $ProfileSelectionResult.SelectedProfile) {
         Write-Host "Finished. Exiting..." -ForegroundColor Blue
