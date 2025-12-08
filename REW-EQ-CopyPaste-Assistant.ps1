@@ -71,14 +71,14 @@ $EffectiveCancelActionHotkey = $null
                 # Compare the local version with the latest version
                 if ($LocalVersion -lt $LatestVersion) {
                     Write-Host "A newer version ($LatestVersion) is available." -ForegroundColor Yellow
-                    $AssistantVersion = "Version $AssistantVersion (update available)"
+                    $AssistantVersion = "Version $LocalVersion (update available)"
                 }
                 elseif ($LocalVersion -gt $LatestVersion) {
-                    $AssistantVersion = "Version $AssistantVersion (Future release)"
+                    $AssistantVersion = "Version $LocalVersion (Future release)"
                     Write-Host "Tool version ($LocalVersion) is ahead of the latest update online ($LatestVersion)." -ForegroundColor DarkRed
                 }
                 else {
-                    $AssistantVersion = "Version $AssistantVersion (Latest)"
+                    $AssistantVersion = "Version $LocalVersion (Latest)"
                     Write-Host "Tool version is up-to-date." -ForegroundColor Cyan
                 }
             }
