@@ -22,14 +22,14 @@
 - ~~Version check on startup~~
 - ~~Floating small semi-transperent window to show notifications instead of windows pop-ups with stop tool button~~
 - ~~Test the tool and transperancy of the main window on Win7/8.1/10/11~~
+- ~~Pictures on buttons instead of characters, icon/logo for the tool~~
+- ~~Windows should appear in the center of the screen~~
+- ~~Mouse Scroll up/down actions to be added~~
 
 ## Immediate plans
 - BUG: hotkeys hint not updated on Profile Choose GUI after a new profile saved
 - Reported issue with confirmation dialog (in parallels desktop)
-- Pictures on buttons instead of characters, icon/logo for the tool
-- Windows should appear in the center of the screen
 - Profile Editor extra button switch for DSP process name, custom/generic
-- Mouse Scroll up/down actions to be added
 
 ## Future plans
 

@@ -1513,14 +1513,14 @@ function Show-PopupGUI {
                                         for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
 
                                             Invoke-MouseScrollUp
-                                            Start-Sleep -Milliseconds 50
+                                            Start-Sleep -Milliseconds $KeySet.Delay_ms
                                         }
                                     }
                                     elseif ($MouseScrollDirection -eq "Down") {
                                         for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
 
                                             Invoke-MouseScrollDown
-                                            Start-Sleep -Milliseconds 50
+                                            Start-Sleep -Milliseconds $KeySet.Delay_ms
                                         }
                                     }
 
