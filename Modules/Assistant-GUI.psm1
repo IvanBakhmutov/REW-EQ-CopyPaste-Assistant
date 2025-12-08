@@ -17,7 +17,7 @@ Function Show-EditProfileGui {
     }
 
     #$ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
-    [xml]$xaml = (Get-Content -Path "$ResourcesDir\ProfileEditorGUI.xml" -Raw -Encoding UTF8)
+    [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Editor-GUI.xml" -Raw -Encoding UTF8)
     $profilesFolderPath = Split-Path -Path $FilePath -Parent
 
     # Load the JSON profile for reference and to populate form fields
@@ -47,7 +47,7 @@ Function Show-EditProfileGui {
     # Parse the XAML to create the GUI
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $ProfileSelectGUI = [Windows.Markup.XamlReader]::Load($reader)
-
+    $ProfileSelectGUI.Icon="$ResourcesDir\Icons\Title.png"
     $ProfileSelectGUI.FindName("FileNameEdit").Text = (get-item $FilePath).BaseName
 
     # Populate form fields from the loaded JSON profile
@@ -809,12 +809,12 @@ Function Show-SelectProfileGui {
     }
 
     # Load the XAML file
-    [xml]$xaml = (Get-Content -Path "$ResourcesDir\ChooseProfileGUI.xml" -Raw -Encoding UTF8)
+    [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Select-GUI.xml" -Raw -Encoding UTF8)
 
     # Parse the XAML to create the GUI
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $ProfileEditGUI = [Windows.Markup.XamlReader]::Load($reader)
-
+    $ProfileEditGUI.Icon="$ResourcesDir\Icons\Title.png"
     # Set hotkey hint label
     $ProfileEditGUI.FindName("HotkeyHint").Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
     #$ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion"
@@ -1218,7 +1218,7 @@ function Show-PopupGUI {
     # ---------------------------------------------------------
     # WPF UI
     # ---------------------------------------------------------
-    [xml]$xaml = (Get-Content "$ResourcesDir\PopupGUI.xml" -Raw -Encoding utf8)
+    [xml]$xaml = (Get-Content "$ResourcesDir\Popup-GUI.xml" -Raw -Encoding utf8)
 
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $window = [Windows.Markup.XamlReader]::Load($reader)
