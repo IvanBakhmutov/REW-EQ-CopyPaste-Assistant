@@ -83,6 +83,22 @@ public class MouseControl {
     public static void ScrollDown(int amount) {
         mouse_event(MOUSEEVENTF_WHEEL, 0, 0, unchecked((uint)-amount), UIntPtr.Zero);
     }
+
+    public static void HoldLeftButton() {
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, UIntPtr.Zero);
+    }
+
+    public static void ReleaseLeftButton() {
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
+    }
+
+    public static void HoldRightButton() {
+        mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, UIntPtr.Zero);
+    }
+
+    public static void ReleaseRightButton() {
+        mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, UIntPtr.Zero);
+    }
 }
 "@
     }

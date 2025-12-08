@@ -47,6 +47,8 @@
                                         <sys:String>MouseChangePositionX</sys:String>
                                         <sys:String>MouseChangePositionY</sys:String>
                                         <sys:String>MouseScroll</sys:String>
+                                        <sys:String>MouseClickHold</sys:String>
+                                        <sys:String>MouseClickRelease</sys:String>
                                     </ComboBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>

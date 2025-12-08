@@ -120,6 +120,30 @@ function Wait-HotkeyInput {
     }
 }
 
+function Invoke-MouseLeftHold {
+    [CmdletBinding()]
+    param ()
+    [MouseControl]::HoldLeftButton()
+}
+
+function Invoke-MouseLeftRelease {
+    [CmdletBinding()]
+    param ()
+    [MouseControl]::ReleaseLeftButton()
+}
+
+function Invoke-MouseRightHold {
+    [CmdletBinding()]
+    param ()
+    [MouseControl]::HoldRightButton()
+}
+
+function Invoke-MouseRightRelease {
+    [CmdletBinding()]
+    param ()
+    [MouseControl]::ReleaseRightButton()
+}
+
 # --- Exported Functions ---
 Export-ModuleMember -Function `
     Invoke-MouseLeftClick,
@@ -129,4 +153,8 @@ Export-ModuleMember -Function `
     Move-CursorToPosition,
     Invoke-KeyStroke,
     Get-MousePosition,
-    Wait-HotkeyInput
+    Wait-HotkeyInput,
+    Invoke-MouseLeftHold,
+    Invoke-MouseLeftRelease,
+    Invoke-MouseRightHold,
+    Invoke-MouseRightRelease
