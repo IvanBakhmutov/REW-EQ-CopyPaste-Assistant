@@ -815,6 +815,8 @@ Function Show-SelectProfileGui {
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $ProfileEditGUI = [Windows.Markup.XamlReader]::Load($reader)
     $ProfileEditGUI.Icon="$ResourcesDir\Icons\Title.png"
+    $ProfileEditGUI.FindName("DonateIcon").Source = "$ResourcesDir\Icons\Jonas-Rask-Danish-Royalty-Free-Smiley.32.png"
+    $ProfileEditGUI.FindName("GitHubIcon").Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Web-github.48.png"
     # Set hotkey hint label
     $ProfileEditGUI.FindName("HotkeyHint").Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
     #$ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion"
