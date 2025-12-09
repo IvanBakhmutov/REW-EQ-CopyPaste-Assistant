@@ -1,0 +1,51 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "ESX Toolkit DSP software (D66SP / QM66SP / D68SP / VE900.7SP / QL810SP / QL812SP / VE1300.11SP / QE812SP)",
+    "processName":  "ESX_Toolkit_*",
+    "QDivider":  1,
+    "QDecimals":  1,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please select 1 band Freq box and hit hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "MouseClick":  "Left",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "Keys":  "^aFREQ",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseChangePositionY":  "28",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseClick":  "Left",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "Keys":  "^aQVALUE",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseChangePositionY":  "114",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseScroll":  "GAIN",
+                                  "Delay_ms":  120
+                              },
+                              {
+                                  "MouseChangePositionX":  "63",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseChangePositionY":  "-142",
+                                  "Delay_ms":  20
+                              }
+                          ]
+}

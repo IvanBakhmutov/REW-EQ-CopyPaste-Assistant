@@ -55,9 +55,7 @@
         <GroupBox Header="Profile settings" Margin="7,0,0,3" Grid.Column="1">
             <TabControl Margin="0">
                 <TabItem Header="Overview">
-
                     <TextBlock x:Name="ProfileOverview" TextWrapping="Wrap" Text="Please select a profile"  Margin="5"/>
-
                 </TabItem>
                 <TabItem Header="Profile details">
                     <TextBox x:Name="ProfileText" TextWrapping="Wrap" Text="Please select a profile" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="0"/>
@@ -69,9 +67,19 @@
         <Button x:Name="NewProfileBTN"  ToolTipService.InitialShowDelay="200" ToolTip="Create a new profile" Content="New Profile" Width="80" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,190,10" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="EditBTN"  ToolTipService.InitialShowDelay="200" ToolTip="Edit or save a copy of selected profile" Content="Edit" Width="80" IsEnabled="False" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,10" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="CloseBTN"  ToolTipService.InitialShowDelay="200" ToolTip="Close the tool" Content="Close" Width="80" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Grid.Column="1" Grid.Row="1"/>
-        <Button x:Name="GitHub"  ToolTipService.InitialShowDelay="200" ToolTip="Open GitHub project page in web browser" Content="GitHub project page" Width="130"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1"/>
-        <Label x:Name="HotkeyHint" Content="HotkeyHint" HorizontalAlignment="Left" Margin="145,0,0,10" VerticalAlignment="Bottom" Height="26" Width="282" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Button x:Name="Donate"  FontFamily="Segoe UI Emoji" ToolTipService.InitialShowDelay="200" Content="Donate 😀" Margin="0,12,10,0" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" ToolTip="Support the project (PayPal)" Grid.Column="1" HorizontalAlignment="Right" Width="66" Height="25" VerticalAlignment="Top"/>
+        <Label x:Name="HotkeyHint" Content="HotkeyHint" HorizontalAlignment="Left" Margin="115,0,0,10" VerticalAlignment="Bottom" Height="26" Width="312" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Button x:Name="GitHub"  ToolTipService.InitialShowDelay="200" ToolTip="Open GitHub project page in web browser" Width="100"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="GitHubIcon" Source="Images/my_icon.png" Width="24" Height="22" Margin="0,0,5,0"/>
+                <TextBlock Text="Project page" VerticalAlignment="Top" Margin="0,2,0,0"/>
+            </StackPanel>
+        </Button>
+        <Button x:Name="Donate"  ToolTipService.InitialShowDelay="200" Margin="0,12,10,0" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" ToolTip="Support the project (PayPal)" Grid.Column="1" HorizontalAlignment="Right" Width="70" Height="25" VerticalAlignment="Top">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Donate" VerticalAlignment="Center"/>
+                <Image x:Name="DonateIcon" Source="Images/my_icon.png" Width="24" Height="20" Margin="5,0,0,0"/>
+            </StackPanel>
+        </Button>
         <!-- Status Bar -->
         <StatusBar Grid.Row="2" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0">
             <StatusBarItem  BorderThickness="0"  BorderBrush="#FFA8A8A8">

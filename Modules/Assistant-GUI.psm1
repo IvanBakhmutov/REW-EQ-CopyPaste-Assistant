@@ -1,8 +1,8 @@
 # ============================================
-# Module: AssistantGUI
+# Module: Assistant-GUI
 # Description: GUI module for REW-EQ-CopyPaste-Assistant
 # Author: Ivan Bakhmutov
-# Date: 2025-12-03
+# Date: 2025-12-07
 # ============================================
 
 Function Show-EditProfileGui {
@@ -17,7 +17,7 @@ Function Show-EditProfileGui {
     }
 
     #$ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
-    [xml]$xaml = (Get-Content -Path "$ResourcesDir\ProfileEditorGUI.xml" -Raw -Encoding UTF8)
+    [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Editor-GUI.xml" -Raw -Encoding UTF8)
     $profilesFolderPath = Split-Path -Path $FilePath -Parent
 
     # Load the JSON profile for reference and to populate form fields
@@ -47,7 +47,7 @@ Function Show-EditProfileGui {
     # Parse the XAML to create the GUI
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $ProfileSelectGUI = [Windows.Markup.XamlReader]::Load($reader)
-
+    $ProfileSelectGUI.Icon="$ResourcesDir\Icons\Title.png"
     $ProfileSelectGUI.FindName("FileNameEdit").Text = (get-item $FilePath).BaseName
 
     # Populate form fields from the loaded JSON profile
@@ -206,8 +206,11 @@ Function Show-EditProfileGui {
                         'MouseChangePositionY' {
                             $ksItem.MouseChangePositionY = [string]$row.Value
                         }
+                        'MouseScroll' {
+                            $ksItem.MouseScroll = [string]$row.Value
+                        }
                     }
-                    try { $ksItem.Delay_ms = [int]$row.DelayMs } catch { $ksItem.Delay_ms = 100 }
+                    try { $ksItem.Delay_ms = [int]$row.Delay_ms } catch { $ksItem.Delay_ms = 100 }
                     $profileObject.KeystrokeSequence += $ksItem
                 }
             }
@@ -295,8 +298,9 @@ Function Show-EditProfileGui {
                         'MouseClick' { $ksItem.MouseClick = [string]$row.Value }
                         'MouseChangePositionX' { $ksItem.MouseChangePositionX = [string]$row.Value }
                         'MouseChangePositionY' { $ksItem.MouseChangePositionY = [string]$row.Value }
+                        'MouseScroll' { $ksItem.MouseScroll = [string]$row.Value }
                     }
-                    try { $ksItem.Delay_ms = [int]$row.DelayMs } catch { $ksItem.Delay_ms = 100 }
+                    try { $ksItem.Delay_ms = [int]$row.Delay_ms } catch { $ksItem.Delay_ms = 100 }
                     $profileObject.KeystrokeSequence += $ksItem
                 }
             }
@@ -383,7 +387,7 @@ Function Show-EditProfileGui {
 
     # Radio buttons share the same logical group. Attach the same Checked handler to both
     $updateHotkeyDelayVisibility = {
-        param($sender, $args)
+        param($HotkeyDelaysender, $HotkeyDelayargs)
         $selectedRadioButton = $ProfileSelectGUI.FindName("HotkeySelected").IsChecked
         if ($selectedRadioButton) {
             $ProfileSelectGUI.FindName("HotkeyLabel").Visibility = "Visible"
@@ -437,7 +441,7 @@ Function Show-EditProfileGui {
 
     # Update the Hotkey/Delay visibility handler to restore override controls when switching back to Hotkey
     $updateHotkeyDelayVisibility = {
-        param($sender, $args)
+        param($HotkeyDelaysender, $HotkeyDelayargs)
         $selectedRadioButton = $ProfileSelectGUI.FindName("HotkeySelected").IsChecked
         if ($selectedRadioButton) {
             $ProfileSelectGUI.FindName("HotkeyLabel").Visibility = "Visible"
@@ -488,7 +492,7 @@ Function Show-EditProfileGui {
                     # Determine the action type based on properties present
                     $action = 'Keys'
                     $value = ''
-                    $delayMs = 100
+                    $Delay_ms = 100
 
                     if ($null -ne $ks.Keys) {
                         $action = 'Keys'
@@ -506,15 +510,19 @@ Function Show-EditProfileGui {
                         $action = 'MouseChangePositionY'
                         $value = [string]$ks.MouseChangePositionY
                     }
+                    elseif ($null -ne $ks.MouseScroll) {
+                        $action = 'MouseScroll'
+                        $value = [string]$ks.MouseScroll
+                    }
 
                     if ($null -ne $ks.Delay_ms) {
-                        $delayMs = $ks.Delay_ms
+                        $Delay_ms = $ks.Delay_ms
                     }
 
                     $rowItem = [pscustomobject]@{
                         Action  = $action
                         Value   = $value
-                        DelayMs = $delayMs
+                        Delay_ms = $Delay_ms
                     }
                     $keystrokeCollection.Add($rowItem) | Out-Null
                 }
@@ -572,6 +580,10 @@ Function Show-EditProfileGui {
                                             # Reset to empty for key action
                                             $rowItem.Value = ''
                                         }
+                                        'MouseScroll' {
+                                            # Default to GAIN for mouse scroll
+                                            $rowItem.Value = 'GAIN'
+                                        }
                                     }
                                 })
                         }
@@ -588,7 +600,7 @@ Function Show-EditProfileGui {
             $new = [pscustomobject]@{
                 Action  = 'Keys'
                 Value   = ''
-                DelayMs = 100
+                Delay_ms = 100
             }
             $keystrokeCollection.Add($new) | Out-Null
             try { $keystrokesDG.ScrollIntoView($new) } catch { }
@@ -679,6 +691,12 @@ Function Show-EditProfileGui {
         $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
     }
 
+    # Center the window on the screen
+    $screenWidth = [System.Windows.SystemParameters]::PrimaryScreenWidth
+    $screenHeight = [System.Windows.SystemParameters]::PrimaryScreenHeight
+    $ProfileSelectGUI.Left = ($screenWidth - $ProfileSelectGUI.Width) / 2
+    $ProfileSelectGUI.Top = ($screenHeight - $ProfileSelectGUI.Height) / 2
+
     # Show the GUI
     $ProfileSelectGUI.ShowDialog() | Out-Null
     return $result
@@ -692,7 +710,7 @@ Function Show-SelectProfileGui {
         [Parameter(Mandatory = $true)][string]$DSPProfilesDir,
         [Parameter(Mandatory = $true)][string]$ModulesDir,
         [Parameter(Mandatory = $false)][string]$LastSelectedProfile,
-        [Parameter(Mandatory = $true)][string]$AssistantVersion
+        [Parameter(Mandatory = $true)][string]$VersionLabelText
     )
 
     function Get-OverviewText {
@@ -791,70 +809,19 @@ Function Show-SelectProfileGui {
     }
 
     # Load the XAML file
-    [xml]$xaml = (Get-Content -Path "$ResourcesDir\ChooseProfileGUI.xml" -Raw -Encoding UTF8)
+    [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Select-GUI.xml" -Raw -Encoding UTF8)
 
     # Parse the XAML to create the GUI
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $ProfileEditGUI = [Windows.Markup.XamlReader]::Load($reader)
-
+    $ProfileEditGUI.Icon="$ResourcesDir\Icons\Title.png"
+    $ProfileEditGUI.FindName("DonateIcon").Source = "$ResourcesDir\Icons\Jonas-Rask-Danish-Royalty-Free-Smiley.32.png"
+    $ProfileEditGUI.FindName("GitHubIcon").Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Web-github.48.png"
     # Set hotkey hint label
     $ProfileEditGUI.FindName("HotkeyHint").Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
-    $ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion"
+    #$ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion"
 
-    #Region Check updates
-    try {
-        # Set a timeout for the request
-        $webRequestOptions = @{
-            Uri         = "https://raw.githubusercontent.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/refs/heads/main/Resources/version"
-            Method      = "Get"
-            TimeoutSec  = 3
-            ErrorAction = "Stop"
-        }
-        $LatestVersion = Invoke-RestMethod @webRequestOptions
-
-        # Validate the version format (e.g., "1.0.0")
-        if ($LatestVersion -notmatch "^\d+\.\d+\.\d+$") {
-            throw "Invalid version format retrieved: $LatestVersion"
-        }
-    }
-    catch {
-        # Log the error and set a default value
-        Write-Host "Failed to retrieve the latest version number: $($_.Exception.Message)" -ForegroundColor Red
-        $LatestVersion = "Unknown"
-    }
-
-    if ($LatestVersion -ne "Unknown") {
-        try {
-            # Read the version from the local file
-            $localVersionPath = Join-Path -Path $ResourcesDir -ChildPath "version"
-            if (Test-Path -Path $localVersionPath) {
-                $LocalVersion = Get-Content -Path $localVersionPath -Raw -Encoding UTF8
-                if ($LocalVersion -notmatch "^\d+\.\d+\.\d+$") {
-                    throw "Invalid version format in local file: $LocalVersion"
-                }
-
-                # Compare the local version with the latest version
-                if ($LocalVersion -lt $LatestVersion) {
-                    Write-Host "A newer version ($LatestVersion) is available." -ForegroundColor Yellow
-                    $ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion (update available)"
-                }
-                elseif ($LocalVersion -gt $LatestVersion) {
-                    Write-Host "Tool version ($LocalVersion) is ahead of the latest update online ($LatestVersion)." -ForegroundColor DarkRed
-                }
-                else {
-                    $ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion (Latest)"
-                    Write-Host "Tool version is up-to-date." -ForegroundColor Cyan
-                }
-            }
-            else {
-                Write-Host "Tool version file not found." -ForegroundColor Red
-            }
-        }
-        catch {
-            Write-Host "Error checking updates: $($_.Exception.Message)" -ForegroundColor Red
-        }
-    }
-    #Endregion
+    $ProfileEditGUI.FindName("Version").Text = $VersionLabelText
 
     # Populate the profiles list in the GUI
     if (-not ($script:DSPProfilesList -is [System.Array])) { $script:DSPProfilesList = @() }
@@ -967,7 +934,7 @@ Function Show-SelectProfileGui {
     #Region Assign event handlers
     # Search box text changed handler to filter the profiles list
     $ProfileEditGUI.FindName("SearchEDIT").Add_TextChanged({
-            param($searchSender, $searchArgs)
+            param($searchSender, $searchEventArgs)
             $searchText = $searchSender.Text.ToLower()
             $filteredProfiles = @()
             foreach ($profileFile in $script:DSPProfilesList) {
@@ -1081,7 +1048,7 @@ Function Show-SelectProfileGui {
                 # If the profile was saved, refresh the list and select the new item
                 if ($null -ne $editResult -and ($editResult.Action -eq 'Saved' -or $editResult.Action -eq 'SavedAs')) {
                     $newProfileName = (get-item $editResult.FilePath | Select-Object -ExpandProperty basename)
-                    $DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json" | Select-Object -ExpandProperty BaseName
+                    #$DSPProfilesList = Get-ChildItem -Path $DSPProfilesDir -Filter "*.json" | Select-Object -ExpandProperty BaseName
                     $ProfileEditGUI.FindName("SearchEDIT").Text = $newProfileName
                     $ProfileEditGUI.FindName("ProfileList").ItemsSource = [array]$newProfileName
                     Get-ProfileContent -selectedItem $newProfileName -DSPProfilesDir $DSPProfilesDir -ProfileEditGUI $ProfileEditGUI -result $result -GlobalPerformHotkey $GlobalPerformActionHotkey -GlobalCancelHotkey $GlobalCancelActionHotkey
@@ -1129,7 +1096,7 @@ Function Show-SelectProfileGui {
                     if (($profileJson.ProfilePerformActionHotkey -ne $GlobalPerformActionHotkey) -and ($null -ne $profileJson.ProfilePerformActionHotkey)) {
                         $result.EffectivePerformActionHotkey = $profileJson.ProfilePerformActionHotkey
                     }
-                    else { $result.EffectivePerformActionHotkey = $GlobalPerformActionHotkey }
+                    else { $result.EffectivePerformActionHotkey = $GlobalPerformHotkey }
                     if (($profileJson.ProfileCancelActionHotkey -ne $GlobalCancelActionHotkey) -and ($null -ne $profileJson.ProfileCancelActionHotkey)) {
                         $result.EffectiveCancelActionHotkey = $profileJson.ProfileCancelActionHotkey
                     }
@@ -1222,6 +1189,12 @@ Function Show-SelectProfileGui {
             return
         })
     #EndRegion
+    # Center the window on the screen
+    $screenWidth = [System.Windows.SystemParameters]::PrimaryScreenWidth
+    $screenHeight = [System.Windows.SystemParameters]::PrimaryScreenHeight
+    $ProfileEditGUI.Left = ($screenWidth - $ProfileEditGUI.Width) / 2
+    $ProfileEditGUI.Top = ($screenHeight - $ProfileEditGUI.Height) / 2
+
     # Show the GUI
     $ProfileEditGUI.ShowDialog() | Out-Null
     return $result
@@ -1235,7 +1208,8 @@ function Show-PopupGUI {
         [Parameter(Mandatory = $true)]$DSPConfig,
         [Parameter(Mandatory = $true)]$GlobalConfig
     )
-    Add-Type -AssemblyName PresentationFramework
+
+    $script:returnResult = $null
 
     # ---------------------------------------------------------
     # Decide OS version
@@ -1243,13 +1217,11 @@ function Show-PopupGUI {
     $winMajor = [Environment]::OSVersion.Version.Major
     $winBuild = [Environment]::OSVersion.Version.Build
 
-
     # ---------------------------------------------------------
     # WPF UI
     # ---------------------------------------------------------
-    [xml]$xaml = (Get-Content "$ResourcesDir\PopupGUI.xml" -Raw -Encoding utf8)
+    [xml]$xaml = (Get-Content "$ResourcesDir\Popup-GUI.xml" -Raw -Encoding utf8)
 
-    Add-Type -AssemblyName PresentationFramework
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $window = [Windows.Markup.XamlReader]::Load($reader)
 
@@ -1262,7 +1234,8 @@ function Show-PopupGUI {
     $window.Top = $screenHeight - $window.Height - $taskbarHeight - 30  # 30px margin from the bottom edge
 
     $grid = $window.FindName("MainGrid")
-    $button = $window.FindName("ExitBTN")
+    $ExitBTN = $window.FindName("ExitBTN")
+    $SelectProfileBTN = $window.FindName("SelectProfileBTN")
     $MessageTextBlock = $window.FindName("MessageTextBlock")
     $Icon = $window.FindName("Icon")
     # ---------------------------------------------------------
@@ -1275,10 +1248,15 @@ function Show-PopupGUI {
         })
 
     # Button click
-    $button.Add_Click({
-            #[System.Windows.MessageBox]::Show("Finished!")
+    $ExitBTN.Add_Click({
+            $script:returnResult = "Exit"
             $window.close()
-            exit
+        })
+    $SelectProfileBTN.Add_Click({
+            $script:returnResult = "SelectProfile"
+            Clear-Host
+            Write-Host "User requested profile selection from popup GUI" -ForegroundColor Yellow
+            $window.close()
         })
 
     # Hover opacity
@@ -1486,37 +1464,73 @@ function Show-PopupGUI {
                             switch ($KeySet.PSObject.Properties.Name) {
                                 "MouseChangePositionY" {
                                     $MouseY += [int]$KeySet.MouseChangePositionY
+                                    Move-CursorToPosition -X $MouseX -Y $MouseY
                                     Start-Sleep -Milliseconds $KeySet.Delay_ms
                                     Write-Host -ForegroundColor Blue "New MouseY: $MouseY"
                                 }
                                 "MouseChangePositionX" {
                                     $MouseX += [int]$KeySet.MouseChangePositionX
+                                    Move-CursorToPosition -X $MouseX -Y $MouseY
                                     Start-Sleep -Milliseconds $KeySet.Delay_ms
                                     Write-Host -ForegroundColor Blue "New MouseX: $MouseX"
                                 }
                                 "MouseClick" {
                                     switch ($KeySet.MouseClick.ToLower()) {
                                         "left" {
-                                            Invoke-MouseClickLeftAt -X $MouseX -Y $MouseY | Out-Null
+                                            Invoke-MouseLeftClick
                                             Start-Sleep -Milliseconds $KeySet.Delay_ms
                                             Write-Host -ForegroundColor Blue "Left click at X:$MouseX Y:$MouseY"
                                         }
                                         "right" {
-                                            Invoke-MouseClickRightAt -X $MouseX -Y $MouseY | Out-Null
+
+                                            Invoke-MouseLeftClick
                                             Start-Sleep -Milliseconds $KeySet.Delay_ms
                                             Write-Host -ForegroundColor Blue "Right click at X:$MouseX Y:$MouseY"
                                         }
                                     }
                                 }
-                                "MouseScrollUp" {
-                                    Invoke-MouseScrollUp -Amount $KeySet.MouseScrollUp
+                                "MouseScroll" {
+                                    $MouseScrollValue = [float](($KeySet.MouseScroll -split ";")[0].Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber))
+                                    if ($null -ne (($KeySet.MouseScroll -split ";")[1])) {
+                                        $MouseScrollFactor = [float](($KeySet.MouseScroll -split ";")[1].replace(",", "."))
+                                        $MouseScrollTimes = [Math]::Abs([int]($MouseScrollValue / $MouseScrollFactor))
+                                    }
+                                    else {
+                                        $MouseScrollTimes = [Math]::Abs([int]($MouseScrollValue))
+                                    }
+
+                                    if ($MouseScrollValue -gt 0) {
+                                        $MouseScrollDirection = "Up"
+                                    }
+                                    elseif ($MouseScrollValue -lt 0) {
+                                        $MouseScrollDirection = "Down"
+                                    }
+                                    else {
+                                        $MouseScrollDirection = "None"
+                                    }
+
+                                    if ($MouseScrollDirection -eq "Up") {
+                                        for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
+
+                                            Invoke-MouseScrollUp
+                                            Start-Sleep -Milliseconds $KeySet.Delay_ms
+                                        }
+                                    }
+                                    elseif ($MouseScrollDirection -eq "Down") {
+                                        for ($i = 0; $i -lt $MouseScrollTimes; $i++) {
+
+                                            Invoke-MouseScrollDown
+                                            Start-Sleep -Milliseconds $KeySet.Delay_ms
+                                        }
+                                    }
+
                                     Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                    Write-Host -ForegroundColor Blue "Mouse scroll up by $($KeySet.MouseScrollUp)"
-                                }
-                                "Invoke-MouseScrollDown" {
-                                    Invoke-MouseScrollDown -Amount $KeySet.MouseScrollDown
-                                    Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                    Write-Host -ForegroundColor Blue "Mouse scroll down by $($KeySet.MouseScrollDown)"
+                                    if ($MouseScrollDirection -ne "None") {
+                                        Write-Host -ForegroundColor Blue "Mouse scroll $MouseScrollDirection x $MouseScrollTimes times"
+                                    }
+                                    else {
+                                        Write-Host -ForegroundColor Blue "Mouse scroll action skipped as value is zero."
+                                    }
                                 }
                                 "Keys" {
                                     $keyToSend = $KeySet.Keys.Replace("FREQ", $band.freq).Replace("QVALUE", $band.Q).Replace("GAIN", $band.Gain).Replace("BANDNUMBER", $band.bandNumber)
@@ -1549,7 +1563,7 @@ function Show-PopupGUI {
     # Run
     $window.ShowDialog() | Out-Null
     $MainDispatcher.Stop()
-    Return $null
+    Return $script:returnResult
 }
 
 Export-ModuleMember -Function `

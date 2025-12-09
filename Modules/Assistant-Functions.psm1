@@ -284,7 +284,7 @@ function Show-TransposedTable {
 .OUTPUTS
    None.
 #>
-function Show-Notification {
+<# function Show-Notification {
     param(
         [string]$Title,
         [string]$Message,
@@ -302,7 +302,9 @@ function Show-Notification {
         Start-Sleep -Milliseconds $Timeout
         $notify.Dispose()
     } -ArgumentList $Title, $Message, $Timeout | Out-Null
-}
+} #>
+
+
 <#
 .SYNOPSIS
    Checks if the current script is running with administrative privileges.
@@ -355,6 +357,6 @@ Export-ModuleMember -Function `
     Show-ConfirmationDialog, `
     Show-DSPWindowToFront, `
     Show-TransposedTable, `
-    Show-Notification, `
     Get-RunningAsAdminFlag, `
     Read-JSONFile
+  # Show-Notification

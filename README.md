@@ -71,6 +71,16 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
 
+### 09.12.2025
+ver 0.5.0<br>
+The mouse cursor now visibly moves to the specified position before clicking, making its location clear<br>
+Implemented functionality for mouse scrolling, example profile `ESX ESXToolkit - mouse scroll demo.json`<br>
+Removed unused functions and performed code cleanup<br>
+Renamed files and functions for better clarity<br>
+Windows centered<br>
+Profile selection button in popup<br>
+Future releases: Mouse dragging (left/right mouse button hold and release) - functions are ready. Need to implement in a form<br>
+
 ### 04.12.2025
 Profiles added:<br>
 RedPower RP_DSP (IMPERATOR, YAKUZA, DSP8CH)<br>
@@ -86,14 +96,6 @@ Floating small semi-transparent window to show notifications instead of Windows 
 Hotkeys are now more responsive. Previously, there was a timing issue with hotkey reactions (a fast hit on a hotkey was not triggering actions).<br>
 Removed confusing REW API mode and a warning message if REW run in the regular mode as API mode gives no any benefits in terms of user experience and would create extra complexity in both code and UX.<br>
 
-### 29.11.2025
-ver 0.3.2<br>
-Last used profile selected automatically on the next startup<br>
-UI fixes<br>
-Profile filter/list fix after a new profile created. Clear filter btn now also refreshes the list<br>
-Code cleanup<br>
-Removed confusing REW API mode warning message<br>
-<br>
 [Full change log...](Documentation/Changelog.md)
 
 ## Q&A

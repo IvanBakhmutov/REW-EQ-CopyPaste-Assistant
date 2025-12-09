@@ -1,5 +1,13 @@
+# ============================================
+# Module: Import-Types
+# Description: Supplemental Types Import Module
+# Author: Ivan Bakhmutov
+# Date: 2025-12-07
+# ============================================
+
+
 function Import-Types {
-    Add-Type -AssemblyName PresentationCore, PresentationFramework -ErrorAction SilentlyContinue
+    Add-Type -AssemblyName PresentationCore, PresentationFramework, System.Windows.Forms -ErrorAction SilentlyContinue
 
     # Minimize parent cmd.exe window
     Add-Type @"
@@ -75,12 +83,28 @@ public class MouseControl {
     public static void ScrollDown(int amount) {
         mouse_event(MOUSEEVENTF_WHEEL, 0, 0, unchecked((uint)-amount), UIntPtr.Zero);
     }
+
+    public static void HoldLeftButton() {
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, UIntPtr.Zero);
+    }
+
+    public static void ReleaseLeftButton() {
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
+    }
+
+    public static void HoldRightButton() {
+        mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, UIntPtr.Zero);
+    }
+
+    public static void ReleaseRightButton() {
+        mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, UIntPtr.Zero);
+    }
 }
 "@
     }
 
     # --- Load SendKeys support (for keyboard input) ---
-    Add-Type -AssemblyName System.Windows.Forms
+   # Add-Type -AssemblyName 
 
     if (-not ([type]::GetType("User32"))) {
         Add-Type -TypeDefinition @"
@@ -93,8 +117,9 @@ public class User32 {
 "@
     }
 
-    Add-Type -AssemblyName System.Windows.Forms
+   # Add-Type -AssemblyName System.Windows.Forms
 
+    # Window to foreground API
     if (-not ([type]::GetType("NativeMethods"))) {
         Add-Type @"
 using System;
