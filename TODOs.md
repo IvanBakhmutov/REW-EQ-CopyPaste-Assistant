@@ -27,6 +27,7 @@
 - ~~Mouse Scroll up/down actions to be added~~
 
 ## Immediate plans
+- Mouse drag actions to be implemented, functions for this are already created 
 - BUG: hotkeys hint not updated on Profile Choose GUI after a new profile saved
 - Reported issue with confirmation dialog (in parallels desktop)
 - Profile Editor extra button switch for DSP process name, custom/generic

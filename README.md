@@ -71,14 +71,15 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
 
-### 07.12.2025
+### 09.12.2025
 ver 0.5.0<br>
 The mouse cursor now visibly moves to the specified position before clicking, making its location clear<br>
-Implemented functionality for mouse scrolling and dragging (left/right mouse button hold and release)<br>
+Implemented functionality for mouse scrolling, example profile `ESX ESXToolkit - mouse scroll demo.json`<br>
 Removed unused functions and performed code cleanup<br>
 Renamed files and functions for better clarity<br>
 Windows centered<br>
 Profile selection button in popup<br>
+Future releases: Mouse dragging (left/right mouse button hold and release) - functions are ready. Need to implement in a form<br>
 
 ### 04.12.2025
 Profiles added:<br>
