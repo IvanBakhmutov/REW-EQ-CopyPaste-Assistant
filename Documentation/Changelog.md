@@ -1,3 +1,7 @@
+### 10.12.2025
+ver 0.5.1<br>
+Bugfix: fixed an issue UI form update of Hotkey/Delay preference; editor focus on keystroke enables save button<br>
+
 ### 09.12.2025
 ver 0.5.0<br>
 The mouse cursor now visibly moves to the specified position before clicking, making its location clear<br>

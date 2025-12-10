@@ -67,7 +67,7 @@
         <Button x:Name="NewProfileBTN"  ToolTipService.InitialShowDelay="200" ToolTip="Create a new profile" Content="New Profile" Width="80" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,190,10" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="EditBTN"  ToolTipService.InitialShowDelay="200" ToolTip="Edit or save a copy of selected profile" Content="Edit" Width="80" IsEnabled="False" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,10" Grid.Column="1" Grid.Row="1"/>
         <Button x:Name="CloseBTN"  ToolTipService.InitialShowDelay="200" ToolTip="Close the tool" Content="Close" Width="80" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Grid.Column="1" Grid.Row="1"/>
-        <Label x:Name="HotkeyHint" Content="HotkeyHint" HorizontalAlignment="Left" Margin="115,0,0,10" VerticalAlignment="Bottom" Height="26" Width="312" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Label x:Name="HotkeyHint" Content="Hotkey or Delay preference depends on profile settings" HorizontalAlignment="Left" Margin="115,0,0,10" VerticalAlignment="Bottom" Height="26" Width="312" Grid.Row="1" Grid.ColumnSpan="2"/>
         <Button x:Name="GitHub"  ToolTipService.InitialShowDelay="200" ToolTip="Open GitHub project page in web browser" Width="100"  Height="25" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Foreground="#FF001BFB" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0" Grid.Row="1">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="GitHubIcon" Source="Images/my_icon.png" Width="24" Height="22" Margin="0,0,5,0"/>

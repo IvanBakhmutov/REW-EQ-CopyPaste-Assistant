@@ -70,6 +70,9 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
+### 10.12.2025
+ver 0.5.1<br>
+Bugfix: fixed an issue UI form update of Hotkey/Delay preference; editor focus on keystroke enables save button<br>
 
 ### 09.12.2025
 ver 0.5.0<br>

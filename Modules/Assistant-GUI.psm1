@@ -47,7 +47,7 @@ Function Show-EditProfileGui {
     # Parse the XAML to create the GUI
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $ProfileSelectGUI = [Windows.Markup.XamlReader]::Load($reader)
-    $ProfileSelectGUI.Icon="$ResourcesDir\Icons\Title.png"
+    $ProfileSelectGUI.Icon = "$ResourcesDir\Icons\Title.png"
     $ProfileSelectGUI.FindName("FileNameEdit").Text = (get-item $FilePath).BaseName
 
     # Populate form fields from the loaded JSON profile
@@ -520,8 +520,8 @@ Function Show-EditProfileGui {
                     }
 
                     $rowItem = [pscustomobject]@{
-                        Action  = $action
-                        Value   = $value
+                        Action   = $action
+                        Value    = $value
                         Delay_ms = $Delay_ms
                     }
                     $keystrokeCollection.Add($rowItem) | Out-Null
@@ -598,8 +598,8 @@ Function Show-EditProfileGui {
     $ProfileSelectGUI.FindName('AddActionBTN').Add_Click({
             if ($null -eq $keystrokeCollection) { return }
             $new = [pscustomobject]@{
-                Action  = 'Keys'
-                Value   = ''
+                Action   = 'Keys'
+                Value    = ''
                 Delay_ms = 100
             }
             $keystrokeCollection.Add($new) | Out-Null
@@ -686,6 +686,7 @@ Function Show-EditProfileGui {
     if ($null -ne $keystrokesDG) {
         $keystrokesDG.Add_SelectionChanged({
                 $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
+                $enableSaveButton.Invoke()
             })
         # initialize state
         $ProfileSelectGUI.FindName('RemoveActionBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
@@ -769,20 +770,30 @@ Function Show-SelectProfileGui {
                     $result.EffectiveCancelActionHotkey = $GlobalCancelActionHotkey
                 }
 
-                $hotkeyHintLabel = $ProfileEditGUI.FindName("HotkeyHint")
-                $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
-                if (($GlobalPerformHotkey -ne $result.EffectivePerformActionHotkey) -or
-                    ($GlobalCancelActionHotkey -ne $result.EffectiveCancelActionHotkey)) {
-                    $hotkeyHintLabel.Content += " (override)"
+                if (($profileJson.HotkeyOrDelayPreference -eq "Hotkey") -or ($profileJson.HotkeyOrDelayPreference -eq "Delay")) {
+                    $result.HotkeyOrDelayPreference = $profileJson.HotkeyOrDelayPreference
+                }
+                else {
+                    $result.HotkeyOrDelayPreference = "Hotkey"
                 }
 
-                switch ($profileJson.HotkeyOrDelayPreference) {
-                    "Hotkey" { $hotkeyHintLabel.Visibility = "Visible" }
-                    "Delay" { $hotkeyHintLabel.Visibility = "Hidden" }
-                    Default { $hotkeyHintLabel.Visibility = "Hidden" }
+                switch (($result.HotkeyOrDelayPreference)) {
+                    "Hotkey" {
+                        $hotkeyHintLabel = $ProfileEditGUI.FindName("HotkeyHint")
+                        $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
+                        if (($GlobalPerformHotkey -ne $result.EffectivePerformActionHotkey) -or
+                            ($GlobalCancelActionHotkey -ne $result.EffectiveCancelActionHotkey)) {
+                            $hotkeyHintLabel.Content += " (override)"
+                        }
+                    }
+                    "Delay" {
+                        $hotkeyHintLabel = $ProfileEditGUI.FindName("HotkeyHint")
+                        $hotkeyHintLabel.Content = "Delay: $($profileJson.TimeoutBeforePasteSecs) seconds"
+                    }
                 }
             }
             catch {
+                $ProfileEditGUI.FindName("HotkeyHint").Text = "Hotkey or Delay preference depends on profile settings"
                 $ProfileEditGUI.FindName("ProfileText").Text = "Error parsing JSON profile. Please check the file"
                 $ProfileEditGUI.FindName("ProfileOverview").Text = "Error parsing JSON profile. Please check the file"
                 $ProfileEditGUI.FindName("OKBTN").IsEnabled = $false
@@ -802,6 +813,8 @@ Function Show-SelectProfileGui {
         SelectedProfile              = $null
         EffectivePerformActionHotkey = $GlobalPerformActionHotkey   # initialize to global defaults
         EffectiveCancelActionHotkey  = $GlobalCancelActionHotkey
+        HotkeyOrDelayPreference      = $null
+        TimeoutBeforePasteSecs       = $null
         ProcessName                  = $null
         ProcessStatus                = $null
         REWStatus                    = $null
@@ -814,13 +827,9 @@ Function Show-SelectProfileGui {
     # Parse the XAML to create the GUI
     $reader = (New-Object System.Xml.XmlNodeReader $xaml)
     $ProfileEditGUI = [Windows.Markup.XamlReader]::Load($reader)
-    $ProfileEditGUI.Icon="$ResourcesDir\Icons\Title.png"
+    $ProfileEditGUI.Icon = "$ResourcesDir\Icons\Title.png"
     $ProfileEditGUI.FindName("DonateIcon").Source = "$ResourcesDir\Icons\Jonas-Rask-Danish-Royalty-Free-Smiley.32.png"
     $ProfileEditGUI.FindName("GitHubIcon").Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Web-github.48.png"
-    # Set hotkey hint label
-    $ProfileEditGUI.FindName("HotkeyHint").Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
-    #$ProfileEditGUI.FindName("Version").Text = "Version $AssistantVersion"
-
     $ProfileEditGUI.FindName("Version").Text = $VersionLabelText
 
     # Populate the profiles list in the GUI
@@ -1087,7 +1096,7 @@ Function Show-SelectProfileGui {
                     $ProfileEditGUI.FindName('ProfileList').SelectedItem = $savedBase
 
                     # update profile preview and hotkey hint using the same logic as SelectionChanged
-                    $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($savedBase).json"
+                    <# $profilePath = Join-Path -Path $DSPProfilesDir -ChildPath "$($savedBase).json"
                     $profileJson = Read-JSONFile -FilePath $profilePath -ErrorAction Stop
                     $ProfileEditGUI.FindName('ProfileText').Text = ($profileJson | ConvertTo-Json -Depth 10)
                     $ProfileEditGUI.FindName('ProfileOverview').Text = Get-OverviewText -profileContent $profileJson
@@ -1106,7 +1115,12 @@ Function Show-SelectProfileGui {
 
                     # enable buttons
                     $ProfileEditGUI.FindName('OKBTN').IsEnabled = $true
-                    $ProfileEditGUI.FindName('EditBTN').IsEnabled = $true
+                    $ProfileEditGUI.FindName('EditBTN').IsEnabled = $true#>
+
+                    $selectedItem = $ProfileEditGUI.FindName("ProfileList").SelectedItem
+                    if ($null -ne $selectedItem) {
+                        Get-ProfileContent -selectedItem $selectedItem -DSPProfilesDir $DSPProfilesDir -ProfileEditGUI $ProfileEditGUI -result $result -GlobalPerformHotkey $GlobalPerformActionHotkey -GlobalCancelHotkey $GlobalCancelActionHotkey
+                    }
                 }
                 catch {
                     # ignore selection refresh errors

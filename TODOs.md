@@ -25,10 +25,10 @@
 - ~~Pictures on buttons instead of characters, icon/logo for the tool~~
 - ~~Windows should appear in the center of the screen~~
 - ~~Mouse Scroll up/down actions to be added~~
+- ~~BUG: hotkeys hint not updated on Profile Choose GUI after a new profile saved~~
 
 ## Immediate plans
-- Mouse drag actions to be implemented, functions for this are already created 
-- BUG: hotkeys hint not updated on Profile Choose GUI after a new profile saved
+- Mouse drag actions to be implemented, functions for this are already created
 - Reported issue with confirmation dialog (in parallels desktop)
 - Profile Editor extra button switch for DSP process name, custom/generic
 

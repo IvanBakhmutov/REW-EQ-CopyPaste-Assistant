@@ -36,64 +36,65 @@ $GlobalConfig = Get-Content $ConfigPath -Raw | ConvertFrom-Json
 $EffectivePerformActionHotkey = $null
 $EffectiveCancelActionHotkey = $null
 
- #Region Check updates
-    try {
-        # Set a timeout for the request
-        $webRequestOptions = @{
-            Uri         = "https://raw.githubusercontent.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/refs/heads/main/Resources/version"
-            Method      = "Get"
-            TimeoutSec  = 3
-            ErrorAction = "Stop"
-        }
-        $LatestVersion = Invoke-RestMethod @webRequestOptions
+#Region Check updates
+try {
+    # Set a timeout for the request
+    $webRequestOptions = @{
+        Uri         = "https://raw.githubusercontent.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/refs/heads/main/Resources/version"
+        Method      = "Get"
+        TimeoutSec  = 3
+        ErrorAction = "Stop"
+    }
+    $LatestVersion = Invoke-RestMethod @webRequestOptions
 
-        # Validate the version format (e.g., "1.0.0")
-        if ($LatestVersion -notmatch "^\d+\.\d+\.\d+$") {
-            throw "Invalid version format retrieved: $LatestVersion"
+    # Validate the version format (e.g., "1.0.0")
+    if ($LatestVersion -notmatch "^\d+\.\d+\.\d+$") {
+        throw "Invalid version format retrieved: $LatestVersion"
+    }
+}
+catch {
+    # Log the error and set a default value
+    Write-Host "Failed to retrieve the latest version number: $($_.Exception.Message)" -ForegroundColor Red
+    $LatestVersion = "Unknown"
+}
+
+if ($LatestVersion -ne "Unknown") {
+    try {
+        # Read the version from the local file
+        $localVersionPath = Join-Path -Path $ResourcesDir -ChildPath "version"
+        if (Test-Path -Path $localVersionPath) {
+            $LocalVersion = Get-Content -Path $localVersionPath -Raw -Encoding UTF8
+            if ($LocalVersion -notmatch "^\d+\.\d+\.\d+$") {
+                throw "Invalid version format in local file: $LocalVersion"
+            }
+
+            # Compare the local version with the latest version
+            if ($LocalVersion -lt $LatestVersion) {
+                Write-Host "A newer version ($LatestVersion) is available." -ForegroundColor Yellow
+                $AssistantVersion = "Version $LocalVersion (update available)"
+            }
+            elseif ($LocalVersion -gt $LatestVersion) {
+                $AssistantVersion = "Version $LocalVersion (Future release)"
+                Write-Host "Tool version ($LocalVersion) is ahead of the latest update online ($LatestVersion)." -ForegroundColor DarkRed
+            }
+            else {
+                $AssistantVersion = "Version $LocalVersion (Latest)"
+                Write-Host "Tool version is up-to-date." -ForegroundColor Cyan
+            }
+        }
+        else {
+            Write-Host "Tool version file not found." -ForegroundColor Red
         }
     }
     catch {
-        # Log the error and set a default value
-        Write-Host "Failed to retrieve the latest version number: $($_.Exception.Message)" -ForegroundColor Red
-        $LatestVersion = "Unknown"
+        Write-Host "Error checking updates: $($_.Exception.Message)" -ForegroundColor Red
     }
-
-    if ($LatestVersion -ne "Unknown") {
-        try {
-            # Read the version from the local file
-            $localVersionPath = Join-Path -Path $ResourcesDir -ChildPath "version"
-            if (Test-Path -Path $localVersionPath) {
-                $LocalVersion = Get-Content -Path $localVersionPath -Raw -Encoding UTF8
-                if ($LocalVersion -notmatch "^\d+\.\d+\.\d+$") {
-                    throw "Invalid version format in local file: $LocalVersion"
-                }
-
-                # Compare the local version with the latest version
-                if ($LocalVersion -lt $LatestVersion) {
-                    Write-Host "A newer version ($LatestVersion) is available." -ForegroundColor Yellow
-                    $AssistantVersion = "Version $LocalVersion (update available)"
-                }
-                elseif ($LocalVersion -gt $LatestVersion) {
-                    $AssistantVersion = "Version $LocalVersion (Future release)"
-                    Write-Host "Tool version ($LocalVersion) is ahead of the latest update online ($LatestVersion)." -ForegroundColor DarkRed
-                }
-                else {
-                    $AssistantVersion = "Version $LocalVersion (Latest)"
-                    Write-Host "Tool version is up-to-date." -ForegroundColor Cyan
-                }
-            }
-            else {
-                Write-Host "Tool version file not found." -ForegroundColor Red
-            }
-        }
-        catch {
-            Write-Host "Error checking updates: $($_.Exception.Message)" -ForegroundColor Red
-        }
-    } else {
-        Write-Host "Skipping version comparison due to retrieval error." -ForegroundColor Red
-        $AssistantVersion = "Version (n/a)"
-    }
-    #Endregion
+}
+else {
+    Write-Host "Skipping version comparison due to retrieval error." -ForegroundColor Red
+    $AssistantVersion = "Version (n/a)"
+}
+#Endregion
 
 do {
     $selectedProfile = $null
