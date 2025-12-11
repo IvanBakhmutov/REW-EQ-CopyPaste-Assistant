@@ -103,44 +103,101 @@ function Show-ConfirmationDialog {
     param(
         [Parameter(Mandatory = $true)][string]$StartingPositionHint
     )
-    # Create the form
+
+    # Set initial global confirmation state
+    $global:confirmation = $false
+
+    # Constants for Layout and Padding
+    $ButtonWidth = 80
+    $ButtonHeight = 25
+    $ButtonSpacing = 20
+    $PaddingX = 30  # Padding on the left/right of the widest element
+    $PaddingY = 15  # Padding between label and buttons, and below the buttons
+    $LabelMarginTop = 15
+    $LabelMarginLeft = 15
+
+    # Form and Label Text
+    $Message = "Ready to paste EQ settings to DSP.`n$StartingPositionHint`n`nProceed?"
+
+    # Create Controls
+
+    # 1. Create the Form
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "EQ Paste Confirmation"
-    $form.Size = New-Object System.Drawing.Size(320, 150)
-    $form.StartPosition = "CenterScreen"
-    $form.TopMost = $true  # Make it stay on top
+    $form.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen
+    $form.TopMost = $true
+    $form.MaximizeBox = $false
+    $form.MinimizeBox = $false
+    $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 
-    # Create a label
+    # 2. Create the Label
     $label = New-Object System.Windows.Forms.Label
-    $label.Text = "Ready to paste EQ settings to DSP.`n$StartingPositionHint`nProceed?"
-    $label.AutoSize = $true
-    $label.Location = New-Object System.Drawing.Point(40, 20)
+    $label.Text = $Message
+    $label.Location = New-Object System.Drawing.Point($LabelMarginLeft, $LabelMarginTop)
+    $label.AutoSize = $true # Crucial for dynamic sizing
     $form.Controls.Add($label)
 
-    # Create Yes button
+    # Initial Layout to Calculate Label Size
+    # This ensures the label calculates its required width/height based on $Message
+    $form.PerformLayout()
+
+    # Dynamic Size Calculation and Button Placement
+
+    # 1. Calculate the required client width
+    $MinContentWidth = ($ButtonWidth * 2) + $ButtonSpacing + ($PaddingX * 2)
+    $RequiredWidth = [Math]::Max($label.Width + ($LabelMarginLeft * 2), $MinContentWidth)
+
+    # 2. Calculate the button starting X-position for centering
+    $TotalButtonAreaWidth = ($ButtonWidth * 2) + $ButtonSpacing
+    $StartButtonX = ($RequiredWidth - $TotalButtonAreaWidth) / 2
+
+    # 3. Calculate the button Y-position (below the dynamically sized label)
+    $ButtonY = $label.Bottom + $PaddingY
+
+    # 4. Calculate the required client height
+    $RequiredHeight = $label.Top + $label.Height + $PaddingY + $ButtonHeight + $PaddingY
+
+    # Apply the calculated size to the form
+    $form.ClientSize = New-Object System.Drawing.Size($RequiredWidth, $RequiredHeight)
+
+    # 5. Create Yes button
     $yesButton = New-Object System.Windows.Forms.Button
     $yesButton.Text = "Yes"
-    $yesButton.Location = New-Object System.Drawing.Point(70, 70)
+    $yesButton.Size = New-Object System.Drawing.Size($ButtonWidth, $ButtonHeight)
+    # Location X is the calculated center start point
+    $yesButton.Location = New-Object System.Drawing.Point($StartButtonX, $ButtonY)
+    $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
     $yesButton.Add_Click({
             $global:confirmation = $true
             $form.Close()
         })
     $form.Controls.Add($yesButton)
 
-    # Create No button
+    # 6. Calculate No button X-position robustly
+    # No Button X = Yes Button Start X + Yes Button Width + Spacing
+    $NoButtonX = $StartButtonX + $ButtonWidth + $ButtonSpacing
+
+    # 7. Create No button
     $noButton = New-Object System.Windows.Forms.Button
     $noButton.Text = "No"
-    $noButton.Location = New-Object System.Drawing.Point(170, 70)
+    $noButton.Size = New-Object System.Drawing.Size($ButtonWidth, $ButtonHeight)
+    # Use the calculated pixel location, not control properties
+    $noButton.Location = New-Object System.Drawing.Point($NoButtonX, $ButtonY)
+    $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
     $noButton.Add_Click({
             $global:confirmation = $false
             $form.Close()
         })
     $form.Controls.Add($noButton)
 
-    # Show the form
+    # Final Form Setup
+    $form.AcceptButton = $yesButton
+    $form.CancelButton = $noButton
+
+    # Show the Form
     $form.ShowDialog() | Out-Null
 
-    return $confirmation
+    return $global:confirmation
 }
 
 # Bring the DSP software window to the front based on the provided process name.
@@ -359,4 +416,4 @@ Export-ModuleMember -Function `
     Show-TransposedTable, `
     Get-RunningAsAdminFlag, `
     Read-JSONFile
-  # Show-Notification
+# Show-Notification

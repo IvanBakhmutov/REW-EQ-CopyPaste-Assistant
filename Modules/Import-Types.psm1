@@ -7,7 +7,7 @@
 
 
 function Import-Types {
-    Add-Type -AssemblyName PresentationCore, PresentationFramework, System.Windows.Forms -ErrorAction SilentlyContinue
+    Add-Type -AssemblyName PresentationCore, PresentationFramework, System.Windows.Forms, System.Drawing -ErrorAction SilentlyContinue
 
     # Minimize parent cmd.exe window
     Add-Type @"

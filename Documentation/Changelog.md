@@ -1,3 +1,7 @@
+### 11.12.2025
+ver 0.5.2<br>
+Delay confirmation dialog dynamic size to fit the starting position hint.<br>
+
 ### 10.12.2025
 ver 0.5.1<br>
 Bugfix: fixed an issue UI form update of Hotkey/Delay preference; editor focus on keystroke enables save button<br>
