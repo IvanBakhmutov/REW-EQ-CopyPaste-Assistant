@@ -16,7 +16,7 @@
                                   "Delay_ms":  150
                               },
                               {
-                                  "Keys":  "^a{BACKSPACE}{BACKSPACE}{BACKSPACE}{DEL}{DEL}{DEL}GAIN",
+                                  "Keys":  "^a{BACKSPACE}{BACKSPACE}{BACKSPACE}{DEL}{DEL}{DEL}GAIN{ENTER}",
                                   "Delay_ms":  100
                               },
                               {
