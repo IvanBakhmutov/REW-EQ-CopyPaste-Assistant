@@ -1,53 +1,55 @@
-{
-    "version": "1.0",
-    "Description": "Nakamichi-K 15-Band EQ (NDSK4065AU / NDSK4165AU)",
-    "processName": "Nakamichi-K",
-    "QDivider": 1,
-    "QDecimals": 3,
-    "GainDecimals": 1,
-    "DecimalSeparator": ".",
-    "HotkeyOrDelayPreference": "Hotkey",
-    "StartingPositionHint": "Please hover mouse over 1 band Freq box and press hotkey",
-    "KeystrokeSequence": [
-        {
-            "MouseClick": "left",
-            "Delay_ms": 150
-        },
-        {
-            "Keys": "^a{BACKSPACE}{BACKSPACE}{BACKSPACE}{DEL}{DEL}{DEL}FREQ",
-            "Delay_ms": 150
-        },
-        {
-            "MouseChangePositionY": "+17",
-            "Delay_ms": 10
-        },
-        {
-            "MouseClick": "left",
-            "Delay_ms": 100
-        },
-        {
-            "Keys": "^a{BACKSPACE}{BACKSPACE}{BACKSPACE}{DEL}{DEL}{DEL}QVALUE",
-            "Delay_ms": 100
-        },
-        {
-            "MouseChangePositionY": "+17",
-            "Delay_ms": 10
-        },
-        {
-            "MouseClick": "left",
-            "Delay_ms": 150
-        },
-        {
-            "Keys": "^a{BACKSPACE}{BACKSPACE}{BACKSPACE}{DEL}{DEL}{DEL}GAIN",
-            "Delay_ms": 100
-        },
-        {
-            "MouseChangePositionY": "-34",
-            "Delay_ms": 10
-        },
-        {
-            "MouseChangePositionX": "+72",
-            "Delay_ms": 10
-        }
-    ]
+﻿{
+    "version":  "1.0",
+    "Description":  "Nakamichi-K 15-Band EQ (NDSK4065AU / NDSK4165AU)",
+    "processName":  "Nakamichi-K",
+    "QDivider":  1,
+    "QDecimals":  3,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please hover mouse over 1 band Freq box and press hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  150
+                              },
+                              {
+                                  "Keys":  "^a{BACKSPACE}{BACKSPACE}{BACKSPACE}{DEL}{DEL}{DEL}FREQ",
+                                  "Delay_ms":  150
+                              },
+                              {
+                                  "MouseChangePositionY":  "+17",
+                                  "Delay_ms":  10
+                              },
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "^a{BACKSPACE}{BACKSPACE}{BACKSPACE}{DEL}{DEL}{DEL}QVALUE",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionY":  "+17",
+                                  "Delay_ms":  10
+                              },
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  150
+                              },
+                              {
+                                  "Keys":  "^a{BACKSPACE}{BACKSPACE}{BACKSPACE}{DEL}{DEL}{DEL}GAIN",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionY":  "-34",
+                                  "Delay_ms":  10
+                              },
+                              {
+                                  "MouseChangePositionX":  "+72",
+                                  "Delay_ms":  10
+                              }
+                          ]
 }

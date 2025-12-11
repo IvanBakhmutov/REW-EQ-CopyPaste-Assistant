@@ -1,6 +1,8 @@
 ### 11.12.2025
 ver 0.5.2<br>
 Delay confirmation dialog dynamic size to fit the starting position hint.<br>
+QDivider field size increased in the editor window<br>
+Nakamichi profiles QDivider set to 0.707 as confirmed with @vasiljevvv <br>
 
 ### 10.12.2025
 ver 0.5.1<br>
