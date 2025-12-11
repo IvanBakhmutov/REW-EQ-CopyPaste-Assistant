@@ -1,6 +1,6 @@
 ﻿{
     "version":  "1.0",
-    "Description":  "Nakamichi-K 31-Band EQ with ONLY GAINS (NDSK4265AU)",
+    "Description":  "Nakamichi-K 31-Band EQ with ONLY GAINS (NDSK4265AU) NOTE: REW PEQ - Q/BW Format: Symmetric Q",
     "processName":  "Nakamichi-K",
     "QDivider":  1,
     "QDecimals":  3,

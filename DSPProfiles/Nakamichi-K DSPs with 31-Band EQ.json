@@ -1,6 +1,6 @@
 ﻿{
     "version":  "1.0",
-    "Description":  "Nakamichi-K 31-Band EQ (NDSK4085AU / NDSK4185AU / NDSK4285AU)",
+    "Description":  "Nakamichi-K 31-Band EQ (NDSK4085AU / NDSK4185AU / NDSK4285AU) NOTE: REW PEQ - Q/BW Format: Symmetric Q",
     "processName":  "Nakamichi-K",
     "QDivider":  1,
     "QDecimals":  3,

@@ -1,6 +1,6 @@
 ﻿{
     "version":  "1.0",
-    "Description":  "Nakamichi-K 15-Band EQ (NDSK4065AU / NDSK4165AU)",
+    "Description":  "Nakamichi-K 15-Band EQ (NDSK4065AU / NDSK4165AU) NOTE: REW PEQ - Q/BW Format: Symmetric Q",
     "processName":  "Nakamichi-K",
     "QDivider":  1,
     "QDecimals":  3,
