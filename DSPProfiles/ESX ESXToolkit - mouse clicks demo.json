@@ -32,19 +32,23 @@
                                   "Delay_ms":  20
                               },
                               {
-                                  "MouseChangePositionY":  "91",
+                                  "MouseChangePositionY":  "22",
                                   "Delay_ms":  20
                               },
                               {
-                                  "MouseScroll":  "GAIN;0.1",
-                                  "Delay_ms":  120
+                                  "MouseClick":  "Left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "^aGAIN",
+                                  "Delay_ms":  20
                               },
                               {
                                   "MouseChangePositionX":  "49",
                                   "Delay_ms":  20
                               },
                               {
-                                  "MouseChangePositionY":  "-113",
+                                  "MouseChangePositionY":  "-44",
                                   "Delay_ms":  20
                               }
                           ]
