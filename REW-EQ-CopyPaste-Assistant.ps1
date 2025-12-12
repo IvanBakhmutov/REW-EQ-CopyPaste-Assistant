@@ -5,6 +5,18 @@
 # Date: 2025-12-07
 # ============================================
 
+$mutexName = "Global\REW-EQ-CopyPaste-Assistant-Mutex"
+
+$createdNew = $false
+
+$mutex = New-Object System.Threading.Mutex($false, $mutexName, [ref]$createdNew)
+
+if (-not $createdNew) {
+    Write-Host "Another instance of assistant is already running. Exiting..."
+    Start-Sleep -Seconds 5
+    exit
+}
+
 $scriptDir = Split-Path -Parent $PSCommandPath
 $DSPProfilesDir = Join-Path -Path $scriptDir -ChildPath "DSPProfiles"
 $ModulesDir = Join-Path -Path $scriptDir -ChildPath "Modules"
@@ -146,3 +158,4 @@ do {
     $PopupResult = Show-PopupGUI -ResourcesDir $ResourcesDir -DSPConfig $DSPConfig -GlobalConfig $GlobalConfig
 } while ($PopupResult -eq "SelectProfile")
 Write-Host "`nFinished. Exiting..." -ForegroundColor Blue
+$mutex.ReleaseMutex()
