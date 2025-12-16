@@ -70,6 +70,12 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
+
+### 16.12.2025
+ver 0.5.3<br>
+Mutex release error fixed<br>
+Aded flags for DSP and REW processes check skip in the Config.json<br>
+
 ### 11.12.2025
 ver 0.5.2<br>
 Delay confirmation dialog dynamic size to fit the starting position hint.<br>
@@ -79,31 +85,6 @@ Nakamichi profiles QDivider set to 0.707 as confirmed with @vasiljevvv <br>
 ### 10.12.2025
 ver 0.5.1<br>
 Bugfix: fixed an issue UI form update of Hotkey/Delay preference; editor focus on keystroke enables save button<br>
-
-### 09.12.2025
-ver 0.5.0<br>
-The mouse cursor now visibly moves to the specified position before clicking, making its location clear<br>
-Implemented functionality for mouse scrolling, example profile `ESX ESXToolkit - mouse scroll demo.json`<br>
-Removed unused functions and performed code cleanup<br>
-Renamed files and functions for better clarity<br>
-Windows centered<br>
-Profile selection button in popup<br>
-Future releases: Mouse dragging (left/right mouse button hold and release) - functions are ready. Need to implement in a form<br>
-
-### 04.12.2025
-Profiles added:<br>
-RedPower RP_DSP (IMPERATOR, YAKUZA, DSP8CH)<br>
-Ground Zero GZHA MINI FIVE-DSP_GUI<br>
-Ground Zero GZDSP 6-10SQ (TuN software)<br>
-<br>
-JL TwK VXi, MVi<br> have 10 band eq, and it is not possible to automate as it always rearranges bands once you change Freq of a given band and jumps all over window. Even with the mouse actions it is hard to understand where a given band will change position to.<br>
-GZDSP-4.80A PRO ground zero rquires mouse scroll actions, will be implemented on upcoming versions
-
-### 03.12.2025
-ver 0.4.0<br>
-Floating small semi-transparent window to show notifications instead of Windows pop-ups with a stop tool button. **Why?** Standard Windows pop-ups play notification sounds, which may go to speakers while you configure your system. Additionally, there is no way to configure timeouts for them, and they do not appear quickly one after another. With the custom notification window, the look and feel are improved now.<br>
-Hotkeys are now more responsive. Previously, there was a timing issue with hotkey reactions (a fast hit on a hotkey was not triggering actions).<br>
-Removed confusing REW API mode and a warning message if REW run in the regular mode as API mode gives no any benefits in terms of user experience and would create extra complexity in both code and UX.<br>
 
 [Full change log...](Documentation/Changelog.md)
 

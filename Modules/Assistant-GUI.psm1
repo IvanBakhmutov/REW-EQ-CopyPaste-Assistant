@@ -706,13 +706,17 @@ Function Show-EditProfileGui {
 Function Show-SelectProfileGui {
     param (
         [Parameter(Mandatory = $true)][string]$ResourcesDir,
-        [Parameter(Mandatory = $true)][string]$GlobalPerformActionHotkey,
-        [Parameter(Mandatory = $true)][string]$GlobalCancelActionHotkey,
         [Parameter(Mandatory = $true)][string]$DSPProfilesDir,
         [Parameter(Mandatory = $true)][string]$ModulesDir,
-        [Parameter(Mandatory = $false)][string]$LastSelectedProfile,
-        [Parameter(Mandatory = $true)][string]$VersionLabelText
+        [Parameter(Mandatory = $true)][string]$VersionLabelText,
+        [Parameter(Mandatory = $true)]$GlobalConfig
     )
+
+    $GlobalPerformActionHotkey = $GlobalConfig.GlobalPerformActionHotkey
+    $GlobalCancelActionHotkey = $GlobalConfig.GlobalCancelActionHotkey
+    if ($null -ne $GlobalConfig.LastSelectedProfile) {
+        $LastSelectedProfile = $GlobalConfig.LastSelectedProfile
+    }
 
     function Get-OverviewText {
         param(
@@ -821,6 +825,16 @@ Function Show-SelectProfileGui {
         AdminRightsRequired          = "false"
     }
 
+    if (($null -ne $GlobalConfig.SkipREWProcessCheck) -and ($GlobalConfig.SkipREWProcessCheck -eq "True")) {
+        $result.REWStatus = "Skip"
+        Write-Host "Global config set to skip REW process check"
+    }
+
+    if (($null -ne $GlobalConfig.SkipDSPProcessCheck) -and ($GlobalConfig.SkipDSPProcessCheck -eq "True")) {
+        $result.ProcessStatus = "Skip"
+        Write-Host "Global config set to skip DSP process check"
+    }
+
     # Load the XAML file
     [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Select-GUI.xml" -Raw -Encoding UTF8)
 
@@ -847,94 +861,110 @@ Function Show-SelectProfileGui {
     $BGProcessCheck = New-Object Windows.Threading.DispatcherTimer
     $BGProcessCheck.Interval = [TimeSpan]::FromMilliseconds(300)
     $BGProcessCheck.Add_Tick({
-            if ($null -eq $result.ProcessName) {
-                $ProfileEditGUI.FindName("ProcessStatus").foreground = "gray"
-                $result.ProcessName = "n/a"
-                $result.ProcessStatus = "Not Running"
-            }
-            elseif ($result.ProcessName -eq "Generic") {
-                $ProfileEditGUI.FindName("ProcessStatus").foreground = "Blue"
-                $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Generic profile selected, no process check performed. Bring the DSP software to the foreground manually."
-                $result.ProcessName = "Generic"
-                $result.ProcessStatus = "Running"
+
+            #Region DSP process check
+            if ($result.ProcessStatus -eq "Skip") {
+                $ProfileEditGUI.FindName("ProcessStatus").foreground = "Plum"
+                $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Global config set to skip DSP process check. Bring the DSP software to the foreground manually."
             }
             else {
-                # find DSP Software processes with window
-                $DSPProcess = Get-Process | Where-Object {
-                    $_.ProcessName -like $result.ProcessName -and $_.ProcessName -ne "conhost" -and $_.MainWindowHandle -ne [IntPtr]::Zero
-                }
-
-                if ($null -eq $DSPProcess) {
-                    $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
-                    $ProfileEditGUI.FindName("ProcessStatus").tooltip = "No matching processes found for $($result.ProcessName)"
-                    #$result.ProcessName = "n/a"
+                if ($null -eq $result.ProcessName) {
+                    $ProfileEditGUI.FindName("ProcessStatus").foreground = "gray"
+                    $result.ProcessName = "n/a"
                     $result.ProcessStatus = "Not Running"
                 }
-                elseif ($DSPProcess.Count -gt 1) {
-                    $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
-                    $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Expected 1 process, found: $($DSPProcess.Count)"
-                    #$result.ProcessName = "n/a"
-                    $result.ProcessStatus = "Multiple Instances Found"
+                elseif ($result.ProcessName -eq "Generic") {
+                    $ProfileEditGUI.FindName("ProcessStatus").foreground = "Blue"
+                    $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Generic profile selected, no process check performed. Bring the DSP software to the foreground manually."
+                    $result.ProcessName = "Generic"
+                    $result.ProcessStatus = "Running"
                 }
                 else {
-                    if ($result.AdminRightsRequired -eq "true") {
-                        if (Get-RunningAsAdminFlag) {
+                    # find DSP Software processes with window
+                    $DSPProcess = Get-Process | Where-Object {
+                        $_.ProcessName -like $result.ProcessName -and $_.ProcessName -ne "conhost" -and $_.MainWindowHandle -ne [IntPtr]::Zero
+                    }
+
+                    if ($null -eq $DSPProcess) {
+                        $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
+                        $ProfileEditGUI.FindName("ProcessStatus").tooltip = "No matching processes found for $($result.ProcessName)"
+                        #$result.ProcessName = "n/a"
+                        $result.ProcessStatus = "Not Running"
+                    }
+                    elseif ($DSPProcess.Count -gt 1) {
+                        $ProfileEditGUI.FindName("ProcessStatus").foreground = "Red"
+                        $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Expected 1 process, found: $($DSPProcess.Count)"
+                        #$result.ProcessName = "n/a"
+                        $result.ProcessStatus = "Multiple Instances Found"
+                    }
+                    else {
+                        if ($result.AdminRightsRequired -eq "true") {
+                            if (Get-RunningAsAdminFlag) {
+                                $ProfileEditGUI.FindName("ProcessStatus").foreground = "Lime"
+                                $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
+                                $result.ProcessName = $DSPProcess.ProcessName
+                                $result.ProcessStatus = "Running"
+                            }
+                            else {
+                                $ProfileEditGUI.FindName("ProcessStatus").foreground = "Purple"
+                                $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Admin rights are required to interact with $($DSPProcess.ProcessName). Please restart the Assistant with elevated privileges."
+                                $result.ProcessName = $DSPProcess.ProcessName
+                                $result.ProcessStatus = "Admin Rights Required"
+                            }
+                        }
+                        else {
                             $ProfileEditGUI.FindName("ProcessStatus").foreground = "Lime"
                             $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
                             $result.ProcessName = $DSPProcess.ProcessName
                             $result.ProcessStatus = "Running"
                         }
-                        else {
-                            $ProfileEditGUI.FindName("ProcessStatus").foreground = "Purple"
-                            $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Admin rights are required to interact with $($DSPProcess.ProcessName). Please restart the Assistant with elevated privileges."
-                            $result.ProcessName = $DSPProcess.ProcessName
-                            $result.ProcessStatus = "Admin Rights Required"
-                        }
-                    }
-                    else {
-                        $ProfileEditGUI.FindName("ProcessStatus").foreground = "Lime"
-                        $ProfileEditGUI.FindName("ProcessStatus").tooltip = "Found process: $($DSPProcess.ProcessName)"
-                        $result.ProcessName = $DSPProcess.ProcessName
-                        $result.ProcessStatus = "Running"
                     }
                 }
             }
+            #Endregion
 
-
-            $REWProcess = Get-Process | Where-Object {
-                $_.ProcessName -like "roomeqwizard" -and $_.ProcessName -ne "conhost" -and $_.MainWindowHandle -ne [IntPtr]::Zero
-            }
-
-            if ($null -eq $REWProcess) {
-                $ProfileEditGUI.FindName("REWStatus").foreground = "Red"
-                #$ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running (click PLAY button to launch REW in API mode)"
-                $ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running (click PLAY button to launch REW)"
-                $result.REWStatus = "Not Running"
-                $ProfileEditGUI.FindName("RunREWBTN").visibility = "Visible"
+            #Region REW process check
+            if ($result.REWStatus -eq "Skip") {
+                $ProfileEditGUI.FindName("REWStatus").foreground = "Plum"
+                $ProfileEditGUI.FindName("REWStatus").tooltip = "Global config set to skip REW process check. Ensure REW is running and in API mode."
+                #$result.REWStatus = "Running"
             }
             else {
-                $ProfileEditGUI.FindName("REWStatus").foreground = "Lime"
-                $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName)."
-                $result.REWStatus = "Running"
-                $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
-                <#$rewWMIprocess = Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'"
-                if ($null -ne $rewWMIprocess) {
-                    $checkpREWargs = $rewWMIprocess | Select-Object CommandLine
-                    if ($checkpREWargs.CommandLine -notmatch "-api") {
-                        $ProfileEditGUI.FindName("REWStatus").foreground = "Orange"
-                        $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is not enabled."
-                        $result.REWStatus = "API Not Enabled"
-                        $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
-                    }
-                    else {
-                        $ProfileEditGUI.FindName("REWStatus").foreground = "Lime"
-                        $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is enabled."
-                        $result.REWStatus = "Running"
-                        $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
-                    }
-                }#>
-            }
+                $REWProcess = Get-Process | Where-Object {
+                    $_.ProcessName -like "roomeqwizard" -and $_.ProcessName -ne "conhost" -and $_.MainWindowHandle -ne [IntPtr]::Zero
+                }
 
+                if ($null -eq $REWProcess) {
+                    $ProfileEditGUI.FindName("REWStatus").foreground = "Red"
+                    #$ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running (click PLAY button to launch REW in API mode)"
+                    $ProfileEditGUI.FindName("REWStatus").tooltip = "REW is not running (click PLAY button to launch REW)"
+                    $result.REWStatus = "Not Running"
+                    $ProfileEditGUI.FindName("RunREWBTN").visibility = "Visible"
+                }
+                else {
+                    $ProfileEditGUI.FindName("REWStatus").foreground = "Lime"
+                    $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName)."
+                    $result.REWStatus = "Running"
+                    $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
+                    <#$rewWMIprocess = Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'"
+                    if ($null -ne $rewWMIprocess) {
+                        $checkpREWargs = $rewWMIprocess | Select-Object CommandLine
+                        if ($checkpREWargs.CommandLine -notmatch "-api") {
+                            $ProfileEditGUI.FindName("REWStatus").foreground = "Orange"
+                            $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is not enabled."
+                            $result.REWStatus = "API Not Enabled"
+                            $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
+                        }
+                        else {
+                            $ProfileEditGUI.FindName("REWStatus").foreground = "Lime"
+                            $ProfileEditGUI.FindName("REWStatus").tooltip = "Found process: $($REWProcess.ProcessName). API mode is enabled."
+                            $result.REWStatus = "Running"
+                            $ProfileEditGUI.FindName("RunREWBTN").visibility = "Hidden"
+                        }
+                    }#>
+                }
+            }
+            #Endregion
 
         })
     $BGProcessCheck.Start()
@@ -1131,17 +1161,17 @@ Function Show-SelectProfileGui {
     # OK button click handler
     $ProfileEditGUI.FindName("OKBTN").Add_Click({
             $selectedProfileFileName = $ProfileEditGUI.FindName("ProfileList").SelectedItem
-
-            # check if REW is running with API enabled
-            if ($result.REWStatus -eq "Not Running") {
-                $ButtonType = [System.Windows.MessageBoxButton]::OK
-                $MessageIcon = [System.Windows.MessageBoxImage]::Error
-                $MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'PLAY' button to launch REW."
-                #$MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'PLAY' button to launch REW in API mode automatically."
-                $MessageTitle = "REW Not Running or API Not Enabled"
-                [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
-                return
-            } <#
+            if ($result.REWStatus -ne "Skip") {
+                # check if REW is running with API enabled
+                if ($result.REWStatus -eq "Not Running") {
+                    $ButtonType = [System.Windows.MessageBoxButton]::OK
+                    $MessageIcon = [System.Windows.MessageBoxImage]::Error
+                    $MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'PLAY' button to launch REW."
+                    #$MessageBody = "Room EQ Wizard (REW) is not running. Please start REW. You can click the 'PLAY' button to launch REW in API mode automatically."
+                    $MessageTitle = "REW Not Running or API Not Enabled"
+                    [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
+                    return
+                } <#
             elseif ($result.REWStatus -eq "API Not Enabled") {
                 $ButtonType = [System.Windows.MessageBoxButton]::OK
                 $MessageIcon = [System.Windows.MessageBoxImage]::Warning
@@ -1149,17 +1179,19 @@ Function Show-SelectProfileGui {
                 $MessageTitle = "REW API Not Enabled"
                 [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
             } #>
-
-            # Check if process is running
-            if ($result.ProcessStatus -ne "Running") {
-                $ButtonType = [System.Windows.MessageBoxButton]::OK
-                $MessageIcon = [System.Windows.MessageBoxImage]::Error
-                $MessageBody = "The target DSP software process is not running. Please start the software and try again."
-                $MessageTitle = "DSP Software Not Running"
-                [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
-                return
             }
 
+            if ($result.ProcessStatus -ne "Skip") {
+                # Check if process is running
+                if ($result.ProcessStatus -ne "Running") {
+                    $ButtonType = [System.Windows.MessageBoxButton]::OK
+                    $MessageIcon = [System.Windows.MessageBoxImage]::Error
+                    $MessageBody = "The target DSP software process is not running. Please start the software and try again."
+                    $MessageTitle = "DSP Software Not Running"
+                    [System.Windows.MessageBox]::Show($MessageBody, $MessageTitle, $ButtonType, $MessageIcon) | Out-Null
+                    return
+                }
+            }
             # Check for admin rights if required by the selected profile
             if ($result.AdminRightsRequired -eq "true") {
                 if (-not (Get-RunningAsAdminFlag)) {
@@ -1213,8 +1245,6 @@ Function Show-SelectProfileGui {
     $ProfileEditGUI.ShowDialog() | Out-Null
     return $result
 }
-
-
 
 function Show-PopupGUI {
     param (
@@ -1318,7 +1348,7 @@ function Show-PopupGUI {
         })
     #################################################################################################################
     if ($null -ne $DSPConfig.processName) {
-        if ($DSPConfig.processName -eq "Generic") {
+        if (($DSPConfig.processName -eq "Generic") -or ($GlobalConfig.SkipDSPProcessCheck -eq "True")) {
             $ProcessName = "Generic"
         }
         else {

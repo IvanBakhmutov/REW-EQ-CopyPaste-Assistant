@@ -27,9 +27,10 @@
 - ~~Mouse Scroll up/down actions to be added~~
 - ~~BUG: hotkeys hint not updated on Profile Choose GUI after a new profile saved~~
 - ~~Reported issue with confirmation dialog (in parallels desktop)~~
+- ~~Add flags in config to skip REW and DSP processes check. Implemented in ver 0.5.3~~
 
 ## Immediate plans
-- Add flags in config to skip REW and DSP processes check
+
 - Mouse drag actions to be implemented, functions for this are already created
 - Profile Editor extra button switch for DSP process name, custom/generic
 
@@ -39,47 +40,47 @@
 
 ## Ideas to be reviewed
 - Folders with brand names for DSP profiles?
-- Experimental: (for the future to consider as still cannot see use case) - Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed.  [proof of concept](Modules/dev/REW-API-Experimental.ps1)  
-    Breakdown of the idea: the tool checks "Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'" | Select-Object CommandLine" if it has -api argument. If it is - direct api connection:  
-    In case if it it running with -api arg, then  
+- Experimental: (for the future to consider as still cannot see use case) - Direct integration with REW API (roomeqwizard.exe -api) to get EQ bands, so no copy to clipboard would be needed. [proof of concept](Modules/dev/REW-API-Experimental.ps1)<br>
+    Breakdown of the idea: the tool checks "Get-WmiObject Win32_Process -Filter "name='roomeqwizard.exe'" | Select-Object CommandLine" if it has -api argument. If it is - direct api connection:<br>
+    In case if it it running with -api arg, then<br>
     - Check API connectivity on the tool startup, notification if roomeqwizard.exe runs in API enabled mode
     - GET /measurements/selected-uuid
     - GET /measurements/{id}/filters
     - Filter EQ bands leaving only ones with PK filters
-    - wait for hotkey and then proceed with DSP software inputs  
+    - wait for hotkey and then proceed with DSP software inputs<br>
 Otherwise - backward compatibility with manual hit copy button on EQ window and then proceeding with hotkeys/delays.
 - Check all suitable processes if there are any matches with DSP software and suggest options
 
 ## DSP profiles list to check
- ~~ESX~~,  
- ~~Musway~~,  
- ~~Nakamichi~~,  
- ~~Zapco ADSP~~,  
- ~~Phoenix Gold~~,  
- ~~Awave~~,  
- ~~Onkyo R-MS~~,  
- ~~Awave DSP (Awave DSP PC Software)~~,  
- ~~Best Balance DSP (Best Balance DSP Tool)~~,  
- ~~Sennuopu DSP (Sennuopu DSP Tool)~~,  
- ~~Down4Sound (JP DSP) (JP DSP PC Software)~~,  
-Audison (bit One, bit Nove, Forza) (Audison bit Tune / bit One Software / AF Forza DSP Tool),  
-Mosconi / Gladen (6to8, PRO, Aerospace) (Mosconi DSP Tool),  
-Rockford Fosgate (DSR1, 3sixty.3) (Rockford Fosgate PerfectTune / 3sixty Software),  
-ARC Audio (PS8 / PS8-Pro) (ARC Audio PS8 Software),  
-JL Audio (TwK-88, VXi series) (JL Audio TüN), - not possible to automate  
-AudioControl (DM-608, DM-810) (DM Smart DSP),  
-Light Audio (Light Audio DSP Software),  
-MadBit (MadBit DSP Tool),  
-Контур DSP (Контур DSP Software),  
-Tonemix DSP (Tonemix DSP Software),  
-URAL (новые DSP) (URAL DSP PC Tool),  
-Ground Zero DSP (GZ DSP PC Software), - 3 DPSs covered, the rest later  
-Hertz H8 DSP (Hertz H8 DSP Software),  
-Focal (FSP-8 and others) (Focal FSP-8 DSP Tool),  
-Stetsom / Banda DSP (Stetsom DSP Software / Banda DSP Manager),  
-JIB DSP (JIB DSP Software),  
-Zapco HDSP,  
-Mobridge (https://mobridge.us/mobridge-dsp/),  
-JIB DSP,  
-Goldhorn  
+ ~~ESX~~,<br>
+ ~~Musway~~,<br>
+ ~~Nakamichi~~,<br>
+ ~~Zapco ADSP~~,<br>
+ ~~Phoenix Gold~~,<br>
+ ~~Awave~~,<br>
+ ~~Onkyo R-MS~~,<br>
+ ~~Awave DSP (Awave DSP PC Software)~~,<br>
+ ~~Best Balance DSP (Best Balance DSP Tool)~~,<br>
+ ~~Sennuopu DSP (Sennuopu DSP Tool)~~,<br>
+ ~~Down4Sound (JP DSP) (JP DSP PC Software)~~,<br>
+Audison (bit One, bit Nove, Forza) (Audison bit Tune / bit One Software / AF Forza DSP Tool),<br>
+Mosconi / Gladen (6to8, PRO, Aerospace) (Mosconi DSP Tool),<br>
+Rockford Fosgate (DSR1, 3sixty.3) (Rockford Fosgate PerfectTune / 3sixty Software),<br>
+ARC Audio (PS8 / PS8-Pro) (ARC Audio PS8 Software),<br>
+JL Audio (TwK-88, VXi series) (JL Audio TüN), - not possible to automate<br>
+AudioControl (DM-608, DM-810) (DM Smart DSP),<br>
+Light Audio (Light Audio DSP Software),<br>
+MadBit (MadBit DSP Tool),<br>
+Контур DSP (Контур DSP Software),<br>
+Tonemix DSP (Tonemix DSP Software),<br>
+URAL (новые DSP) (URAL DSP PC Tool),<br>
+Ground Zero DSP (GZ DSP PC Software), - 3 DPSs covered, the rest later<br>
+Hertz H8 DSP (Hertz H8 DSP Software),<br>
+Focal (FSP-8 and others) (Focal FSP-8 DSP Tool),<br>
+Stetsom / Banda DSP (Stetsom DSP Software / Banda DSP Manager),<br>
+JIB DSP (JIB DSP Software),<br>
+Zapco HDSP,<br>
+Mobridge (https://mobridge.us/mobridge-dsp/),<br>
+JIB DSP,<br>
+Goldhorn<br>
 and others
