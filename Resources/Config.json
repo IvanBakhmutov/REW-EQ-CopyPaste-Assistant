@@ -7,8 +7,5 @@
     "QDecimals":  1,
     "FreqDecimals":  0,
     "DecimalSeparator":  ".",
-    "TimeoutBeforePasteSecs":  6,
-    "LastSelectedProfile":  "ESX ESXToolkit",
-    "SkipREWProcessCheck":  "False",
-    "SkipDSPProcessCheck":  "False"
+    "TimeoutBeforePasteSecs":  6
 }
