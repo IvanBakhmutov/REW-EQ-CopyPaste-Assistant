@@ -9,18 +9,74 @@
     FontStretch="Expanded"
     FontStyle="Normal"
     FontWeight="Normal"
-    Background="#FF140C47"
+    Background="#FF292929"
     WindowStyle="None"
     ShowInTaskbar="True">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
+        <Color x:Key="WindowBgColor">#FF292929</Color>
+        <Color x:Key="ContainerBgColor">#FF35353A</Color>
+        <Color x:Key="AccentBlueColor">#FF65ABFE</Color>
+        <Color x:Key="DarkAccentBlueColor">#FF367ACB</Color>
+        <Color x:Key="SurfaceColor">#FF1E1E1E</Color>
+
+        <SolidColorBrush x:Key="WindowBgBrush" Color="{StaticResource WindowBgColor}"/>
+        <SolidColorBrush x:Key="ContainerBgBrush" Color="{StaticResource ContainerBgColor}"/>
+        <SolidColorBrush x:Key="AccentBlueBrush" Color="{StaticResource AccentBlueColor}"/>
+        <SolidColorBrush x:Key="DarkAccentBrush" Color="{StaticResource DarkAccentBlueColor}"/>
+        <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+        <SolidColorBrush x:Key="TextMainBrush" Color="White"/>
+        <SolidColorBrush x:Key="TextMutedBrush" Color="#AAAAAA"/>
+
+        <Style x:Key="ScrollBarThumbStyle" TargetType="Thumb">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border x:Name="rectangle" 
+                        SnapsToDevicePixels="True" 
+                        Background="#444444" 
+                        CornerRadius="4" 
+                        Margin="2,0,2,0"
+                        Width="8" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="rectangle" Property="Background" Value="{StaticResource AccentBlueBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ScrollBar">
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Margin" Value="2,0,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid x:Name="Bg" Background="Transparent" SnapsToDevicePixels="true">
+                            <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsEnabled}">
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource ScrollBarThumbStyle}" />
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style TargetType="ListBox">
-            <Setter Property="Background" Value="#FF1E1E1E"/>
-            <Setter Property="BorderBrush" Value="#FF3A2D8C"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkAccentBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{StaticResource TextMainBrush}"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
         </Style>
 
@@ -38,7 +94,7 @@
                                 <Setter TargetName="IconBorder" Property="Background" Value="#3365ABFE"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="IconBorder" Property="Background" Value="#FF367ACB"/>
+                                <Setter TargetName="IconBorder" Property="Background" Value="{StaticResource DarkAccentBrush}"/>
                                 <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -58,72 +114,37 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Foreground" Value="#FF65ABFE" />
-                                <Setter TargetName="Border" Property="BorderBrush" Value="#FF65ABFE" />
+                                <Setter Property="Foreground" Value="{StaticResource AccentBlueBrush}" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource AccentBlueBrush}" />
                             </Trigger>
                             <Trigger Property="IsSelected" Value="False">
-                                <Setter Property="Foreground" Value="#AAAAAA" />
+                                <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}" />
                             </Trigger>
-                            <!--<Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>-->
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <Style TargetType="TabControl">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TabControl">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <TabPanel Grid.Row="0" IsItemsHost="True" Background="Transparent"/>
-                            <Border Grid.Row="1" Background="{TemplateBinding Background}">
-                                <ContentPresenter ContentSource="SelectedContent"/>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <Style x:Key="RoundedTextBoxStyle" TargetType="TextBox">
-            <Setter Property="Background" Value="#FFFFFF" />
-            <Setter Property="Foreground" Value="#333333" />
-            <Setter Property="BorderBrush" Value="#FF65ABFE" />
+            <Setter Property="Background" Value="#FF151515" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="{StaticResource DarkAccentBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Padding" Value="5,0,5,0" />
-
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
-                        <Border x:Name="border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="9">
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                Focusable="false"
-                                HorizontalScrollBarVisibility="Hidden"
-                                VerticalScrollBarVisibility="Hidden" />
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="9">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" />
                         </Border>
-
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#FF4CCEFF" />
-                                <Setter TargetName="border" Property="BorderThickness" Value="1.5" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBlueBrush}" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="border" Property="Opacity" Value="0.5" />
-                                <Setter Property="Background" Value="#F0F0F0" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -132,13 +153,9 @@
         </Style>
 
         <Style x:Key="CustomGroupBoxStyle" TargetType="GroupBox">
-            <Setter Property="Background" Value="#FF180D61" />
-            <Setter Property="BorderBrush" Value="#FF180D61" />
-            <Setter Property="BorderThickness" Value="1.5" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="Padding" Value="10" />
-            <Setter Property="Margin" Value="5" />
-
+            <Setter Property="Background" Value="{StaticResource ContainerBgBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ContainerBgBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource AccentBlueBrush}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="GroupBox">
@@ -147,61 +164,43 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-
-                            <Border Grid.Row="0"
-                                Background="{TemplateBinding BorderBrush}"
-                                CornerRadius="15,15,0,0"
-                                Padding="8,4">
-                                <ContentPresenter ContentSource="Header"
-                                    RecognizesAccessKey="True"
-                                    TextBlock.FontWeight="Bold" />
+                            <Border Grid.Row="0" Background="{TemplateBinding BorderBrush}" CornerRadius="15,15,0,0" Padding="8,4">
+                                <ContentPresenter ContentSource="Header" TextBlock.FontWeight="Bold" />
                             </Border>
-
-                            <Border Grid.Row="1"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="1"
-                                CornerRadius="0,0,15,15">
-                                <ContentPresenter Margin="{TemplateBinding Padding}" />
+                            <Border Grid.Row="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="0,0,15,15">
+                                <ContentPresenter Margin="10" />
                             </Border>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style x:Key="RoundedBlueButtonStyle" TargetType="Button">
-           <!--#endregion <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis" /> -->
-            <Setter Property="Background" Value="#FF367ACB" />
+            <Setter Property="Background" Value="{StaticResource DarkAccentBrush}" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="Cursor" Value="Hand" />
-
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Width="80" Height="25"
-                            CornerRadius="12"
-                            Background="{TemplateBinding Background}">
-                            <ContentPresenter VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                TextBlock.Foreground="{TemplateBinding Foreground}" />
+                        <Border CornerRadius="12" Background="{TemplateBinding Background}" Padding="10,2">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FF65ABFE" />
+                    <Setter Property="Background" Value="{StaticResource AccentBlueBrush}" />
                 </Trigger>
-
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="#555588" />
+                    <Setter Property="Background" Value="#444444" />
                     <Setter Property="Foreground" Value="#888888" />
                 </Trigger>
             </Style.Triggers>
         </Style>
     </Window.Resources>
+
     <Grid TextBlock.FontWeight="Normal">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -210,8 +209,8 @@
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="159*" />
-            <ColumnDefinition Width="238*" />
+            <ColumnDefinition Width="119*" />
+            <ColumnDefinition Width="145*" />
         </Grid.ColumnDefinitions>
         <Grid Background="#1E1E1E" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
@@ -219,7 +218,7 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <TextBlock x:Name="Title" Text="REW EQ CopyPaste Assistant" Foreground="White" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16"/>
+        <TextBlock x:Name="Title" Text="REW EQ CopyPaste Assistant" Foreground="White" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,4,0,4" FontSize="16" Height="22" Width="202"/>
         <GroupBox Header="DSP profile list" Margin="10,10,0,10" Grid.Column="0" Grid.Row="1"
             Foreground="#FF65ABFE" Style="{StaticResource CustomGroupBoxStyle}">
             <Grid Margin="0">
@@ -257,8 +256,8 @@
                 </Grid>
                 <ListBox x:Name="ProfileList"
                     Grid.Row="2"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                     VerticalAlignment="Stretch" />
 
             </Grid>
@@ -324,7 +323,7 @@
         </Button>
         <!-- Status Bar -->
         <StatusBar Grid.Row="3" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0"
-            Background="#FF140C47">
+            Background="#FF35353A">
             <StatusBarItem BorderThickness="0" BorderBrush="#FFA8A8A8">
                 <TextBlock Text="DSP:" FontFamily="Segoe UI Symbol" Foreground="White" />
             </StatusBarItem>
