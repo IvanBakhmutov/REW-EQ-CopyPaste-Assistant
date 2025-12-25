@@ -21,12 +21,14 @@
         <Color x:Key="AccentBlueColor">#FF65ABFE</Color>
         <Color x:Key="DarkAccentBlueColor">#FF367ACB</Color>
         <Color x:Key="SurfaceColor">#FF1E1E1E</Color>
+        <Color x:Key="LightGrayColor">#FFCCCCCC</Color>
 
         <SolidColorBrush x:Key="WindowBgBrush" Color="{StaticResource WindowBgColor}"/>
         <SolidColorBrush x:Key="ContainerBgBrush" Color="{StaticResource ContainerBgColor}"/>
         <SolidColorBrush x:Key="AccentBlueBrush" Color="{StaticResource AccentBlueColor}"/>
         <SolidColorBrush x:Key="DarkAccentBrush" Color="{StaticResource DarkAccentBlueColor}"/>
         <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+        <SolidColorBrush x:Key="LightGrayBrush" Color="{StaticResource LightGrayColor}"/>
         <SolidColorBrush x:Key="TextMainBrush" Color="White"/>
         <SolidColorBrush x:Key="TextMutedBrush" Color="#AAAAAA"/>
 
@@ -73,7 +75,7 @@
         </Style>
 
         <Style TargetType="ListBox">
-            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="Background" Value="{StaticResource ContainerBgBrush}"/>
             <Setter Property="BorderBrush" Value="{StaticResource DarkAccentBrush}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Foreground" Value="{StaticResource TextMainBrush}"/>
@@ -127,7 +129,7 @@
         </Style>
 
         <Style x:Key="RoundedTextBoxStyle" TargetType="TextBox">
-            <Setter Property="Background" Value="#FF151515" />
+            <Setter Property="Background" Value="{StaticResource WindowBgBrush}" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="BorderBrush" Value="{StaticResource DarkAccentBrush}" />
             <Setter Property="BorderThickness" Value="1" />
@@ -199,11 +201,27 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedBlueButtonStyle}">
+            <Setter Property="Background" Value="#C42B1C" />
+            <Setter Property="Foreground" Value="White" />
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E81123" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#8B0000" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
+    
+    
     <Grid TextBlock.FontWeight="Normal">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="40" />
             <RowDefinition />
             <RowDefinition Height="37" />
             <RowDefinition Height="25" />
@@ -218,9 +236,13 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <TextBlock x:Name="Title" Text="REW EQ CopyPaste Assistant" Foreground="White" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,4,0,4" FontSize="16" Height="22" Width="202"/>
+        <TextBlock x:Name="Title" Text="REW EQ CopyPaste Assistant" Foreground="White" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,9,0,9" FontSize="16" FontWeight="Bold"/>
+        <Button x:Name="CloseXBTN" ToolTipService.InitialShowDelay="200" ToolTip="Close the tool"
+            Content="×" Width="29" Height="24" HorizontalAlignment="Right"
+            VerticalAlignment="Top" Margin="0,8,10,0" Grid.Column="1" Grid.Row="0"
+            Style="{StaticResource CloseButtonStyle}" />
         <GroupBox Header="DSP profile list" Margin="10,10,0,10" Grid.Column="0" Grid.Row="1"
-            Foreground="#FF65ABFE" Style="{StaticResource CustomGroupBoxStyle}">
+            Foreground="{StaticResource LightGrayBrush}" Style="{StaticResource CustomGroupBoxStyle}">
             <Grid Margin="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -240,40 +262,42 @@
                         Margin="0,-1,0,0" Height="26" HorizontalAlignment="Left" Foreground="White" />
 
                     <TextBox x:Name="SearchEDIT"
-                        Margin="0"
+                        Margin="0,0,5,0"
                         ToolTip="Search filter" ToolTipService.InitialShowDelay="200"
-                        VerticalAlignment="Center" Height="20" Grid.Column="1"
+                        VerticalAlignment="Center" Height="25" Grid.Column="1"
                         Style="{StaticResource RoundedTextBoxStyle}" />
 
                     <Button x:Name="ClearSearchBTN"
-                        Content="❎"
+                        Content="×"
                         Grid.Column="2"
                         Height="25"
                         Margin="2,1,2,0"
                         ToolTip="Clear search filter and refresh list"
                         ToolTipService.InitialShowDelay="200" VerticalAlignment="Top"
-                        Style="{StaticResource RoundedBlueButtonStyle}" />
+                        Style="{StaticResource RoundedBlueButtonStyle}" Width="36" />
                 </Grid>
                 <ListBox x:Name="ProfileList"
                     Grid.Row="2"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                    VerticalAlignment="Stretch" />
+                    VerticalAlignment="Stretch" Margin="0,10,0,0" />
 
             </Grid>
         </GroupBox>
 
         <GroupBox Header="Profile settings" Margin="10,10,10,10" Grid.Column="1" Grid.Row="1"
-            Foreground="#FF65ABFE" Style="{StaticResource CustomGroupBoxStyle}">
-            <TabControl Margin="0">
+            Foreground="{StaticResource LightGrayBrush}" Style="{StaticResource CustomGroupBoxStyle}">
+            <TabControl Margin="0" Background="{StaticResource ContainerBgBrush}" BorderThickness="0,1,0,0">
                 <TabItem Header="Overview">
                     <TextBlock x:Name="ProfileOverview" TextWrapping="Wrap"
+                        Foreground="{StaticResource LightGrayBrush}" Background="{StaticResource ContainerBgBrush}"
                         Text="Please select a profile" Margin="5" />
                 </TabItem>
                 <TabItem Header="Profile details">
                     <TextBox x:Name="ProfileText" TextWrapping="Wrap" Text="Please select a profile"
+                        Foreground="{StaticResource LightGrayBrush}" Background="{StaticResource ContainerBgBrush}"
                         HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                        Margin="0" Background="{x:Null}" />
+                        Margin="5" BorderThickness="0"  />
                 </TabItem>
             </TabControl>
         </GroupBox>
