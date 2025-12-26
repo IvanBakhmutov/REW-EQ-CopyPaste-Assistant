@@ -785,7 +785,7 @@ Function Show-SelectProfileGui {
                     "Hotkey" {
                         $hotkeyHintLabel = $ProfileEditGUI.FindName("HotkeyHint")
                         $hotkeyHintLabel.Content = "Hotkeys: Perform - $($result.EffectivePerformActionHotkey), Cancel - $($result.EffectiveCancelActionHotkey)"
-                        if (($GlobalPerformHotkey -ne $result.EffectivePerformActionHotkey) -or
+                        if (($GlobalPerformActionHotkey -ne $result.EffectivePerformActionHotkey) -or
                             ($GlobalCancelActionHotkey -ne $result.EffectiveCancelActionHotkey)) {
                             $hotkeyHintLabel.Content += " (override)"
                         }
@@ -1034,6 +1034,12 @@ Function Show-SelectProfileGui {
                 }
             }
         })
+    # Correctly attach the MouseDown event to the TitleBar Grid
+    $ProfileEditGUI.FindName("TitleBar").Add_MouseDown({
+            if ($_.LeftButton -eq "Pressed") {
+                $window.DragMove()
+            }
+        })
 
     # GitHub button click handler
     $ProfileEditGUI.FindName("GitHub").Add_Click({
@@ -1047,6 +1053,12 @@ Function Show-SelectProfileGui {
 
     # Close button click handler
     $ProfileEditGUI.FindName("CloseBTN").Add_Click({
+            $BGProcessCheck.Stop()
+            $ProfileEditGUI.Close()
+            #return
+        })
+
+    $ProfileEditGUI.FindName("CloseXBTN").Add_Click({
             $BGProcessCheck.Stop()
             $ProfileEditGUI.Close()
             #return
