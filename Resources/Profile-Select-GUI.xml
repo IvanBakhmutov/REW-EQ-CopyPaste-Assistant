@@ -82,6 +82,7 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Foreground" Value="{StaticResource TextMainBrush}" />
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
         </Style>
 
         <Style TargetType="ListBoxItem">
@@ -314,8 +315,7 @@
                 </Grid>
                 <ListBox x:Name="ProfileList"
                     Grid.Row="2"
-                    ScrollViewer.VerticalScrollBarVisibility="Visible"
-                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+
                     VerticalAlignment="Stretch" Margin="0,10,0,0" />
 
             </Grid>
@@ -414,7 +414,7 @@
             </StatusBarItem>
             <StatusBarItem BorderThickness="0" HorizontalAlignment="Right">
                 <TextBlock x:Name="Version" Text="Version: "
-                    Foreground="{StaticResource LightGrayBrush}" />
+                    Foreground="{StaticResource LightGrayBrush}" Margin="0,0,5,0" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

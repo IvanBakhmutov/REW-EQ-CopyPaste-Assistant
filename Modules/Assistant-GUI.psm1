@@ -712,12 +712,6 @@ Function Show-SelectProfileGui {
         [Parameter(Mandatory = $true)]$GlobalConfig
     )
 
-    $GlobalPerformActionHotkey = $GlobalConfig.GlobalPerformActionHotkey
-    $GlobalCancelActionHotkey = $GlobalConfig.GlobalCancelActionHotkey
-    if ($null -ne $GlobalConfig.LastSelectedProfile) {
-        $LastSelectedProfile = $GlobalConfig.LastSelectedProfile
-    }
-
     function Get-OverviewText {
         param(
             [Parameter(Mandatory = $true)]$profileContent
@@ -825,6 +819,13 @@ Function Show-SelectProfileGui {
         AdminRightsRequired          = "false"
     }
 
+    #Region Load global config values
+    $GlobalPerformActionHotkey = $GlobalConfig.GlobalPerformActionHotkey
+    $GlobalCancelActionHotkey = $GlobalConfig.GlobalCancelActionHotkey
+    if ($null -ne $GlobalConfig.LastSelectedProfile) {
+        $LastSelectedProfile = $GlobalConfig.LastSelectedProfile
+    }
+
     if (($null -ne $GlobalConfig.SkipREWProcessCheck) -and ($GlobalConfig.SkipREWProcessCheck -eq "True")) {
         $result.REWStatus = "Skip"
         Write-Host "Global config set to skip REW process check"
@@ -834,6 +835,7 @@ Function Show-SelectProfileGui {
         $result.ProcessStatus = "Skip"
         Write-Host "Global config set to skip DSP process check"
     }
+    #Endregion
 
     # Load the XAML file
     [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Select-GUI.xml" -Raw -Encoding UTF8)
@@ -1034,7 +1036,7 @@ Function Show-SelectProfileGui {
                 }
             }
         })
-    # Correctly attach the MouseDown event to the TitleBar Grid
+    # Drag window when title bar is clicked and dragged
     $ProfileEditGUI.FindName("TitleBar").Add_MouseDown({
             if ($_.LeftButton -eq "Pressed") {
                 $ProfileEditGUI.DragMove()
@@ -1062,7 +1064,6 @@ Function Show-SelectProfileGui {
             $ProfileEditGUI.Close()
             #return
         })
-
     $ProfileEditGUI.FindName("CloseXBTN").Add_Click({
             $BGProcessCheck.Stop()
             $ProfileEditGUI.Close()
