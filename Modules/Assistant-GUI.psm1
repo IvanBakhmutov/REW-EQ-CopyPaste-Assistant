@@ -1037,7 +1037,12 @@ Function Show-SelectProfileGui {
     # Correctly attach the MouseDown event to the TitleBar Grid
     $ProfileEditGUI.FindName("TitleBar").Add_MouseDown({
             if ($_.LeftButton -eq "Pressed") {
-                $window.DragMove()
+                $ProfileEditGUI.DragMove()
+            }
+        })
+    $ProfileEditGUI.FindName("Title").Add_MouseDown({
+            if ($_.LeftButton -eq "Pressed") {
+                $ProfileEditGUI.DragMove()
             }
         })
 
