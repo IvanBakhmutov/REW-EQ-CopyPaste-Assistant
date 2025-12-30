@@ -13,7 +13,9 @@
     WindowStyle="None"
     ShowInTaskbar="True">
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
+        <WindowChrome CaptionHeight="30"
+            GlassFrameThickness="0"
+            CornerRadius="10" ResizeBorderThickness="5" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
         <Color x:Key="WindowBgColor">#FF292929</Color>
@@ -315,7 +317,6 @@
                 </Grid>
                 <ListBox x:Name="ProfileList"
                     Grid.Row="2"
-
                     VerticalAlignment="Stretch" Margin="0,10,0,0" />
 
             </Grid>
@@ -406,8 +407,8 @@
             <Button x:Name="RunREWBTN" ToolTipService.InitialShowDelay="200"
                 ToolTip="Start REW" Content="▶️" Width="28"
                 Visibility="Hidden"
-                    Style="{StaticResource RoundedBlueButtonStyle}" FontSize="10"
-                    />
+                Style="{StaticResource RoundedBlueButtonStyle}" FontSize="10"
+            />
             <StatusBarItem BorderThickness="0">
                 <TextBlock x:Name="Hint" Text="Hint: Select a profile to begin"
                     Foreground="{StaticResource LightGrayBrush}" Visibility="Hidden" />
