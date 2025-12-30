@@ -593,7 +593,23 @@ Function Show-EditProfileGui {
                 }
             })
     }
+    # Drag window when title bar is clicked and dragged
+    $ProfileEditWindow.FindName("TitleBar").Add_MouseDown({
+            if ($_.LeftButton -eq "Pressed") {
+                $ProfileEditWindow.DragMove()
+            }
+        })
+    $ProfileEditWindow.FindName("Title").Add_MouseDown({
+            if ($_.LeftButton -eq "Pressed") {
+                $ProfileEditWindow.DragMove()
+            }
+        })
 
+    $ProfileEditWindow.FindName("CloseXBTN").Add_Click({
+            $result.Action = "Cancel"
+            $ProfileEditWindow.Close()
+            #return
+        })
     # Add/Remove action row handlers for KeystrokesList DataGrid (use ItemsSource collection)
     $ProfileEditWindow.FindName('AddActionBTN').Add_Click({
             if ($null -eq $keystrokeCollection) { return }
