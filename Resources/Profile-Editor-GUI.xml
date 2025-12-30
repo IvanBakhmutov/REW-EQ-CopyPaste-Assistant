@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:WpfApp1"
-        Title="Edit profile" Height="600" Width="800" MinWidth="800" MinHeight="600" Margin="-3,0,0,0"
+        Title="Edit profile" Height="768" Width="1024" MinWidth="800" MinHeight="600" Margin="-3,0,0,0"
         FontStretch="Expanded"
     FontStyle="Normal"
     FontWeight="Normal"
@@ -142,7 +142,7 @@
             <Setter Property="Foreground" Value="White" />
             <Setter Property="BorderBrush" Value="{StaticResource DarkAccentBrush}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
             <Setter Property="Padding" Value="5,0,5,0" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -530,7 +530,7 @@
             <RowDefinition Height="48*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="103*"/>
+            <ColumnDefinition Width="310"/>
             <ColumnDefinition Width="161*"/>
         </Grid.ColumnDefinitions>
         <Grid x:Name="TitleBar" Background="#1E1E1E" Grid.ColumnSpan="2">
@@ -550,11 +550,11 @@
             Style="{StaticResource CustomGroupBoxStyle}" Grid.Row="1">
             <Grid Margin="10,10,10,2">
                 <Button x:Name="AddActionBTN"  Style="{StaticResource RoundedBlueButtonStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Add a new action"  Content="Add" Margin="0,0,250,9" HorizontalAlignment="Right" Width="75" Height="25" VerticalAlignment="Bottom"/>
-                <Button x:Name="RemoveActionBTN"  Style="{StaticResource RoundedBlueButtonStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Remove the selected action"  Content="Remove" Margin="0,0,170,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75"/>
-                <Button x:Name="MoveActionToEndBTN"  Style="{StaticResource RoundedBlueButtonStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Move action to end" Content="⏬" Margin="0,0,130,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="35"/>
-                <Button x:Name="MoveActionDownBTN"  Style="{StaticResource RoundedBlueButtonStyle}"   ToolTipService.InitialShowDelay="200" ToolTip="Move action down" Content="🔽" Margin="0,0,90,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="35"/>
-                <Button x:Name="MoveActionUpBTN"  Style="{StaticResource RoundedBlueButtonStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Move action up" Content="🔼" Margin="0,0,50,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="35"/>
-                <Button x:Name="MoveActionToTopBTN"  Style="{StaticResource RoundedBlueButtonStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Move action to top" Content="⏫" Margin="0,0,10,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="35"/>
+                <Button x:Name="RemoveActionBTN"  Style="{StaticResource RoundedBlueButtonStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Remove the selected action"  Content="Remove" Margin="0,0,170,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" IsEnabled="False"/>
+                <Button x:Name="MoveActionToEndBTN"  Style="{StaticResource RoundedBlueButtonStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Move action to end" Content="⏬" Margin="0,0,130,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="35" IsEnabled="False"/>
+                <Button x:Name="MoveActionDownBTN"  Style="{StaticResource RoundedBlueButtonStyle}"   ToolTipService.InitialShowDelay="200" ToolTip="Move action down" Content="🔽" Margin="0,0,90,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="35" IsEnabled="False"/>
+                <Button x:Name="MoveActionUpBTN"  Style="{StaticResource RoundedBlueButtonStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Move action up" Content="🔼" Margin="0,0,50,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="35" IsEnabled="False"/>
+                <Button x:Name="MoveActionToTopBTN"  Style="{StaticResource RoundedBlueButtonStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Move action to top" Content="⏫" Margin="0,0,10,9" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="35" IsEnabled="False"/>
                 <DataGrid Margin="0,0,0,45" x:Name="KeystrokesList"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
@@ -604,12 +604,12 @@
         <Grid Margin="0" Grid.RowSpan="2" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="63"/>
-                <RowDefinition Height="21*"/>
-                <RowDefinition Height="210"/>
-                <RowDefinition Height="19*"/>
+                <RowDefinition Height="8*"/>
+                <RowDefinition Height="213"/>
+                <RowDefinition Height="7*"/>
                 <RowDefinition Height="96"/>
             </Grid.RowDefinitions>
-            
+
             <TextBox x:Name="FileNameEdit"  Style="{StaticResource RoundedTextBoxLightStyle}" VerticalScrollBarVisibility="Auto" Height="25" Margin="24,36,15,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="filename" IsEnabled="False"/>
             <Label Content="File Name" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="26" Width="63"/>
             <TextBox x:Name="DescriptionEdit"  Style="{StaticResource RoundedTextBoxLightStyle}"  ToolTipService.InitialShowDelay="200" ToolTip="Profile description" Margin="24,26,15,0" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Row="1"/>
@@ -618,30 +618,34 @@
             <Label Content="DSP Software Process Name" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="159" Grid.Row="2" />
 
             <GroupBox Header="Decimals" Foreground="{StaticResource LightGrayBrush}"
-            Style="{StaticResource CustomGroupBoxStyle}" Height="147" Margin="24,58,15,0" VerticalAlignment="Top" Grid.Row="2">
-                <Grid Margin="10,0">
+            Style="{StaticResource CustomGroupBoxStyle}" Margin="24,58,15,0" Grid.Row="2">
+                <Grid Margin="0,-12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="105*"/>
+
+                    </Grid.ColumnDefinitions>
                     <TextBox x:Name="FreqDecimalsEdit" Style="{StaticResource RoundedTextBoxLightStyle}" ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for frequency values" HorizontalAlignment="Left" Height="25" Margin="0,26,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="70"/>
                     <Label Content="Freq" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <TextBox x:Name="QDecimalsEdit" Style="{StaticResource RoundedTextBoxLightStyle}" ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for Q values" HorizontalAlignment="Left" Height="25" Margin="75,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
-                    <Label Content="Q" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="75,0,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="GainDecimalsEdit" Style="{StaticResource RoundedTextBoxLightStyle}" ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for gain values" HorizontalAlignment="Left" Height="25" Margin="150,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
-                    <Label Content="Gain" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="145,0,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Decimal separator" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="0,54,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="QDecimalsEdit" Style="{StaticResource RoundedTextBoxLightStyle}" ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for Q values" HorizontalAlignment="Left" Height="25" Margin="87,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70" Grid.ColumnSpan="2"/>
+                    <Label Content="Q" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="87,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="GainDecimalsEdit" Style="{StaticResource RoundedTextBoxLightStyle}" ToolTipService.InitialShowDelay="200" ToolTip="Number of decimal places for gain values" HorizontalAlignment="Left" Height="25" Margin="178,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
+                    <Label Content="Gain" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="173,0,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Decimal separator" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="0,54,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
                     <RadioButton x:Name="DecimalSeparatorDot"  ToolTipService.InitialShowDelay="200" ToolTip="Use dot as decimal separator, example 1.5" Content="Dot &quot;.&quot;" HorizontalAlignment="Left" Margin="0,85,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup" IsChecked="True"/>
-                    <RadioButton x:Name="DecimalSeparatorComma"  ToolTipService.InitialShowDelay="200" ToolTip="Use comma as decimal separator, example 1,5" Content="Comma &quot;,&quot;" HorizontalAlignment="Left" Margin="0,105,0,0" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup"/>
-                    <Label Content="Q Divider" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="150,54,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
-                    <TextBox x:Name="QDividerEdit" Style="{StaticResource RoundedTextBoxLightStyle}" ToolTipService.InitialShowDelay="200" ToolTip="Divider for Q values, example 2 means Q values will be divided by 2, or 0.5 means Q values will be multiplied by 2. Default is 1" HorizontalAlignment="Left" Height="25" Margin="150,80,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
+                    <RadioButton x:Name="DecimalSeparatorComma"  ToolTipService.InitialShowDelay="200" ToolTip="Use comma as decimal separator, example 1,5" Content="Comma &quot;,&quot;" HorizontalAlignment="Left" Margin="0,105,0,-4" VerticalAlignment="Top" GroupName="DecimalSeparatorGroup"/>
+                    <Label Content="Q Divider" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="178,54,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
+                    <TextBox x:Name="QDividerEdit" Style="{StaticResource RoundedTextBoxLightStyle}" ToolTipService.InitialShowDelay="200" ToolTip="Divider for Q values, example 2 means Q values will be divided by 2, or 0.5 means Q values will be multiplied by 2. Default is 1" HorizontalAlignment="Left" Height="25" Margin="178,80,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="70"/>
                 </Grid>
             </GroupBox>
             <TextBox x:Name="StartingPositionEdit" Style="{StaticResource RoundedTextBoxLightStyle}" ToolTipService.InitialShowDelay="200" ToolTip="Display message to help user understand starting position of the paste operation"  VerticalScrollBarVisibility="Auto" Margin="24,26,15,10" TextWrapping="Wrap" Grid.Row="3"/>
             <Label Content="Starting position hint"  Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="159" Grid.Row="3"/>
 
             <Label Content="Hotkey/delay" Foreground="{StaticResource LightGrayBrush}" HorizontalAlignment="Left" Margin="24,0,0,0" VerticalAlignment="Top" Height="26" Width="94" Grid.Row="4"/>
-            <RadioButton x:Name="HotkeySelected" ToolTipService.InitialShowDelay="200" ToolTip="Select to use a hotkey for the action"  Content="Hotkey" HorizontalAlignment="Left" Margin="24,26,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" IsChecked="True" Height="15" Width="57" Grid.Row="4"/>
-            <RadioButton x:Name="DelaySelected" ToolTipService.InitialShowDelay="200" ToolTip="Select to use a delay for the action" Content="Delay" HorizontalAlignment="Left" Margin="24,46,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" Height="15" Width="49" Grid.Row="4"/>
+            <RadioButton x:Name="HotkeySelected" ToolTipService.InitialShowDelay="200" ToolTip="Select to use a hotkey for the action"  Content="Hotkey" HorizontalAlignment="Left" Margin="24,26,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" IsChecked="True" Height="20" Width="70" Grid.Row="4"/>
+            <RadioButton x:Name="DelaySelected" ToolTipService.InitialShowDelay="200" ToolTip="Select to use a delay for the action" Content="Delay" HorizontalAlignment="Left" Margin="24,46,0,0" VerticalAlignment="Top" GroupName="HotkeyOrDelayGroup" Height="20" Width="70" Grid.Row="4"/>
             <Label x:Name="HotkeyLabel" Foreground="{StaticResource LightGrayBrush}" Content="Hotkey" HorizontalAlignment="Left" Margin="106,0,0,0" VerticalAlignment="Top" Height="26" Width="57" Grid.Row="4"/>
-            <RadioButton x:Name="HotkeyDefault" ToolTipService.InitialShowDelay="200" ToolTip="Use the default hotkey for the action"  Content="Default" HorizontalAlignment="Left" Margin="106,26,0,0" VerticalAlignment="Top" GroupName="HotkeyGroup" IsChecked="True" Height="15" Width="57" Grid.Row="4"/>
-            <RadioButton x:Name="HotkeyOverride" ToolTipService.InitialShowDelay="200" ToolTip="Override the default hotkey for the action" Content="Override" HorizontalAlignment="Left" Margin="106,46,0,0" VerticalAlignment="Top" GroupName="HotkeyGroup" Height="15" Width="77" Grid.Row="4"/>
+            <RadioButton x:Name="HotkeyDefault" ToolTipService.InitialShowDelay="200" ToolTip="Use the default hotkey for the action"  Content="Default" HorizontalAlignment="Left" Margin="106,26,0,0" VerticalAlignment="Top" GroupName="HotkeyGroup" IsChecked="True" Height="20" Width="79" Grid.Row="4"/>
+            <RadioButton x:Name="HotkeyOverride" ToolTipService.InitialShowDelay="200" ToolTip="Override the default hotkey for the action" Content="Override" HorizontalAlignment="Left" Margin="106,46,0,0" VerticalAlignment="Top" GroupName="HotkeyGroup" Height="20" Width="79" Grid.Row="4"/>
             <Label x:Name="ActionLabel" Foreground="{StaticResource LightGrayBrush}" Content="Action" HorizontalAlignment="Left" Margin="185,0,0,0" VerticalAlignment="Top" Height="26" Width="57" Grid.Row="4" Visibility="Hidden"/>
             <Label x:Name="CancelLabel" Foreground="{StaticResource LightGrayBrush}" Content="Cancel" HorizontalAlignment="Left" Margin="242,0,0,0" VerticalAlignment="Top" Height="26" Width="57" Grid.Row="4" Visibility="Hidden"/>
             <ComboBox x:Name="ActionHotkeyCombo"
@@ -678,7 +682,7 @@
             </ComboBox>
             <Label x:Name="DelayLabel" Foreground="{StaticResource LightGrayBrush}" Content="Delay, sec" HorizontalAlignment="Left" Margin="106,0,0,0" VerticalAlignment="Top" Height="26" Width="62" Grid.Row="4" Visibility="Hidden"/>
             <TextBox x:Name="DelayEdit" Style="{StaticResource RoundedTextBoxLightStyle}" ToolTipService.InitialShowDelay="200" ToolTip="Set the delay in seconds for the action" HorizontalAlignment="Left" Height="25" Margin="106,26,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Width="32" Grid.Row="4" Visibility="Hidden"/>
-            <CheckBox x:Name="AdminRightsRequiredCHBX" ToolTipService.InitialShowDelay="200" ToolTip="Check if the DSP software requires administrative rights to run" Content="DSP software runs with admin rights" HorizontalAlignment="Left" Margin="24,66,0,0" VerticalAlignment="Top" Grid.Row="4" Height="15" Width="212"/>
+            <CheckBox x:Name="AdminRightsRequiredCHBX" ToolTipService.InitialShowDelay="200" ToolTip="Check if the DSP software requires administrative rights to run" Content="DSP software runs with admin rights" HorizontalAlignment="Left" Margin="24,66,0,0" VerticalAlignment="Top" Grid.Row="4" Height="20" Width="226"/>
 
         </Grid>
     </Grid>

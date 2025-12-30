@@ -622,6 +622,10 @@ Function Show-EditProfileGui {
             try { $keystrokesDG.ScrollIntoView($new) } catch { }
             $keystrokesDG.SelectedItem = $new
             $ProfileEditWindow.FindName('RemoveActionBTN').IsEnabled = $true
+            $ProfileEditWindow.FindName('MoveActionToEndBTN').IsEnabled = $true
+            $ProfileEditWindow.FindName('MoveActionDownBTN').IsEnabled = $true
+            $ProfileEditWindow.FindName('MoveActionUpBTN').IsEnabled = $true
+            $ProfileEditWindow.FindName('MoveActionToTopBTN').IsEnabled = $true
             $ProfileEditWindow.FindName('SaveBTN').IsEnabled = $true
 
             # Put the new row into edit mode immediately
@@ -702,10 +706,18 @@ Function Show-EditProfileGui {
     if ($null -ne $keystrokesDG) {
         $keystrokesDG.Add_SelectionChanged({
                 $ProfileEditWindow.FindName('RemoveActionBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
+                $ProfileEditWindow.FindName('MoveActionToEndBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
+                $ProfileEditWindow.FindName('MoveActionDownBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
+                $ProfileEditWindow.FindName('MoveActionUpBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
+                $ProfileEditWindow.FindName('MoveActionToTopBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
                 $enableSaveButton.Invoke()
             })
         # initialize state
         $ProfileEditWindow.FindName('RemoveActionBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
+        $ProfileEditWindow.FindName('MoveActionToEndBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
+        $ProfileEditWindow.FindName('MoveActionDownBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
+        $ProfileEditWindow.FindName('MoveActionUpBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
+        $ProfileEditWindow.FindName('MoveActionToTopBTN').IsEnabled = ($null -ne $keystrokesDG.SelectedItem)
     }
 
     # Center the window on the screen
