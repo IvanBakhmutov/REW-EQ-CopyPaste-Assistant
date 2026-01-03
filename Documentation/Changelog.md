@@ -1,3 +1,10 @@
+### 03.01.2026
+ver 0.6.0<br>
+New Year - New UI!
+<p align="center">
+<img src="../Img/MaterialUI.png" alt="MaterialUI"/>
+</p>
+
 ### 16.12.2025
 ver 0.5.3<br>
 Mutex release error fixed<br>
