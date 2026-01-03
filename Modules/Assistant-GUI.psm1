@@ -5,6 +5,25 @@
 # Date: 2025-12-07
 # ============================================
 
+# Helper function to load XAML with proper BaseUri context for resolving relative resources
+Function Load-XamlFile {
+    param([string]$Path)
+    if (-not (Test-Path $Path)) {
+        throw "XAML file not found: $Path"
+    }
+    $fs = [System.IO.File]::OpenRead($Path)
+    try {
+        $context = New-Object System.Windows.Markup.ParserContext
+        $context.BaseUri = [Uri]$Path
+        return [Windows.Markup.XamlReader]::Load($fs, $context)
+    }
+    finally {
+        $fs.Close()
+    }
+}
+
+
+
 Function Show-EditProfileGui {
     param (
         [Parameter(Mandatory = $true)][string]$FilePath,
@@ -16,8 +35,6 @@ Function Show-EditProfileGui {
         Action   = "none"
     }
 
-    #$ResourcesDir = Join-Path -Path $scriptDir -ChildPath "Resources" # Use the global $scriptDir variable
-    [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Editor-GUI.xml" -Raw -Encoding UTF8)
     $profilesFolderPath = Split-Path -Path $FilePath -Parent
 
     # Load the JSON profile for reference and to populate form fields
@@ -45,8 +62,12 @@ Function Show-EditProfileGui {
     }
 
     # Parse the XAML to create the GUI
-    $reader = (New-Object System.Xml.XmlNodeReader $xaml)
-    $ProfileEditWindow = [Windows.Markup.XamlReader]::Load($reader)
+    $ProfileEditWindow = Load-XamlFile -Path "$ResourcesDir\Profile-Editor-GUI.xml"
+    
+    # [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Editor-GUI.xml" -Raw -Encoding UTF8)
+    # $reader = (New-Object System.Xml.XmlNodeReader $xaml)
+    # $ProfileEditWindow = [Windows.Markup.XamlReader]::Load($reader)
+    # Merge-SharedStyles -Window $ProfileEditWindow -ResourcesDir $ResourcesDir
     $ProfileEditWindow.Icon = "$ResourcesDir\Icons\Title.png"
     $ProfileEditWindow.FindName("FileNameEdit").Text = (get-item $FilePath).BaseName
 
@@ -866,11 +887,13 @@ Function Show-SelectProfileGui {
     #Endregion
 
     # Load the XAML file
-    [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Select-GUI.xml" -Raw -Encoding UTF8)
+    # Load and Configure Profile Select Window
+    $ProfileSelectWindow = Load-XamlFile -Path "$ResourcesDir\Profile-Select-GUI.xml"
 
-    # Parse the XAML to create the GUI
-    $reader = (New-Object System.Xml.XmlNodeReader $xaml)
-    $ProfileSelectWindow = [Windows.Markup.XamlReader]::Load($reader)
+    # [xml]$xaml = (Get-Content -Path "$ResourcesDir\Profile-Select-GUI.xml" -Raw -Encoding UTF8)
+    # $reader = (New-Object System.Xml.XmlNodeReader $xaml)
+    # $ProfileSelectWindow = [Windows.Markup.XamlReader]::Load($reader)
+    # Merge-SharedStyles -Window $ProfileSelectWindow -ResourcesDir $ResourcesDir
     $ProfileSelectWindow.Icon = "$ResourcesDir\Icons\Title.png"
     $ProfileSelectWindow.FindName("DonateIcon").Source = "$ResourcesDir\Icons\Jonas-Rask-Danish-Royalty-Free-Smiley.32.png"
     $ProfileSelectWindow.FindName("GitHubIcon").Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Web-github.48.png"
@@ -1310,10 +1333,8 @@ function Show-PopupGUI {
     # ---------------------------------------------------------
     # WPF UI
     # ---------------------------------------------------------
-    [xml]$xaml = (Get-Content "$ResourcesDir\Popup-GUI.xml" -Raw -Encoding utf8)
-
-    $reader = (New-Object System.Xml.XmlNodeReader $xaml)
-    $window = [Windows.Markup.XamlReader]::Load($reader)
+    # Load Popup Window
+    $window = Load-XamlFile -Path "$ResourcesDir\Popup-GUI.xml"
 
     # Position the window at the bottom-right corner of the screen, avoiding the taskbar
     $screenWidth = [System.Windows.SystemParameters]::PrimaryScreenWidth
