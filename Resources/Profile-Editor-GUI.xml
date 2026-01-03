@@ -44,6 +44,7 @@
             Margin="20,9,0,9" FontSize="16" FontWeight="Bold" />
         <Button x:Name="CloseXBTN" ToolTipService.InitialShowDelay="200" ToolTip="Close the tool"
             Content="X" Width="29" Height="24" HorizontalAlignment="Right"
+            WindowChrome.IsHitTestVisibleInChrome="True"
             VerticalAlignment="Top" Margin="0,8,10,0" Grid.Column="1" Grid.Row="0"
             Style="{StaticResource CloseButtonStyle}" />
         <GroupBox Header="Keystroke and mouse actions" Margin="14,10,10,0" Grid.Column="1"
