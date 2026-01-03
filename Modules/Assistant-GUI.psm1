@@ -1035,6 +1035,11 @@ Function Show-SelectProfileGui {
                 }
             }
             $ProfileSelectWindow.FindName("ProfileList").ItemsSource = $filteredProfiles
+            
+            # Auto-select if only one profile remains in the list
+            if ($filteredProfiles.Count -eq 1) {
+                $ProfileSelectWindow.FindName("ProfileList").SelectedItem = $filteredProfiles[0]
+            }
         })
 
     # Search box clear click handler
@@ -1286,6 +1291,13 @@ Function Show-SelectProfileGui {
             $selectedItem = $ProfileSelectWindow.FindName("ProfileList").SelectedItem
             if ($null -ne $selectedItem) {
                 Get-ProfileContent -selectedItem $selectedItem -DSPProfilesDir $DSPProfilesDir -ProfileSelectWindow $ProfileSelectWindow -result $result -GlobalPerformHotkey $GlobalPerformActionHotkey -GlobalCancelHotkey $GlobalCancelActionHotkey
+            }
+            else {
+                # Selection cleared (e.g. via filter), reset UI
+                $ProfileSelectWindow.FindName("ProfileText").Text = "Please select a profile"
+                $ProfileSelectWindow.FindName("ProfileOverview").Text = "Please select a profile"
+                $ProfileSelectWindow.FindName("OKBTN").IsEnabled = $false
+                $ProfileSelectWindow.FindName("EditBTN").IsEnabled = $false
             }
         })
 
