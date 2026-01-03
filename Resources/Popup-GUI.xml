@@ -1,33 +1,43 @@
 <Window xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        WindowStyle='none'
-        AllowsTransparency='True'
-        Background='Transparent'
-        Width='280' Height='200'
-        Topmost='True'
-        ShowInTaskbar='False'
-        Title='REW EQ CopyPaste Assistant'>
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    WindowStyle='none'
+    AllowsTransparency='True'
+    Background='Transparent'
+    Width='280' Height='200'
+    Topmost='True'
+    ShowInTaskbar='False'
+    Title='REW EQ CopyPaste Assistant'>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Border x:Name='WindowBorder'
-
-            BorderBrush='#3383D487'
-            BorderThickness='1'>
-
-        <Grid x:Name='MainGrid' Background="White">
+        BorderBrush='#3383D487'
+        BorderThickness='1'>
+        <Grid x:Name='MainGrid' Background="#FF292929">
             <Button x:Name='ExitBTN'
-                    Width='80'
-                    Height='25'
-                    HorizontalAlignment='Right'
-                    VerticalAlignment='Bottom'
-                    Content='Exit' Margin="0,0,10,10" IsDefault="True"/>
-            <Label x:Name="Title" Content="REW EQ CopyPaste Assistant" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-            <TextBlock x:Name="MessageTextBlock" Margin="10,41,10,40" TextWrapping="Wrap" Text="Message text"/>
-            <Image x:Name="Icon" Margin="10,156,236,10" Width="32" Height="32"/>
+                Width='80'
+                Height='25'
+                HorizontalAlignment='Right'
+                VerticalAlignment='Bottom'
+                Style="{StaticResource RoundedBlueButtonStyle}"
+                Content='Exit' Margin="0,0,10,10" IsDefault="True" />
+            <Label x:Name="Title" Content="REW EQ CopyPaste Assistant" HorizontalAlignment="Left" Foreground="{StaticResource LightGrayBrush}"
+                Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold" />
+            <TextBlock x:Name="MessageTextBlock" Margin="10,41,10,40" TextWrapping="Wrap" Foreground="{StaticResource LightGrayBrush}"
+                Text="Message text" />
+            <Image x:Name="Icon" Margin="10,156,236,10" Width="32" Height="32" />
             <Button x:Name='SelectProfileBTN'
                 Width='80'
                 Height='25'
                 HorizontalAlignment='Right'
                 VerticalAlignment='Bottom'
-                Content='Profile' Margin="0,0,95,10"/>
+                Style="{StaticResource RoundedBlueButtonStyle}"
+                Content='Profile' Margin="0,0,95,10" />
         </Grid>
     </Border>
 </Window>
