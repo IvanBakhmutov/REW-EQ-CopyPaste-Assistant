@@ -1,0 +1,55 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "Goldhorn Preset. Can be used with a Goldhorn DSP, including P5/P3/P2/P1 and all DSPA models.",
+    "processName":  "Goldhorn*",
+    "QDivider":  1,
+    "QDecimals":  1,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please hover 1 band Freq box and hit hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "MouseClick":  "Left",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "Keys":  "^aFREQ",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseChangePositionY":  "22",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseClick":  "Left",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "Keys":  "^aQVALUE",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseChangePositionY":  "22",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseClick":  "Left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "^aGAIN",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseChangePositionX":  "50",
+                                  "Delay_ms":  20
+                              },
+                              {
+                                  "MouseChangePositionY":  "-44",
+                                  "Delay_ms":  20
+                              }
+                          ]
+}

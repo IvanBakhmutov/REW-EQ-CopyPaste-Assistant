@@ -1,3 +1,6 @@
+### 04.01.2026
+Goldhorn profiles added
+
 ### 03.01.2026
 ver 0.6.0<br>
 New Year - New UI!

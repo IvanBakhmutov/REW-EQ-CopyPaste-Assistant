@@ -65,11 +65,15 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 | RedPower | RP_DSP | ❎ | IMPERATOR, YAKUZA, DSP8CH |
 | Ground Zero | GZHA MINI FIVE-DSP_GUI  | ❎ | GZHA MINI FIVE-DSP |
 | Ground Zero | GZDSP 6-10SQ | ❎ | GZDSP 6-10SQ |
+| Goldhorn | Goldhorn DSP software | ❎ |  P5/P3/P2/P1 and all DSPA models |
 
 ## Project plans
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
+
+### 04.01.2026
+Goldhorn profiles added
 
 ### 03.01.2026
 ver 0.6.0<br>
