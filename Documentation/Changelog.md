@@ -1,5 +1,5 @@
 ### 04.01.2026
-Goldhorn profiles added
+Goldhorn profiles added. Thanks Dương Anh Bình for the profile testing and thanks [Lanson YT channel](https://www.youtube.com/@LansonF) for the demo video [<img src="../Img/YouTube_Logo.png" alt="YouTube icon" height=12/> REW EQ CopyPaste Assistant Automation - Updated for Goldhorn DSP](https://www.youtube.com/watch?v=7EdmJTDdIEk)
 
 ### 03.01.2026
 ver 0.6.0<br>
