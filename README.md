@@ -34,38 +34,46 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 
 ### Tested profiles
 
-| Brand | DSP Software | Requires admin rights | DSP devices |
-| :---- | ---- | ---- | ---- |
-| Generic profile | (No specific app) | ❎ | May work on some DSPs as is or after some keystroke adjustments. It just types wherever you want, for instance in notepad |
-| ESX | ESX Toolkit | ❎ |D66SP, QM66SP, D68SP, VE900.7SP, QL810SP, QL812SP, VE1300.11SP, QE812SP |
-| Hellion | Hellion DSP software | ❎ | (to be verified) |
-| Musway | MUSWAY DSP V1.08 | ❎ | M4+, M6, M6v2, DSP68PRO |
-| Musway | MUSWAY TUNEST_PC_V1.* | ❎ | M4, M4+V3, M4+V4, M6V3, M6V4, D8V3, D8V4, DSP68, TUNE12, M6PRO, M12, M5, M10, M8 |
-| Nakamichi | Nakamichi-K | ❎ | NDSK4265AU |
-| Nakamichi | Nakamichi-K | ❎ | NDSK4065AU, NDSK4165AU |
-| Nakamichi | Nakamichi-K | ❎ | NDSK4085AU, NDSK4185AU, NDSK4285AU |
-| Phoenix | Phoenix Gold DSP software | ❎ | (to be verified) |
-| Sennuopu | Sennuopu DP-X680 PC Software EN | ❎ | DP-X680 |
-| Zapco | PC Program (Windows) for ADSP series | ❎ | ADSP-Z8 IV AT, ADSP-Z8 IV-6AT, ADSP-Z12 IV-10A, ADSP-Z16 IV-12A |
-| Awave | DSP PC Tool | ❎ | DSPA6, DSP12DMAX, DSP16DMAX, DSPA6II, DSP6V5, DSPM6, DSPA8D, DSPA10II, DSP10D, DSP10DMAX, DSPT10, DSP8.1, DSPA12, DSPA12D, DSPA12D PRO, DSP12DMAXII, DSPA16D, DSPA16DMAXII,DSPA24D |
-| ONKYO | R-MS Series | 🚩 | R-MS66, R-MS55, R-MS25, R-MS10: Important - DSP software runs with admin rights, so CopyPaste tool should be running with admin rights as well |
-| the t.racks | DSP 4x4 Mini Editor V1.05 | ❎ | DSP 4×4 Mini |
-| Sigma | Sigma Studio | ❎ | adau1701 processors |
-| Best Balance | DSP_BestBalance | 🚩 | DSP-6L, DSP-6.8 |
-| Best Balance | BestBalance V2 | ❎ | DSP-6H |
-| Down 4 Sound | EZY-DSP68 | ❎ | EZY-DSP68 |
-| Down 4 Sound | EZY-DSP6* | ❎ | EZY-DSP612, EZY-DSP68+, EZY-DSP612+ |
-| Sennuopu | Sennuopu DP-X10 | ❎ | DP-X10 |
-| Hellion | HAM8.80DSP | ❎ | HAM 6.80DSP, HAM 8.80DSP, HAM 8.100DSP |
-| Hellion | HAM8.10DSP | ❎ | HAM 8.10DSP, 4.6pinDSP, 4.8pinDSP, DHL-6, DHL-10 |
-| Hellion | HAM16.150DSP | ❎ | HAM 16.150DSP, HAM 12.80DSP |
-| Behringer | DCX-Remote | ❎ | DCX2496 |
-| DBX | pa2ui | ❎ | DriveRack Pa2 |
-| Powersoft | ArmoniaPlus | ❎ | DSP-Lite E |
-| RedPower | RP_DSP | ❎ | IMPERATOR, YAKUZA, DSP8CH |
-| Ground Zero | GZHA MINI FIVE-DSP_GUI  | ❎ | GZHA MINI FIVE-DSP |
-| Ground Zero | GZDSP 6-10SQ | ❎ | GZDSP 6-10SQ |
-| Goldhorn | Goldhorn DSP software | ❎ |  P5/P3/P2/P1 and all DSPA models |
+| Brand | DSP Software | Requires admin rights * | Input type ** | DSP devices |
+| :---- | ---- | ---- | ---- | ---- | 
+| Generic profile | (No specific app) | ❎ | ⌨️ | May work on some DSPs as is or after some keystroke adjustments. It just types wherever you want, for instance in notepad |
+| ESX | ESX Toolkit | ❎ | ⌨️ | D66SP, QM66SP, D68SP, VE900.7SP, QL810SP, QL812SP, VE1300.11SP, QE812SP |
+| Hellion | Hellion DSP software | ❎ | ⌨️ | (to be verified) |
+| Musway | MUSWAY DSP V1.08 | ❎ | ⌨️ | M4+, M6, M6v2, DSP68PRO | ⌨️🖱️ |
+| Musway | MUSWAY TUNEST_PC_V1.* | ❎ | ⌨️ | M4, M4+V3, M4+V4, M6V3, M6V4, D8V3, D8V4, DSP68, TUNE12, M6PRO, M12, M5, M10, M8 |
+| Nakamichi | Nakamichi-K | ❎ | ⌨️🖱️ | NDSK4265AU |
+| Nakamichi | Nakamichi-K | ❎ | ⌨️🖱️ | NDSK4065AU, NDSK4165AU |
+| Nakamichi | Nakamichi-K | ❎ | ⌨️🖱️ | NDSK4085AU, NDSK4185AU, NDSK4285AU |
+| Phoenix | Phoenix Gold DSP software | ❎ | ⌨️🖱️ | (to be verified) |
+| Sennuopu | Sennuopu DP-X680 PC Software EN | ❎ | ⌨️🖱️ | DP-X680 |
+| Zapco | PC Program (Windows) for ADSP series | ❎ | ⌨️ | ADSP-Z8 IV AT, ADSP-Z8 IV-6AT, ADSP-Z12 IV-10A, ADSP-Z16 IV-12A |
+| Awave | DSP PC Tool | ❎ | ⌨️🖱️ | DSPA6, DSP12DMAX, DSP16DMAX, DSPA6II, DSP6V5, DSPM6, DSPA8D, DSPA10II, DSP10D, DSP10DMAX, DSPT10, DSP8.1, DSPA12, DSPA12D, DSPA12D PRO, DSP12DMAXII, DSPA16D, DSPA16DMAXII,DSPA24D |
+| ONKYO | R-MS Series | 🚩 | ⌨️ | R-MS66, R-MS55, R-MS25, R-MS10 |
+| the t.racks | DSP 4x4 Mini Editor V1.05 | ❎ | ⌨️ | DSP 4×4 Mini |
+| Sigma | Sigma Studio | ❎ | ⌨️ | adau1701 processors |
+| Best Balance | DSP_BestBalance | 🚩 | ⌨️ | DSP-6L, DSP-6.8 |
+| Best Balance | BestBalance V2 | ❎ | ⌨️ | DSP-6H |
+| Down 4 Sound | EZY-DSP68 | ❎ | ⌨️🖱️ | EZY-DSP68 |
+| Down 4 Sound | EZY-DSP6* | ❎ | ⌨️🖱️ | EZY-DSP612, EZY-DSP68+, EZY-DSP612+ |
+| Sennuopu | Sennuopu DP-X10 | ❎ | ⌨️🖱️ | DP-X10 |
+| Hellion | HAM8.80DSP | ❎ | ⌨️ | HAM 6.80DSP, HAM 8.80DSP, HAM 8.100DSP |
+| Hellion | HAM8.10DSP | ❎ | ⌨️ | HAM 8.10DSP, 4.6pinDSP, 4.8pinDSP, DHL-6, DHL-10 |
+| Hellion | HAM16.150DSP | ❎ | ⌨️ | HAM 16.150DSP, HAM 12.80DSP |
+| Behringer | DCX-Remote | ❎ | ⌨️🖱️ | DCX2496 |
+| DBX | pa2ui | ❎ | ⌨️ | DriveRack Pa2 |
+| Powersoft | ArmoniaPlus | ❎ | ⌨️🖱️ | DSP-Lite E |
+| RedPower | RP_DSP | ❎ | ⌨️ | IMPERATOR, YAKUZA, DSP8CH |
+| Ground Zero | GZHA MINI FIVE-DSP_GUI  | ❎ | ⌨️🖱️ | GZHA MINI FIVE-DSP |
+| Ground Zero | GZDSP 6-10SQ | ❎ | ⌨️ | GZDSP 6-10SQ |
+| Goldhorn | Goldhorn DSP software | ❎ | ⌨️🖱️ | P5/P3/P2/P1 and all DSPA models |
+ 
+ \* Requires admin rights<br>
+ ❎ - Run the assistant tool as usual with `Run.bat`<br>
+ 🚩 - The assistant tool should be started with admin rights (right click on `Run.bat` - Run as administrator )<br>
+
+ \** Input types<br>
+ ⌨️ - Keyboard<br>
+ 🖱️ - Mouse (may require tweaks of relative X/Y coordinates in the profile to fit your env/screen resolution)<br>
 
 ## Project plans
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
