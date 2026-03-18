@@ -1,0 +1,19 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "Rebec 812v3",
+    "processName":  "Rebec*",
+    "QDivider":  1,
+    "QDecimals":  1,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please select 1 band Gain box and hit hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "Keys":  "GAIN{ENTER}FREQ{ENTER}QVALUE{ENTER}",
+                                  "Delay_ms":  200
+                              }
+                          ]
+}

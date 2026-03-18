@@ -66,6 +66,9 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 | Ground Zero | GZHA MINI FIVE-DSP_GUI  | ❎ | ⌨️🖱️ | GZHA MINI FIVE-DSP |
 | Ground Zero | GZDSP 6-10SQ | ❎ | ⌨️ | GZDSP 6-10SQ |
 | Goldhorn | Goldhorn DSP software | ❎ | ⌨️🖱️ | P5/P3/P2/P1 and all DSPA models |
+| Rebec | R6 | ❎ | ⌨️🖱️ | R6s DSP/Amplifier |
+| Rebec | RebecA6A8 | ❎ | ⌨️ | DSP 406Q, A6 and A8 |
+| Rebec | Rebec 8-12v3 | ❎ | ⌨️ | 812v3 |
  
  \* Requires admin rights<br>
  ❎ - Run the assistant tool as usual with `Run.bat`<br>
@@ -79,6 +82,10 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
+
+### 18.03.2026
+Rebec profiles added.
+Kudos to @piyush7243 for the sharing Rebec 812v3 profile.
 
 ### 04.01.2026
 Goldhorn profiles added. Thanks Dương Anh Bình for the profile testing and thanks [Lanson YT channel](https://www.youtube.com/@LansonF) for the demo video [<img src="Img/YouTube_Logo.png" alt="YouTube icon" height=12/> REW EQ CopyPaste Assistant Automation - Updated for Goldhorn DSP](https://www.youtube.com/watch?v=7EdmJTDdIEk)

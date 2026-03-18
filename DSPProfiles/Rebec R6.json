@@ -1,0 +1,55 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "Rebec R6",
+    "processName":  "R6",
+    "QDivider":  1,
+    "QDecimals":  3,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please select 1 band Gain box and hit hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "MouseClick":  "Left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "^aFREQ{ENTER}",
+                                  "Delay_ms":  200
+                              },
+                              {
+                                  "MouseChangePositionY":  "19",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseClick":  "Left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "^aQVALUE{ENTER}",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionY":  "21",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseClick":  "Left",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "Keys":  "^aGAIN{ENTER}",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionY":  "-40",
+                                  "Delay_ms":  100
+                              },
+                              {
+                                  "MouseChangePositionX":  "31",
+                                  "Delay_ms":  100
+                              }
+                          ]
+}

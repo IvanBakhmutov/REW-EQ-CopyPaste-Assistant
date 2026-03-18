@@ -1,0 +1,19 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "Rebec (DSP 406Q, A6 and A8)",
+    "processName":  "RebecA6A8",
+    "QDivider":  1,
+    "QDecimals":  3,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please select 1 band Gain box and hit hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "Keys":  "FREQ{ENTER}QVALUE{ENTER}GAIN{ENTER}",
+                                  "Delay_ms":  200
+                              }
+                          ]
+}
