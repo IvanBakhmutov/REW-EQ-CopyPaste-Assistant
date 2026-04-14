@@ -83,6 +83,12 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
 
+### 14.04.2026
+ver 0.6.1<br>
+Clipboard parsing updated to address #19<br>
+Confirmation dialog UI update<br>
+<img src="Img/Confirm Paste.png" alt="Confirmation"/>
+
 ### 18.03.2026
 Rebec profiles added.
 Kudos to @piyush7243 for the sharing Rebec 812v3 profile.

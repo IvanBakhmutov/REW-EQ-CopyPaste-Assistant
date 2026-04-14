@@ -71,14 +71,16 @@ Function Show-EditProfileGui {
     $ProfileEditWindow.Icon = "$ResourcesDir\Icons\Title.png"
     $ProfileEditWindow.FindName("FileNameEdit").Text = (get-item $FilePath).BaseName
 
-    # Populate form fields from the loaded JSON profile
-    if ($null -ne $originalProfile.Description) { $ProfileEditWindow.FindName("DescriptionEdit").Text = $originalProfile.Description }
-    if ($null -ne $originalProfile.processName) { $ProfileEditWindow.FindName("ProcessNameEdit").Text = $originalProfile.processName }
-    if ($null -ne $originalProfile.FreqDecimals) { $ProfileEditWindow.FindName("FreqDecimalsEdit").Text = $originalProfile.FreqDecimals.ToString() }
-    if ($null -ne $originalProfile.QDecimals) { $ProfileEditWindow.FindName("QDecimalsEdit").Text = $originalProfile.QDecimals.ToString() }
-    if ($null -ne $originalProfile.GainDecimals) { $ProfileEditWindow.FindName("GainDecimalsEdit").Text = $originalProfile.GainDecimals.ToString() }
-    if ($null -ne $originalProfile.QDivider) { $ProfileEditWindow.FindName("QDividerEdit").Text = $originalProfile.QDivider.ToString() }
-    if ($null -ne $originalProfile.StartingPositionHint) { $ProfileEditWindow.FindName("StartingPositionEdit").Text = $originalProfile.StartingPositionHint }
+        # Populate form fields from the loaded JSON profile
+        if ($null -ne $originalProfile.Description) { $ProfileEditWindow.FindName("DescriptionEdit").Text = $originalProfile.Description }
+        if ($null -ne $originalProfile.processName) { $ProfileEditWindow.FindName("ProcessNameEdit").Text = $originalProfile.processName }
+        if ($null -ne $originalProfile.FreqDecimals) { $ProfileEditWindow.FindName("FreqDecimalsEdit").Text = $originalProfile.FreqDecimals.ToString() }
+        if ($null -ne $originalProfile.QDecimals) { $ProfileEditWindow.FindName("QDecimalsEdit").Text = $originalProfile.QDecimals.ToString() }
+        if ($null -ne $originalProfile.GainDecimals) { $ProfileEditWindow.FindName("GainDecimalsEdit").Text = $originalProfile.GainDecimals.ToString() }
+        if ($null -ne $originalProfile.QDivider) { $ProfileEditWindow.FindName("QDividerEdit").Text = $originalProfile.QDivider.ToString() }
+        if ($null -ne $originalProfile.StartingPositionHint) { $ProfileEditWindow.FindName("StartingPositionEdit").Text = $originalProfile.StartingPositionHint }
+        if ($null -ne $originalProfile.TimeoutBeforePasteSecs) { $ProfileEditWindow.FindName("DelayEdit").Text = $originalProfile.TimeoutBeforePasteSecs.ToString() }
+        if ($null -ne $originalProfile.AdminRightsRequired) { $ProfileEditWindow.FindName("AdminRightsRequiredCHBX").IsChecked = $originalProfile.AdminRightsRequired -eq "true" }
 
     # Decimal separator radio buttons
     if ($originalProfile.DecimalSeparator -eq ",") {
@@ -1504,8 +1506,9 @@ function Show-PopupGUI {
             # Check clipboard content
             $bufferHeader = $null
             $buffer = get-clipboard
-            $bufferHeader = $($buffer -split "`n")[0]
-            if ($bufferHeader -in "Configurable_PEQ", "Generic", "Extended") {
+            $bufferHeader = $($buffer -split "`n")[1]
+            $bufferHeaderEQtype = $($buffer -split "`n")[0]
+            if ($bufferHeader -match "(?=.*Number)(?=.*Enabled)(?=.*Control)(?=.*Type)") {
 
                 [array]$bands = Read-EQText `
                     -Text ($buffer | Out-String) `
@@ -1521,14 +1524,14 @@ function Show-PopupGUI {
 
                 Set-Clipboard "Data has been read. Waiting for user confirmation to paste..."
 
-                Write-host "`nFound EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP  " -ForegroundColor Yellow -NoNewline
+                Write-host "`nFound EQ data in clipboard ( $bufferHeaderEQtype ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP  " -ForegroundColor Yellow -NoNewline
 
                 if ($ProcessName -ne "Generic") {
                     Show-DSPWindowToFront -processName $ProcessName | Out-Null
                 }
 
                 if (($null -ne $DSPConfig.HotkeyOrDelayPreference) -and ($DSPConfig.HotkeyOrDelayPreference -eq "Hotkey")) {
-                    $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."
+                    $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeaderEQtype ) with $($bands.count) PK bands. $StartingPositionHint`nPress '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel."
                     $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Logview.48.png"
                     $MessageTextBlock.Dispatcher.Invoke([Windows.Threading.DispatcherPriority]::Render, [action] {} )
                     Write-Host "Waiting for user to press '$EffectivePerformActionHotkey' to proceed or '$EffectiveCancelActionHotkey' to cancel. Timeout in $($GlobalConfig.HotkeyTimeoutSecs) seconds..." -ForegroundColor Yellow
@@ -1549,10 +1552,10 @@ function Show-PopupGUI {
                     }
                 }
                 else {
-                    $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeader ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
+                    $MessageTextBlock.Text = "Found EQ data in clipboard ( $bufferHeaderEQtype ) with $($bands.count) PK bands. Confirm in dialog to paste it to DSP"
                     $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Preferences-system-network.48.png"
                     Write-Host "Waiting for user confirmation dialog to proceed with paste..." -ForegroundColor Yellow
-                    $UserHasConfirmedAction = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint
+                    $UserHasConfirmedAction = Show-ConfirmationDialog -StartingPositionHint $StartingPositionHint -ResourcesDir $ResourcesDir
                 }
 
                 if ($UserHasConfirmedAction -eq $true) {

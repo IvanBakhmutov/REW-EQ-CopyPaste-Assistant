@@ -1,0 +1,38 @@
+<Window xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    WindowStyle='None'
+    AllowsTransparency='True'
+    Background='Transparent'
+    Width='360' Height='140'
+    WindowStartupLocation='CenterScreen'
+    Topmost='True'
+    ShowInTaskbar='False'
+    Title='Confirm Paste'>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border x:Name='WindowBorder' BorderBrush='#3383D487' BorderThickness='1' CornerRadius='8'>
+        <Grid x:Name="MainGrid" Background="{StaticResource WindowBgBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Margin="12" Grid.Row="0">
+                <Image x:Name="Icon" Width="32" Height="32" Margin="0,0,10,0" />
+                <TextBlock x:Name="MessageTextBlock" TextWrapping="Wrap" Foreground="{StaticResource LightGrayBrush}" VerticalAlignment="Center" FontSize="13" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,12,8" Grid.Row="1">
+                <Button x:Name="YesBTN" Width="80" Height="26" Margin="0,0,8,0" Content="Yes" Style="{StaticResource RoundedBlueButtonStyle}" IsDefault="True" />
+                <Button x:Name="NoBTN" Width="80" Height="26" Content="No" Style="{StaticResource RoundedBlueButtonStyle}" IsCancel="True" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

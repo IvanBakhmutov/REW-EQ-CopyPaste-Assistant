@@ -101,103 +101,72 @@ function Read-EQText {
 #>
 function Show-ConfirmationDialog {
     param(
-        [Parameter(Mandatory = $true)][string]$StartingPositionHint
+        [Parameter(Mandatory = $true)][string]$StartingPositionHint,
+        [string]$ResourcesDir
     )
 
-    # Set initial global confirmation state
-    $global:confirmation = $false
+    if (-not $ResourcesDir) {
+        $moduleRoot = Split-Path -Parent $PSScriptRoot
+        $ResourcesDir = Join-Path -Path $moduleRoot -ChildPath "Resources"
+    }
 
-    # Constants for Layout and Padding
-    $ButtonWidth = 80
-    $ButtonHeight = 25
-    $ButtonSpacing = 20
-    $PaddingX = 30  # Padding on the left/right of the widest element
-    $PaddingY = 15  # Padding between label and buttons, and below the buttons
-    $LabelMarginTop = 15
-    $LabelMarginLeft = 15
+    $xamlPath = Join-Path -Path $ResourcesDir -ChildPath "Confirmation-GUI.xml"
+    if (-not (Test-Path $xamlPath)) {
+        throw "Confirmation XAML not found: $xamlPath"
+    }
 
-    # Form and Label Text
-    $Message = "Ready to paste EQ settings to DSP.`n$StartingPositionHint`n`nProceed?"
+    $fs = [System.IO.File]::OpenRead($xamlPath)
+    try {
+        $context = New-Object System.Windows.Markup.ParserContext
+        $context.BaseUri = [Uri]$xamlPath
+        $window = [Windows.Markup.XamlReader]::Load($fs, $context)
+    }
+    finally {
+        $fs.Close()
+    }
 
-    # Create Controls
+    $window.Topmost = $true
+    try {
+        $iconPath = Join-Path -Path $ResourcesDir -ChildPath "Icons\Title.png"
+        if (Test-Path $iconPath) { $window.Icon = $iconPath }
+    }
+    catch { }
 
-    # 1. Create the Form
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = "EQ Paste Confirmation"
-    $form.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen
-    $form.TopMost = $true
-    $form.MaximizeBox = $false
-    $form.MinimizeBox = $false
-    $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
+    $message = "Ready to paste EQ settings to DSP.`n$StartingPositionHint`n`nProceed?"
 
-    # 2. Create the Label
-    $label = New-Object System.Windows.Forms.Label
-    $label.Text = $Message
-    $label.Location = New-Object System.Drawing.Point($LabelMarginLeft, $LabelMarginTop)
-    $label.AutoSize = $true # Crucial for dynamic sizing
-    $form.Controls.Add($label)
+    try {
+        $msg = $window.FindName("MessageTextBlock")
+        if ($null -ne $msg) { $msg.Text = $message }
 
-    # Initial Layout to Calculate Label Size
-    # This ensures the label calculates its required width/height based on $Message
-    $form.PerformLayout()
+        $yes = $window.FindName("YesBTN")
+        $no  = $window.FindName("NoBTN")
 
-    # Dynamic Size Calculation and Button Placement
+        # Make window draggable by its main grid (match popup behavior)
+        try {
+            $mainGrid = $window.FindName("MainGrid")
+            if ($null -ne $mainGrid) {
+                $mainGrid.Add_MouseDown({ if ($_.LeftButton -eq 'Pressed') { $window.DragMove() } })
+            }
+        }
+        catch { }
 
-    # 1. Calculate the required client width
-    $MinContentWidth = ($ButtonWidth * 2) + $ButtonSpacing + ($PaddingX * 2)
-    $RequiredWidth = [Math]::Max($label.Width + ($LabelMarginLeft * 2), $MinContentWidth)
+        $result = $false
 
-    # 2. Calculate the button starting X-position for centering
-    $TotalButtonAreaWidth = ($ButtonWidth * 2) + $ButtonSpacing
-    $StartButtonX = ($RequiredWidth - $TotalButtonAreaWidth) / 2
+        if ($null -ne $yes) {
+            $yes.Add_Click({ $window.DialogResult = $true; $window.Close() })
+        }
+        if ($null -ne $no) {
+            $no.Add_Click({ $window.DialogResult = $false; $window.Close() })
+        }
 
-    # 3. Calculate the button Y-position (below the dynamically sized label)
-    $ButtonY = $label.Bottom + $PaddingY
-
-    # 4. Calculate the required client height
-    $RequiredHeight = $label.Top + $label.Height + $PaddingY + $ButtonHeight + $PaddingY
-
-    # Apply the calculated size to the form
-    $form.ClientSize = New-Object System.Drawing.Size($RequiredWidth, $RequiredHeight)
-
-    # 5. Create Yes button
-    $yesButton = New-Object System.Windows.Forms.Button
-    $yesButton.Text = "Yes"
-    $yesButton.Size = New-Object System.Drawing.Size($ButtonWidth, $ButtonHeight)
-    # Location X is the calculated center start point
-    $yesButton.Location = New-Object System.Drawing.Point($StartButtonX, $ButtonY)
-    $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
-    $yesButton.Add_Click({
-            $global:confirmation = $true
-            $form.Close()
-        })
-    $form.Controls.Add($yesButton)
-
-    # 6. Calculate No button X-position robustly
-    # No Button X = Yes Button Start X + Yes Button Width + Spacing
-    $NoButtonX = $StartButtonX + $ButtonWidth + $ButtonSpacing
-
-    # 7. Create No button
-    $noButton = New-Object System.Windows.Forms.Button
-    $noButton.Text = "No"
-    $noButton.Size = New-Object System.Drawing.Size($ButtonWidth, $ButtonHeight)
-    # Use the calculated pixel location, not control properties
-    $noButton.Location = New-Object System.Drawing.Point($NoButtonX, $ButtonY)
-    $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
-    $noButton.Add_Click({
-            $global:confirmation = $false
-            $form.Close()
-        })
-    $form.Controls.Add($noButton)
-
-    # Final Form Setup
-    $form.AcceptButton = $yesButton
-    $form.CancelButton = $noButton
-
-    # Show the Form
-    $form.ShowDialog() | Out-Null
-
-    return $global:confirmation
+        $dialogResult = $window.ShowDialog()
+        if ($dialogResult -eq $true) { return $true }
+        return $false
+    }
+    catch {
+        Write-Host "Confirmation dialog failed: $($_.Exception.Message)" -ForegroundColor Red
+        return $false
+    }
 }
 
 # Bring the DSP software window to the front based on the provided process name.

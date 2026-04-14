@@ -1,3 +1,13 @@
+### 14.04.2026
+ver 0.6.1<br>
+Clipboard parsing updated to address #19<br>
+Confirmation dialog UI update<br>
+<img src="Img/Confirm Paste.png" alt="Confirmation"/>
+
+### 18.03.2026
+Rebec profiles added.
+Kudos to @piyush7243 for the sharing Rebec 812v3 profile.
+
 ### 04.01.2026
 Goldhorn profiles added. Thanks Dương Anh Bình for the profile testing and thanks [Lanson YT channel](https://www.youtube.com/@LansonF) for the demo video [<img src="../Img/YouTube_Logo.png" alt="YouTube icon" height=12/> REW EQ CopyPaste Assistant Automation - Updated for Goldhorn DSP](https://www.youtube.com/watch?v=7EdmJTDdIEk)
 
