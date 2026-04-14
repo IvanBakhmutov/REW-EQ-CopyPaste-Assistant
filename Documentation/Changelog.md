@@ -1,8 +1,8 @@
 ### 14.04.2026
 ver 0.6.1<br>
-Clipboard parsing updated to address #19<br>
+Clipboard parsing updated to address [issue #19](https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/issues/19)<br>
 Confirmation dialog UI update<br>
-<img src="Img/Confirm Paste.png" alt="Confirmation"/>
+<img src="../Img/Confirm Paste.png" alt="Confirmation"/>
 
 ### 18.03.2026
 Rebec profiles added.
