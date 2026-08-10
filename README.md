@@ -88,8 +88,8 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 ver 0.6.2<br>
 Added automatic Windows display-scale awareness for mouse-based DSP profiles.
 - Mouse offsets from profiles are now adjusted automatically based on the current Windows display scale (100%, 125%, 150%, etc.).
-- This improves reliability for profiles that rely on MouseChangePositionX/Y when the UI is scaled.
-- No manual profile edits are required for common scaling values.
+- This improves reliability for profiles that rely on MouseChangePositionX/Y when the DSP UI is scaled.
+- In most cases, no manual profile edits are needed for common scaling values.
 
 ### 10.08.2026
 Updated REW parsing and Q handling for HS/LS and HP/LP filters.
