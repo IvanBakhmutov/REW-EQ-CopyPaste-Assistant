@@ -1,0 +1,55 @@
+﻿{
+    "version":  "1.0",
+    "Description":  "STEG (MDSP6 / MDSP10 / MDSP12 / MDSP6II / MDSP8 /  DSP-S6 / MDSP10D / DSP-S12 / SS-DSP12 / SS-DSP12II / MDSP12D / MDSP16 / MDSP16D / SS-DSP16 II / MDSP24D)",
+    "processName":  "STEG*",
+    "QDivider":  1,
+    "QDecimals":  2,
+    "GainDecimals":  1,
+    "FreqDecimals":  0,
+    "DecimalSeparator":  ".",
+    "StartingPositionHint":  "Please hover F/Hz edit box and hit hotkey",
+    "AdminRightsRequired":  "false",
+    "HotkeyOrDelayPreference":  "Hotkey",
+    "KeystrokeSequence":  [
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  50
+                              },
+                              {
+                                  "Keys":  "FREQ",
+                                  "Delay_ms":  200
+                              },
+                              {
+                                  "MouseChangePositionY":  "+18",
+                                  "Delay_ms":  10
+                              },
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  50
+                              },
+                              {
+                                  "Keys":  "GAIN",
+                                  "Delay_ms":  200
+                              },
+                              {
+                                  "MouseChangePositionY":  "+117",
+                                  "Delay_ms":  10
+                              },
+                              {
+                                  "MouseClick":  "left",
+                                  "Delay_ms":  50
+                              },
+                              {
+                                  "Keys":  "QVALUE",
+                                  "Delay_ms":  200
+                              },
+                              {
+                                  "MouseChangePositionY":  "-135",
+                                  "Delay_ms":  10
+                              },
+                              {
+                                  "MouseChangePositionX":  "+37",
+                                  "Delay_ms":  10
+                              }
+                          ]
+}
