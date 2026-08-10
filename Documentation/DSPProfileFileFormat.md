@@ -11,6 +11,7 @@ To send modifier combinations use SendKeys notation:<br>
 `%` = Alt (example: `%{F4}` is Alt+F4 - this is just an example, don't put it in your DSP profile)<br>
 For a complete list of SendKeys codes see the Microsoft docs: [learn.microsoft.com](https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=windowsdesktop-9.0) <br><br>
 `MouseChangePositionX` and `MouseChangePositionY` accept integer values. Values are relative to the current cursor position: positive numbers move the cursor right/down, and negative numbers move it left/up (screen origin is top-left).<br><br>
+When the Windows display scale is not 100%, the assistant now automatically adjusts these offsets based on the detected scale factor (for example 125% or 150%). This means profiles that were calibrated for 100% scaling generally keep working on scaled displays without requiring manual edits.<br><br>
 `MouseClick` accepts two values: `left` and `right`.<br><br>
 `MouseClickHold` accepts two values: `left` and `right`.<br><br>
 `MouseClickRelease` accepts two values: `left` and `right`.<br><br>

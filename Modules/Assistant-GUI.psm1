@@ -899,7 +899,23 @@ Function Show-SelectProfileGui {
     $ProfileSelectWindow.Icon = "$ResourcesDir\Icons\Title.png"
     $ProfileSelectWindow.FindName("DonateIcon").Source = "$ResourcesDir\Icons\Jonas-Rask-Danish-Royalty-Free-Smiley.32.png"
     $ProfileSelectWindow.FindName("GitHubIcon").Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Web-github.48.png"
-    $ProfileSelectWindow.FindName("Version").Text = $VersionLabelText
+    $versionTextBlock = $ProfileSelectWindow.FindName("Version")
+    if ($null -ne $versionTextBlock) {
+        $versionTextBlock.Text = $VersionLabelText
+        $versionTextBlock.Dispatcher.Invoke([Windows.Threading.DispatcherPriority]::Normal, [action] {
+                $versionTextBlock.Text = $VersionLabelText
+            }) | Out-Null
+    }
+
+    $scaleIndicator = $ProfileSelectWindow.FindName("ScaleIndicator")
+    $scaleStatus = $ProfileSelectWindow.FindName("ScaleStatus")
+    $displayScale = Get-WindowsDisplayScale
+    if ($null -ne $scaleIndicator) {
+        $scaleIndicator.Text = "Scale: $($displayScale.ScalePercent)%"
+    }
+    if ($null -ne $scaleStatus) {
+        $scaleStatus.Text = "Scale: $($displayScale.ScalePercent)%"
+    }
 
     # Populate the profiles list in the GUI
     if (-not ($script:DSPProfilesList -is [System.Array])) { $script:DSPProfilesList = @() }
@@ -1572,8 +1588,17 @@ function Show-PopupGUI {
                         $_.PSObject.Properties.Name -match '^mouse'
                     }
                     if ($null -ne $hasMouseAction) {
+                        $displayScale = Get-WindowsDisplayScale
+                        $displayScaleMessage = "Detected Windows display scale: $($displayScale.ScalePercent)%"
+                        if ($displayScale.ScalePercent -ne 100) {
+                            $displayScaleMessage += " (mouse offsets will be adjusted by x$($displayScale.ScaleFactor))"
+                        }
+
                         Write-Host "Mouse actions detected in profile. Make sure the DSP window is visible and not covered by other windows." -ForegroundColor Yellow
-                        $MessageTextBlock.text = "CopyPaste started...`n`nMake sure the DSP window is visible and not covered by other windows."
+                        Write-Host $displayScaleMessage -ForegroundColor Cyan
+                        $MessageTextBlock.Dispatcher.Invoke([Windows.Threading.DispatcherPriority]::Normal, [action] {
+                                $MessageTextBlock.Text = "CopyPaste started...`n`n$displayScaleMessage`n`nMake sure the DSP window is visible and not covered by other windows."
+                            }) | Out-Null
                         $Icon.Source = "$ResourcesDir\Icons\Bokehlicia-Captiva-Edit.48.png"
                         $MouseX, $MouseY = Get-MousePosition
                         Write-Host "Current mouse position: X=$MouseX, Y=$MouseY" -foregroundColor blue
@@ -1589,16 +1614,18 @@ function Show-PopupGUI {
                         foreach ($KeySet in $DSPConfig.KeystrokeSequence) {
                             switch ($KeySet.PSObject.Properties.Name) {
                                 "MouseChangePositionY" {
-                                    $MouseY += [int]$KeySet.MouseChangePositionY
+                                    $adjustedY = Convert-MouseOffsetForDisplayScale -Value $KeySet.MouseChangePositionY -ScaleFactor $displayScale.ScaleFactor
+                                    $MouseY += $adjustedY
                                     Move-CursorToPosition -X $MouseX -Y $MouseY
                                     Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                    Write-Host -ForegroundColor Blue "New MouseY: $MouseY"
+                                    Write-Host -ForegroundColor Blue "New MouseY: $MouseY (base $($KeySet.MouseChangePositionY), scale $($displayScale.ScalePercent)%)"
                                 }
                                 "MouseChangePositionX" {
-                                    $MouseX += [int]$KeySet.MouseChangePositionX
+                                    $adjustedX = Convert-MouseOffsetForDisplayScale -Value $KeySet.MouseChangePositionX -ScaleFactor $displayScale.ScaleFactor
+                                    $MouseX += $adjustedX
                                     Move-CursorToPosition -X $MouseX -Y $MouseY
                                     Start-Sleep -Milliseconds $KeySet.Delay_ms
-                                    Write-Host -ForegroundColor Blue "New MouseX: $MouseX"
+                                    Write-Host -ForegroundColor Blue "New MouseX: $MouseX (base $($KeySet.MouseChangePositionX), scale $($displayScale.ScalePercent)%)"
                                 }
                                 "MouseClick" {
                                     switch ($KeySet.MouseClick.ToLower()) {
