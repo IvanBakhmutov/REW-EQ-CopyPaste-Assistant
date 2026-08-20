@@ -69,6 +69,56 @@ function Get-MousePosition {
     return $point.X, $point.Y
 }
 
+function Get-WindowsDisplayScale {
+    [CmdletBinding()]
+    param()
+
+    $scaleFactor = 1.0
+    $scalePercent = 100
+
+    try {
+        $windowHandle = [NativeMethods]::GetForegroundWindow()
+        if ($windowHandle -eq [IntPtr]::Zero) {
+            $windowHandle = [Win]::GetConsoleWindow()
+        }
+
+        if ($windowHandle -ne [IntPtr]::Zero) {
+            $dpi = [NativeMethods]::GetDpiForWindow($windowHandle)
+            if ($dpi -gt 0) {
+                $scaleFactor = [Math]::Round($dpi / 96.0, 2)
+                $scalePercent = [int]([Math]::Round($scaleFactor * 100.0))
+            }
+        }
+    }
+    catch {
+        $scaleFactor = 1.0
+        $scalePercent = 100
+    }
+
+    return [pscustomobject]@{
+        ScaleFactor = $scaleFactor
+        ScalePercent = $scalePercent
+    }
+}
+
+function Convert-MouseOffsetForDisplayScale {
+    [CmdletBinding()]
+    param(
+        [AllowNull()]
+        [string]$Value,
+        [Parameter(Mandatory = $true)]
+        [double]$ScaleFactor
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        return $null
+    }
+
+    $numericValue = [double]$Value
+    $scaledValue = $numericValue * $ScaleFactor
+    return [int][Math]::Round($scaledValue, 0, [System.MidpointRounding]::AwayFromZero)
+}
+
 function Wait-HotkeyInput {
     param(
         [int]$timeoutSecs = 60,
@@ -153,6 +203,8 @@ Export-ModuleMember -Function `
     Move-CursorToPosition,
     Invoke-KeyStroke,
     Get-MousePosition,
+    Get-WindowsDisplayScale,
+    Convert-MouseOffsetForDisplayScale,
     Wait-HotkeyInput,
     Invoke-MouseLeftHold,
     Invoke-MouseLeftRelease,

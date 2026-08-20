@@ -45,6 +45,9 @@
         <TextBlock x:Name="Title" Text="REW EQ CopyPaste Assistant" Foreground="White"
             Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center"
             Margin="20,9,0,9" FontSize="16" FontWeight="Bold" />
+        <TextBlock x:Name="ScaleIndicator" Text="Scale: detecting..." Foreground="#FFCCCCCC"
+            Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+            Margin="0,9,0,9" FontSize="12" FontWeight="SemiBold" />
         <Button x:Name="CloseXBTN" ToolTipService.InitialShowDelay="200" ToolTip="Close the tool"
             Content="X" Width="29" Height="24" HorizontalAlignment="Right"
             WindowChrome.IsHitTestVisibleInChrome="True"

@@ -84,6 +84,14 @@ Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
 
+### 11.08.2026
+ver 0.6.2<br>
+Added automatic Windows display-scale awareness for mouse-based DSP profiles.
+- Mouse offsets from profiles are now adjusted automatically based on the current Windows display scale (100%, 125%, 150%, etc.).
+- This improves reliability for profiles that rely on MouseChangePositionX/Y when the DSP UI is scaled.
+- In most cases, no manual profile edits are needed for common scaling values.
+Implemented by @wagnerfcruz
+
 ### 10.08.2026
 Updated REW parsing and Q handling for HS/LS and HP/LP filters.
 - HS/LS shelf filters now compute Q when REW does not provide a valid Q value, using the standard REW shelf formula with S = 0.9. The result is clamped to a minimum of 0.30 to avoid unrealistic low-Q values.
@@ -93,7 +101,7 @@ Updated REW parsing and Q handling for HS/LS and HP/LP filters.
   - Bessel: 0.5774
 - STEG DSP profile added to the tested profile list.
 - This means the tool now supports both shelf Q calculation and explicit crossover alignment selection for LPF/HPF bands.
-Implemented by @wagnerfcruz.
+Implemented by @wagnerfcruz
 
 ### 14.04.2026
 ver 0.6.1<br>
