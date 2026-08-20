@@ -66,6 +66,7 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 | Ground Zero | GZHA MINI FIVE-DSP_GUI  | ❎ | ⌨️🖱️ | GZHA MINI FIVE-DSP |
 | Ground Zero | GZDSP 6-10SQ | ❎ | ⌨️ | GZDSP 6-10SQ |
 | Goldhorn | Goldhorn DSP software | ❎ | ⌨️🖱️ | P5/P3/P2/P1 and all DSPA models |
+| STEG | STEG DSP software | ❎ | ⌨️ | STEG series DSPs |
 | Rebec | R6 | ❎ | ⌨️🖱️ | R6s DSP/Amplifier |
 | Rebec | RebecA6A8 | ❎ | ⌨️ | DSP 406Q, A6 and A8 |
 | Rebec | Rebec 8-12v3 | ❎ | ⌨️ | 812v3 |
@@ -82,6 +83,17 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)
 
 ## Recent updates
+
+### 10.08.2026
+Updated REW parsing and Q handling for HS/LS and HP/LP filters.
+- HS/LS shelf filters now compute Q when REW does not provide a valid Q value, using the standard REW shelf formula with S = 0.9. The result is clamped to a minimum of 0.30 to avoid unrealistic low-Q values.
+- HP/LP filters now prompt the user for the crossover alignment type when these bands appear, and then apply fixed Q values:
+  - Butterworth: 0.7071
+  - Linkwitz: 0.5000
+  - Bessel: 0.5774
+- STEG DSP profile added to the tested profile list.
+- This means the tool now supports both shelf Q calculation and explicit crossover alignment selection for LPF/HPF bands.
+Implemented by @wagnerfcruz.
 
 ### 14.04.2026
 ver 0.6.1<br>
