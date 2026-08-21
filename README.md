@@ -66,7 +66,7 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 | Ground Zero | GZHA MINI FIVE-DSP_GUI  | ❎ | ⌨️🖱️ | GZHA MINI FIVE-DSP |
 | Ground Zero | GZDSP 6-10SQ | ❎ | ⌨️ | GZDSP 6-10SQ |
 | Goldhorn | Goldhorn DSP software | ❎ | ⌨️🖱️ | P5/P3/P2/P1 and all DSPA models |
-| STEG | STEG DSP software | ❎ | ⌨️ | STEG series DSPs |
+| STEG | STEG DSP software | ❎ | ⌨️🖱️ | MDSP6, MDSP10, MDSP12, MDSP6II, MDSP8,  DSP-S6, MDSP10D, DSP-S12, SS-DSP12, SS-DSP12II, MDSP12D, MDSP16, MDSP16D, SS-DSP16 II, MDSP24D |
 | Rebec | R6 | ❎ | ⌨️🖱️ | R6s DSP/Amplifier |
 | Rebec | RebecA6A8 | ❎ | ⌨️ | DSP 406Q, A6 and A8 |
 | Rebec | Rebec 8-12v3 | ❎ | ⌨️ | 812v3 |

@@ -28,6 +28,8 @@
 - ~~BUG: hotkeys hint not updated on Profile Choose GUI after a new profile saved~~
 - ~~Reported issue with confirmation dialog (in parallels desktop)~~
 - ~~Add flags in config to skip REW and DSP processes check. Implemented in ver 0.5.3~~
+- ~~Added automatic Windows display-scale awareness for mouse-based DSP profiles~~
+- ~~Updated REW parsing and Q handling for HS/LS and HP/LP filters~~
 
 ## Immediate plans
 
