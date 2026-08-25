@@ -51,11 +51,11 @@ When the Windows display scale is not 100%, the assistant now automatically adju
 | `"delay_ms": 50` | |
 | `},` | |
 | `{` | |
-| `"MouseChangePositionY": "+25",` | *Moves the mouse cursor N pixels up/down. Coordinates of the screen start from top left.* |
+| `"MouseChangePositionY": "+25",` | *Moves the mouse cursor N pixels up/down (calibrated for 100% scale; automatically adjusted for active Windows display scaling).* |
 | `"delay_ms": 10` | |
 | `}` | |
 | `{` | |
-| `"MouseChangePositionX": "-10",` | *Moves the mouse cursor N pixels left/right. Coordinates of the screen start from top left.* |
+| `"MouseChangePositionX": "-10",` | *Moves the mouse cursor N pixels left/right (calibrated for 100% scale; automatically adjusted for active Windows display scaling).* |
 | `"delay_ms": 10` | |
 | `}` | |
 | `]` | |

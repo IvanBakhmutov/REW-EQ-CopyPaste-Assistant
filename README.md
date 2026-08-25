@@ -11,7 +11,7 @@ This tool allows you to transfer EQ filters for Room EQ Wizard (REW) to your DSP
 It assists with the EQ copy-paste procedure from REW software into your DSP app's EQ filters. You just need to run it in the background while applying EQ filters to your measurements in REW. When you are ready with EQ filters, hit the "Copy" button in the EQ filters section of REW. This tool will then prompt you to confirm if you want to paste the copied data into your DSP app. After your confirmation, it will bring the DSP process to the foreground, and you will need to click on the first band where the keystroke sequence will start to paste the data.
 <br>
 This is just an initial version of the tool. Experiment with it, create your own DSP profiles, and have fun!
-Strong suggestion, when you create profile for a DSP which doesn't fully support keyboard navigation and you are dealing with mouse moves and clicks and you would like to share your profile with others - leave the DSP app in its native resolution, don't make it maximized to a full screen (on different devices screen resolution may vary).
+Strong suggestion, when you create profile for a DSP which doesn't fully support keyboard navigation and you are dealing with mouse moves and clicks and you would like to share your profile with others - leave the DSP app in its native resolution, don't make it maximized to a full screen (on different devices screen resolution may vary). Note: Windows display scaling (100%, 125%, 150%, etc.) is automatically detected and mouse offsets are scaled accordingly, but window dimensions and layout should still match.
 Once you tested your own DSP profile please share it in the Discussion section of the repository so it will be added to the repo.
 
 A demo video v0.3 [<img src="Img/YouTube_Logo.png" alt="YouTube icon" height=12/> watch on YouTube](https://youtu.be/nAJcuQtrowY) (The current demo is not up to date. A new one with a detailed walkthrough of the newer version will be recorded soon.)
@@ -77,7 +77,7 @@ The tool uses its own profiles (in JSON format), which store the DSP software ap
 
  \** Input types<br>
  ⌨️ - Keyboard<br>
- 🖱️ - Mouse (may require tweaks of relative X/Y coordinates in the profile to fit your env/screen resolution)<br>
+ 🖱️ - Mouse (display scaling is automatically adjusted by the tool; relative X/Y coordinate tweaks may still be needed if DSP window layout varies)<br>
 
 ## Project plans
 Completed tasks and upcoming plans in [TODOs.md](TODOs.md)

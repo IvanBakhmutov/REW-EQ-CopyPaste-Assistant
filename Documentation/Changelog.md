@@ -1,3 +1,22 @@
+### 11.08.2026
+ver 0.6.2<br>
+Added automatic Windows display-scale awareness for mouse-based DSP profiles.
+- Mouse offsets from profiles are now adjusted automatically based on the current Windows display scale (100%, 125%, 150%, etc.).
+- This improves reliability for profiles that rely on MouseChangePositionX/Y when the DSP UI is scaled.
+- In most cases, no manual profile edits are needed for common scaling values.
+Implemented by @wagnerfcruz
+
+### 10.08.2026
+Updated REW parsing and Q handling for HS/LS and HP/LP filters.
+- HS/LS shelf filters now compute Q when REW does not provide a valid Q value, using the standard REW shelf formula with S = 0.9. The result is clamped to a minimum of 0.30 to avoid unrealistic low-Q values.
+- HP/LP filters now prompt the user for the crossover alignment type when these bands appear, and then apply fixed Q values:
+  - Butterworth: 0.7071
+  - Linkwitz: 0.5000
+  - Bessel: 0.5774
+- STEG DSP profile added to the tested profile list.
+- This means the tool now supports both shelf Q calculation and explicit crossover alignment selection for LPF/HPF bands.
+Implemented by @wagnerfcruz
+
 ### 14.04.2026
 ver 0.6.1<br>
 Clipboard parsing updated to address [issue #19](https://github.com/IvanBakhmutov/REW-EQ-CopyPaste-Assistant/issues/19)<br>
